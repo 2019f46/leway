@@ -1,3 +1,5 @@
+image: linux
+
 build:
   script:
   - npm install
