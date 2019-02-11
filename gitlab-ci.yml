@@ -1,0 +1,11 @@
+image: node:8.12.0
+
+build:
+  script:
+  - npm install
+  - npm run build
+  - rm -rf public
+  - mv build public
+  artifacts:
+    paths:
+    - public
