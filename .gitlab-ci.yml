@@ -1,6 +1,12 @@
 image: linux
 
+stages:
+  - build
+  - test
+  - deploy
+
 build:
+  stage: build
   script:
   - npm install
   - npm run build
@@ -10,7 +16,8 @@ build:
     paths:
     - public
 
-test:
+unittest:
+  stage: test
   script:
     - npm install
     - npm test unit
