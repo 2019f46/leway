@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./ThreeDimensionalMap.module.scss";
 
 export interface IThreeDimensionalMapProps {
 
@@ -15,9 +16,11 @@ export default class ThreeDimensionalMap extends React.Component<IThreeDimension
 
     public render(): JSX.Element {
         return (
-            <h2>
-                3D Map
-            </h2>
+            <div className={styles.threeDimensionalMapContainer}>
+                <h2>
+                    3D Map
+                </h2>
+            </div>
         );
     }
 }

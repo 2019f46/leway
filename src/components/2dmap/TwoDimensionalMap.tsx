@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./TwoDimensionalMap.module.scss"
 
 export interface ITwoDimensionalMapProps {
 
@@ -15,9 +16,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     public render(): JSX.Element {
         return (
-            <h2>
-                2D Map
-            </h2>
+            <div className={styles.twoDimensionalMapContainer}>
+                <h2>
+                    2D Map
+                </h2>
+            </div>
         );
     }
 }

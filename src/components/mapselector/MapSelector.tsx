@@ -1,8 +1,8 @@
 import React from "react";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import styles from "MapSelector.module.scss";
+import { Toggle } from 'office-ui-fabric-react';
+import styles from "./MapSelector.module.scss";
 
 export interface IMapSelectorProps {
 
@@ -25,6 +25,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         let toggle: JSX.Element = <Toggle
             onText={"3D Map"}
             offText={"2D Map"}
+            disabled={true}
             onClick={this.onToggleClick} />
         return (
             <div className={styles.mapSelectorContainer}>
