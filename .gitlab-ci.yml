@@ -20,4 +20,5 @@ unittest:
   stage: test
   script:
     - npm install
+    - npm install -D babel-core@7.0.0-bridge.0
     - npm test unit
