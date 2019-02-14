@@ -1,11 +1,12 @@
 import React from "react";
-import icon from "../assets/logo.svg";
+import MapSelector from "./mapselector/MapSelector";
 
-export default class Home extends React.Component{
+export default class Home extends React.Component {
     render() {
+        let selector: JSX.Element = <MapSelector />
         return (
             <div>
-                <img src={icon} />
+                {selector}
             </div>
         );
     }
