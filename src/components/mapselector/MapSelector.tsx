@@ -1,7 +1,7 @@
 import React from "react";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle } from 'office-ui-fabric-react';
+import { Toggle } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/FakeMapService";
@@ -23,10 +23,10 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         this.state = {
             mapData: {
                 innerPolygon: [],
-                outerPolygon: { polygon: [] }
+                outerPolygon: { polygon: [] },
             },
-            twoDimensions: true
-        }
+            twoDimensions: true,
+        };
         this.mapService = this.props.fakeData ? new FakeMapService() : new MapService();
     }
 
@@ -36,7 +36,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
             onText={"3D Map"}
             offText={"2D Map"}
             disabled={true}
-            onClick={this.onToggleClick} />
+            onClick={this.onToggleClick} />;
         return (
             <div className={styles.mapSelectorContainer}>
                 {toggle}

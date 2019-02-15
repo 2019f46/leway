@@ -8,7 +8,7 @@ export default class FakeMapService implements IMapService {
             innerPolygon: [
                 {
                     polygon: [
-                        { x: 5, y: 15 }, { x: 15, y: 15 }, { x: 17, y: 7 }, { x: 15, y: 10 }, { x: 5, y: 10 }, { x: 2, y: 7 }]
+                        { x: 5, y: 15 }, { x: 15, y: 15 }, { x: 17, y: 7 }, { x: 15, y: 10 }, { x: 5, y: 10 }, { x: 2, y: 7 }],
                 },
                 {
                     polygon: [
@@ -35,7 +35,7 @@ export default class FakeMapService implements IMapService {
                         { x: 40, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
                 },
             ]
-        }
+        };
 
         return fakeData;
     }

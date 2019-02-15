@@ -1,10 +1,10 @@
-import React from 'react';
-import MapSelector from './MapSelector';
-import { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { configure } from 'enzyme';
-import TwoDimensionalMap from '../2dmap/TwoDimensionalMap';
-import ThreeDimensionalMap from '../3dmap/ThreeDimensionalMap';
+import React from "react";
+import MapSelector from "./MapSelector";
+import { mount } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
+import { configure } from "enzyme";
+import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
+import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
 
 // automatically unmount and cleanup DOM after the test is finished.
 configure({ adapter: new Adapter() });
