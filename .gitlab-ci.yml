@@ -5,27 +5,20 @@ stages:
   - test
   - deploy
 
-# build:
-#   stage: build
-#   script:
-#   - npm install
-#   - npm run build
-#   - rm -rf public
-#   - mv build public
-#   artifacts:
-#     paths:
-#     - public
+build:
+  stage: build
+  script:
+  - npm install
+  - npm run build
+  - rm -rf public
+  - mv build public
+  artifacts:
+    paths:
+    - public
 
-# unittest:
-#   stage: test
-#   script:
-#     - npm install
-#     - npm install -D babel-core@7.0.0-bridge.0
-#     - npm test unit
-
-deploy:
-    stage: deploy
-    script:
+unittest:
+  stage: test
+  script:
     - npm install
-    - npm run build
-    - lftp -c "set ftp:ssl-allow no; open -u $USER,$PASS $HOST; mirror -Rev build/ ./public_html  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/"
+    - npm install -D babel-core@7.0.0-bridge.0
+    - npm test unit
