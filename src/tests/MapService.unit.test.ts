@@ -1,8 +1,8 @@
 import MapService, { IMapService } from "../services/MapService";
-import { IMapModel } from "../components/models/MapModel";
 import FakeMapService from "../services/FakeMapService";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { IMapModel } from "../models/MapModel";
 const env = require("dotenv").config();
 
 

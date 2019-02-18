@@ -1,5 +1,5 @@
-import { IMapModel } from "../components/models/MapModel";
 import axios from "axios";
+import { IMapModel } from "../models/MapModel";
 const env = require("dotenv").config();
 
 export interface IMapService {

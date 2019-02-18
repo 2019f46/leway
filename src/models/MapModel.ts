@@ -1,6 +1,6 @@
 export interface IMapModel {
-    outerPolygon?: IPolygon;
-    innerPolygon?: IPolygon[];
+    outerPolygon: IPolygon;
+    innerPolygon: IPolygon[];
 }
 
 export interface IPolygon {

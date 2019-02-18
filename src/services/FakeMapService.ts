@@ -1,5 +1,5 @@
-import { IMapModel } from "../components/models/MapModel";
 import { IMapService } from "./MapService";
+import { IMapModel } from "../models/MapModel";
 
 export default class FakeMapService implements IMapService {
     public getMapData = async (): Promise<IMapModel> => {

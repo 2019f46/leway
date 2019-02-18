@@ -5,7 +5,8 @@ import { Toggle } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/FakeMapService";
-import { IMapModel } from "../models/MapModel";
+import { IMapModel } from "../../models/MapModel";
+
 
 export interface IMapSelectorProps {
     fakeData?: boolean;
