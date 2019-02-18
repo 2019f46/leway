@@ -83,7 +83,7 @@ it("Mapservice uses returns data correctly", async () => {
             },
             {
                 polygon: [
-                    { x: 4, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
+                    { x: 40, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
             },
         ]
     };

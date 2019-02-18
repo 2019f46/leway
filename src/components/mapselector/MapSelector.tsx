@@ -53,4 +53,8 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         let data = await this.mapService.getMapData();
         this.setState({ mapData: data });
     }
+
+    private onEditMap = () => {
+        console.log("Map has been edited");
+    }
 }
