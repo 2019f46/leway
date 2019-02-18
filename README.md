@@ -28,4 +28,6 @@ Ejects the pack, allows free modification of all configs (Don't do unless necesa
 2. Extension: Beautify css/sass/scss/less in visual code
 3. Extension: CSS Modules in visual code
 4. Extension: IntelliSence for CSS, SCSS, class names in HTML slim and SCSS in visual code
+5. Extension: TS-lint (non depracated version)
+6. Globally install npm package tslint "npm install tslint"
 

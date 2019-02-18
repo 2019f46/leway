@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./TwoDimensionalMap.module.scss"
+import styles from "./TwoDimensionalMap.module.scss";
 
 export interface ITwoDimensionalMapProps {
 
