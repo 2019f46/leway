@@ -1,6 +1,6 @@
 import { IMapModel } from "../components/models/MapModel";
 import axios from "axios";
-const env = require('dotenv').config()
+const env = require("dotenv").config();
 
 export interface IMapService {
     getMapData: () => Promise<IMapModel>;
