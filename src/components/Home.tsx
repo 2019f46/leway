@@ -1,20 +1,12 @@
 import React from "react";
-import { RouteComponentProps } from 'react-router';
-import icon from "../assets/logo.svg";
-import fs from "fs-extra";
-export interface IHomeProps {
+import MapSelector from "./mapselector/MapSelector";
 
-}
-
-export interface IHomeState {
-
-}
-
-export default class Home extends React.Component<IHomeProps, IHomeState>{
-    render() {
+export default class Home extends React.Component {
+    public render() {
+        let selector: JSX.Element = <MapSelector fakeData={true} />;
         return (
             <div>
-                <img src={icon} />
+                {selector}
             </div>
         );
     }
