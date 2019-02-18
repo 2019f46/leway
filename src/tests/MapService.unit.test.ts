@@ -3,6 +3,8 @@ import { IMapModel } from "../components/models/MapModel";
 import FakeMapService from "../services/FakeMapService";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+const env = require("dotenv").config();
+
 
 it("Fake MapService gets data", async () => {
     let service: IMapService;
@@ -46,7 +48,7 @@ it("Fake MapService gets data", async () => {
     expect(expected).toEqual(result);
 });
 
-it("Mapservice uses endpoint from .env  file", async () => {
+it("Mapservice uses returns data correctly", async () => {
     let service: IMapService;
     service = new MapService();
 
@@ -81,12 +83,12 @@ it("Mapservice uses endpoint from .env  file", async () => {
             },
             {
                 polygon: [
-                    { x: 40, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
+                    { x: 4, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
             },
         ]
     };
 
-    mock.onGet("targeturl...").reply(200, expected);
+    mock.onGet("https://www.endpoint.com/_api/get").reply(200, expected);
 
     let result = await service.getMapData();
 
