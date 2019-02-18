@@ -6,6 +6,7 @@ import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import PageNotFound from "../components/pagenotfound/PageNotFound";
 import { MemoryRouter } from "react-router";
+import SettingsPage from "../components/settingspage/SettingsPage";
 
 
 describe("Routing", () => {
@@ -37,6 +38,15 @@ describe("Routing", () => {
       </MemoryRouter>
     );
     expect(wrapper.find(PageNotFound)).toHaveLength(1);
+  });
+
+  it('/settings should redirect to SettingsPage', () => {
+    let wrapper = mount(
+      <MemoryRouter initialEntries={["/settings"]}>
+        <ProjectRouter />
+      </MemoryRouter>
+    );
+    expect(wrapper.find(SettingsPage)).toHaveLength(1);
   });
 
 });
