@@ -1,7 +1,7 @@
 import React from "react";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle } from "office-ui-fabric-react";
+import { Toggle, Spinner } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/FakeMapService";
@@ -10,11 +10,13 @@ import { IMapModel } from "../../models/MapModel";
 
 export interface IMapSelectorProps {
     fakeData?: boolean;
+    unitTest?: boolean;
 }
 
 export interface IMapSelectorState {
     twoDimensions: boolean;
     mapData: IMapModel;
+    dataReady: boolean;
 }
 
 export default class MapSelector extends React.Component<IMapSelectorProps, IMapSelectorState>{
@@ -27,12 +29,13 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
                 outerPolygon: { polygon: [] },
             },
             twoDimensions: true,
+            dataReady: false
         };
         this.mapService = this.props.fakeData ? new FakeMapService() : new MapService();
     }
 
     public render(): JSX.Element {
-        let map: JSX.Element = this.state.twoDimensions ? <TwoDimensionalMap /> : <ThreeDimensionalMap />;
+        let map: JSX.Element = this.state.twoDimensions ? <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} unitTest={this.props.unitTest} /> : <ThreeDimensionalMap />;
         let toggle: JSX.Element = <Toggle
             onText={"3D Map"}
             offText={"2D Map"}
@@ -41,7 +44,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         return (
             <div className={styles.mapSelectorContainer}>
                 {toggle}
-                {map}
+                {this.state.dataReady ? map : <Spinner />}
             </div>
         );
     }
@@ -52,10 +55,12 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
 
     public async componentDidMount() {
         let data = await this.mapService.getMapData();
-        this.setState({ mapData: data });
+        if (data) {
+            this.setState({ mapData: data, dataReady: true });
+        }
     }
 
-    private onEditMap = () => {
+    private onEditMap = (data: IMapModel) => {
         console.log("Map has been edited");
     }
 }

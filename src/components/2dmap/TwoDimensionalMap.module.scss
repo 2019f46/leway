@@ -1,3 +1,23 @@
 .twoDimensionalMapContainer {
-    display: block;
+    background-color: white;
+    height: 80%;
+    width: 80%;
+    text-align: center;
+    .svgContainer {
+        padding: 10px;
+        height: 800px;
+        width: 800px;
+        fill: white;
+        .svgMap {
+            fill: transparent;
+            stroke-width: 1px;
+            stroke: black;
+            .polygonObject {
+                fill: #f1f1f1;
+            }
+            .polygonObject:hover {
+                fill: beige;
+            }
+        }
+    }
 }

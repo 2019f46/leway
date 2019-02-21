@@ -1,42 +1,43 @@
 import { IMapService } from "./MapService";
 import { IMapModel } from "../models/MapModel";
+import { delay } from "q";
 
 export default class FakeMapService implements IMapService {
     public getMapData = async (): Promise<IMapModel> => {
         let fakeData: IMapModel = {
-            outerPolygon: { polygon: [{ x: 0, y: 0 }, { x: 0, y: 65 }, { x: 80, y: 65 }, { x: 80, y: 0 }] },
+            outerPolygon: { polygon: [{ x: 0, y: 0 }, { x: 0, y: 650 }, { x: 800, y: 650 }, { x: 800, y: 0 }] },
             innerPolygon: [
                 {
                     polygon: [
-                        { x: 5, y: 15 }, { x: 15, y: 15 }, { x: 17, y: 7 }, { x: 15, y: 10 }, { x: 5, y: 10 }, { x: 2, y: 7 }],
+                        { x: 50, y: 150 }, { x: 150, y: 150 }, { x: 175, y: 75 }, { x: 150, y: 100 }, { x: 50, y: 100 }, { x: 25, y: 75 }]
                 },
                 {
                     polygon: [
-                        { x: 25, y: 5 }, { x: 30, y: 5 }, { x: 30, y: 15 }, { x: 25, y: 15 }]
+                        { x: 250, y: 50 }, { x: 300, y: 50 }, { x: 300, y: 150 }, { x: 250, y: 150 }]
                 },
                 {
                     polygon: [
-                        { x: 5, y: 20 }, { x: 35, y: 20 }, { x: 35, y: 35 }, { x: 5, y: 35 }]
+                        { x: 50, y: 200 }, { x: 350, y: 200 }, { x: 350, y: 350 }, { x: 50, y: 350 }]
                 },
                 {
                     polygon: [
-                        { x: 45, y: 15 }, { x: 75, y: 15 }, { x: 75, y: 7 }, { x: 45, y: 10 }]
+                        { x: 450, y: 150 }, { x: 750, y: 150 }, { x: 755, y: 75 }, { x: 450, y: 100 }]
                 },
                 {
                     polygon: [
-                        { x: 45, y: 35 }, { x: 70, y: 55 }, { x: 60, y: 60 }, { x: 45, y: 40 }]
+                        { x: 450, y: 350 }, { x: 700, y: 550 }, { x: 600, y: 600 }, { x: 450, y: 400 }]
                 },
                 {
                     polygon: [
-                        { x: 5, y: 50 }, { x: 35, y: 50 }, { x: 35, y: 40 }, { x: 5, y: 40 }]
+                        { x: 50, y: 500 }, { x: 350, y: 500 }, { x: 350, y: 400 }, { x: 50, y: 400 }]
                 },
                 {
                     polygon: [
-                        { x: 40, y: 25 }, { x: 75, y: 26 }, { x: 75, y: 30 }, { x: 75, y: 50 }]
+                        { x: 400, y: 250 }, { x: 750, y: 260 }, { x: 750, y: 300 }, { x: 750, y: 500 }]
                 },
             ]
         };
-
+        await delay("", 3000);
         return fakeData;
     }
 }

@@ -10,10 +10,10 @@ import SettingsPage from "../components/settingspage/SettingsPage";
 
 
 describe("Routing", () => {
-  
+
   configure({ adapter: new Adapter() });
 
-  it("/home should redirect to home", () => {
+  it("Routing - /home should redirect to home", () => {
     let wrapper = mount(
       <MemoryRouter initialEntries={["/home"]}>
         <ProjectRouter />
@@ -22,7 +22,7 @@ describe("Routing", () => {
     expect(wrapper.find(Home)).toHaveLength(1);
   });
 
-  it("/ should redirect to home", () => {
+  it("Routing - / should redirect to home", () => {
     let wrapper = mount(
       <MemoryRouter initialEntries={["/"]}>
         <ProjectRouter />
@@ -31,7 +31,7 @@ describe("Routing", () => {
     expect(wrapper.find(Home)).toHaveLength(1);
   });
 
-  it("/ggwp should redirect to pagenotfound", () => {
+  it("Routing - /ggwp should redirect to pagenotfound", () => {
     let wrapper = mount(
       <MemoryRouter initialEntries={["/ggwp"]}>
         <ProjectRouter />
@@ -40,7 +40,7 @@ describe("Routing", () => {
     expect(wrapper.find(PageNotFound)).toHaveLength(1);
   });
 
-  it('/settings should redirect to SettingsPage', () => {
+  it("Routing - /settings should redirect to SettingsPage", () => {
     let wrapper = mount(
       <MemoryRouter initialEntries={["/settings"]}>
         <ProjectRouter />
