@@ -10,7 +10,6 @@ export interface ITwoDimensionalMapProps {
 }
 
 export interface ITwoDimensionalMapState {
-    mapReady: boolean;
     mapData: IMapModel;
 }
 
@@ -18,7 +17,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     constructor(props: any) {
         super(props);
         this.state = {
-            mapReady: false,
             mapData: this.props.polygonData as any
         };
     }
@@ -74,12 +72,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                     polygon = "";
                 });
             }
-            this.setState({ mapReady: true });
         }
     }
 
     public componentWillReceiveProps(nextProps: ITwoDimensionalMapProps) {
-        this.setState({ mapReady: false, mapData: nextProps.polygonData as any });
+        this.setState({ mapData: nextProps.polygonData as any });
         this.generateMap();
     }
 }
