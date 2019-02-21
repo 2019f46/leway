@@ -76,7 +76,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     }
 
     public componentWillReceiveProps(nextProps: ITwoDimensionalMapProps) {
-        this.setState({ mapData: nextProps.polygonData as any });
+        this.setState({ mapData: nextProps.polygonData });
         this.generateMap();
     }
 }
