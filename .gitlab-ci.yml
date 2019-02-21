@@ -5,27 +5,28 @@ stages:
   - test
   - deploy
 
-build:
+buildapp:
   stage: build
   script:
   - npm install
   - npm run build
-  - rm -rf public
-  - mv build public
+  - cp web.config build/
   artifacts:
     paths:
-    - public
+    - build
 
 unittest:
   stage: test
   script:
-    - npm install
     - npm install -D babel-core@7.0.0-bridge.0
     - npm test unit
+  dependencies:
+    - buildapp
 
 deploy:
   stage: deploy
   script:
-    - npm run build
     - cd build/
     - az webapp up -n lewayf -l northeurope
+  dependencies:
+    - buildapp
