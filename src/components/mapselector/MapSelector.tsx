@@ -39,7 +39,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         let toggle: JSX.Element = <Toggle
             onText={"3D Map"}
             offText={"2D Map"}
-            // disabled={true}
+            disabled={true}
             onClick={this.onToggleClick} />;
         return (
             <div className={styles.mapSelectorContainer}>

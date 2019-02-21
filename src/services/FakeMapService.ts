@@ -1,5 +1,6 @@
 import { IMapService } from "./MapService";
 import { IMapModel } from "../models/MapModel";
+import { delay } from "q";
 
 export default class FakeMapService implements IMapService {
     public getMapData = async (): Promise<IMapModel> => {
@@ -36,7 +37,7 @@ export default class FakeMapService implements IMapService {
                 },
             ]
         };
-
+        await delay("", 3000);
         return fakeData;
     }
 }
