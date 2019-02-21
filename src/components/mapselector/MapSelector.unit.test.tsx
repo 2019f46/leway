@@ -50,7 +50,7 @@ describe("MapSelector", () => {
         let fakeService: IMapService = new FakeMapService();
         let data = await fakeService.getMapData();
 
-        expect(wrapper.contains(<TwoDimensionalMap polygonData={data} unit={true} />)).toEqual(false);
+        expect(wrapper.contains(<TwoDimensionalMap polygonData={data} unitTest={true} />)).toEqual(false);
         wrapper.unmount();
     });
 });

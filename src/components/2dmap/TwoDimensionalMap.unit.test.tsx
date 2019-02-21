@@ -18,7 +18,7 @@ describe("TwoDimensionalMap", () => {
         let data = await fakeService.getMapData();
 
         const wrapper = shallow(
-            <TwoDimensionalMap polygonData={data} unit={true} />
+            <TwoDimensionalMap polygonData={data} unitTest={true} />
         );
 
         expect(wrapper.state("mapData")).toEqual(data);
@@ -30,7 +30,7 @@ describe("TwoDimensionalMap", () => {
         let data = await fakeService.getMapData();
 
         const wrapper = mount(
-            <TwoDimensionalMap polygonData={data} unit={true} />
+            <TwoDimensionalMap polygonData={data} unitTest={true} />
         );
 
         expect(wrapper.contains(<div className={styles.twoDimensionalMapContainer}>
