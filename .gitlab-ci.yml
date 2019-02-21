@@ -8,10 +8,10 @@ stages:
 build:
   stage: build
   script:
-  - sudo npm install
-  - sudo npm run build
-  - sudo rm -rf public
-  - sudo mv build public
+  - npm install
+  - npm run build
+  - rm -rf public
+  - mv build public
   artifacts:
     paths:
     - public
@@ -19,9 +19,9 @@ build:
 unittest:
   stage: test
   script:
-    - sudo npm install
-    - sudo npm install -D babel-core@7.0.0-bridge.0
-    - sudo npm test unit
+    - npm install
+    - npm install -D babel-core@7.0.0-bridge.0
+    - npm test unit
 
 deploy:
   stage: deploy
