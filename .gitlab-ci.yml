@@ -26,4 +26,6 @@ unittest:
 deploy:
   stage: deploy
   script:
+    - npm run build
+    - cd build/
     - az webapp up -n lewayf -l northeurope
