@@ -23,3 +23,7 @@ unittest:
     - sudo npm install -D babel-core@7.0.0-bridge.0
     - sudo npm test unit
 
+deploy:
+  stage: deploy
+  script:
+    - az webapp up -n lewayf -l northeurope
