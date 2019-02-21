@@ -12,19 +12,7 @@ configure({ adapter: new Adapter() });
 
 describe("TwoDimensionalMap", () => {
 
-    it("TwoDimensionalMap - Initial mapReady state is false", async () => {
-        let fakeService: IMapService = new FakeMapService();
-        let data = await fakeService.getMapData();
-
-        const wrapper = shallow(
-            <TwoDimensionalMap polygonData={data} unit={true} />
-        );
-
-        expect(wrapper.state("mapReady")).toEqual(false);
-        wrapper.unmount();
-    });
-
-    it("TwoDimensionalMap - Initial mapData is equal to state", async () => {
+    it("TwoDimensionalMap - Initial mapData is equal to received prop", async () => {
         let fakeService: IMapService = new FakeMapService();
         let data = await fakeService.getMapData();
 

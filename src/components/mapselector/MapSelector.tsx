@@ -10,7 +10,7 @@ import { IMapModel } from "../../models/MapModel";
 
 export interface IMapSelectorProps {
     fakeData?: boolean;
-    unit?: boolean;
+    unitTest?: boolean;
 }
 
 export interface IMapSelectorState {
@@ -35,7 +35,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
     }
 
     public render(): JSX.Element {
-        let map: JSX.Element = this.state.twoDimensions ? <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} unit={this.props.unit} /> : <ThreeDimensionalMap />;
+        let map: JSX.Element = this.state.twoDimensions ? <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} unit={this.props.unitTest} /> : <ThreeDimensionalMap />;
         let toggle: JSX.Element = <Toggle
             onText={"3D Map"}
             offText={"2D Map"}

@@ -17,7 +17,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     constructor(props: any) {
         super(props);
         this.state = {
-            mapData: this.props.polygonData as any
+            mapData: this.props.polygonData
         };
     }
 
@@ -39,39 +39,37 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     private generateMap = () => {
         if (this.state.mapData && !this.props.unit) {
-
             let snap: Snap.Paper = Snap("#svg");
 
-            if (this.state.mapData.outerPolygon) {
-                let polygon: string = "";
-                this.state.mapData.outerPolygon.polygon.forEach(coord => {
+            // Process outer polygon
+            let polygon: string = "";
+            this.state.mapData.outerPolygon.polygon.forEach(coord => {
+                polygon += `${coord.x}, ${coord.y} `;
+            });
+            snap.polygon(polygon as any);
+
+            // Reset the string container
+            polygon = "";
+
+            // Iterate all inner polygons
+            this.state.mapData.innerPolygon.forEach(it => {
+
+                // for each inner polygon
+                it.polygon.forEach(coord => {
+                    // generate string with coordinates
                     polygon += `${coord.x}, ${coord.y} `;
                 });
-                snap.polygon(polygon as any);
-            }
 
-            if (this.state.mapData.innerPolygon) {
-                let polygon: string = "";
+                // create the polygon
+                let pol: Snap.Element = snap.polygon(polygon as any);
 
-                // Iterate all inner polygons
-                this.state.mapData.innerPolygon.forEach(it => {
+                // style the polygon
+                pol.addClass(styles.polygonObject);
 
-                    // for each inner polygon
-                    it.polygon.forEach(coord => {
-                        // generate string with coordinates
-                        polygon += `${coord.x}, ${coord.y} `;
-                    });
+                // reset the string
+                polygon = "";
+            });
 
-                    // create the polygon
-                    let pol: Snap.Element = snap.polygon(polygon as any);
-
-                    // style the polygon
-                    pol.addClass(styles.polygonObject);
-
-                    // reset the string
-                    polygon = "";
-                });
-            }
         }
     }
 
