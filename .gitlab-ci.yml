@@ -31,3 +31,5 @@ deploy:
     - az webapp up -n lewayf -l northeurope
   dependencies:
     - buildapp
+  only:
+    - master
