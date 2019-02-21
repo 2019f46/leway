@@ -69,7 +69,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 // reset the string
                 polygon = "";
             });
-
         }
     }
 
