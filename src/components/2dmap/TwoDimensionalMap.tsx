@@ -18,7 +18,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         return (
             <div className={styles.twoDimensionalMapContainer}>
                 <h2>
-                    2D Map
+                    2D Mapp
                 </h2>
             </div>
         );
