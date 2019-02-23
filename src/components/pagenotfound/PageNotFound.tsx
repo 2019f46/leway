@@ -1,7 +1,7 @@
 import React from "react";
-import { Image } from "office-ui-fabric-react/lib/Image";
+import { Image } from "office-ui-fabric-react/";
 import styles from "./PageNotFound.module.scss";
-import { Link } from "office-ui-fabric-react/lib/Link";
+import { Link } from "office-ui-fabric-react/";
 
 
 export default class PageNotFound extends React.Component {
