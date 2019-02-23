@@ -2,12 +2,21 @@
     position: absolute;
     top: 0px;
     bottom: 0px;
-    left: 0px;
-    right: 0px;
-    div[class*="ms-Image"] {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    div {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        h1 {
+            color: red;
+            font-weight: 700;
+        }
+        a[class*="ms-Link"] {
+            margin-top: 20px;
+            font-size: 25px;
+        }
     }
 }

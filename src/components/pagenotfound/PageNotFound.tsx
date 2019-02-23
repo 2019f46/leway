@@ -9,8 +9,11 @@ export default class PageNotFound extends React.Component {
     public render() {
         return (
             <div className={styles.notFoundContainer}>
-                <Image src={this.image} />
-                <Link href={window.location.origin} />
+                <div>
+                    <h1>404 - Oh-oh... Can't find the requested page</h1>
+                    <Image src={this.image} />
+                    <Link href={window.location.origin}>Return to Homepage</Link>
+                </div>
             </div>
         );
     }
