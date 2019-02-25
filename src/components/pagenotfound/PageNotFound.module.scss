@@ -1,0 +1,22 @@
+.notFoundContainer {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        h1 {
+            color: red;
+            font-weight: 700;
+        }
+        a[class*="ms-Link"] {
+            margin-top: 20px;
+            font-size: 25px;
+        }
+    }
+}
