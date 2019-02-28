@@ -23,10 +23,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     public render(): JSX.Element {
         let map = <div className={styles.twoDimensionalMapContainer}>
-            <svg className={styles.svgContainer}>
-                <svg id="svg" className={styles.svgMap}>
-                </svg>
-            </svg>
+            <svg id="svg" className={styles.svgMap} viewBox={"0 0 900 900"} />
         </div>;
         return (
             map
