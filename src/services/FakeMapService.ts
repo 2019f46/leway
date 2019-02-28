@@ -37,7 +37,7 @@ export default class FakeMapService implements IMapService {
                 },
             ]
         };
-        await delay("", 3000);
+        await delay("", 1000);
         return fakeData;
     }
 }
