@@ -40,7 +40,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         }
         this.timeout = window.setTimeout(() => {
             this.executeProductSearch(value);
-        }, 1000);
+        }, this.SEARCH_DELAY);
     }
 
     private executeProductSearch = async (value: string): Promise<void> => {
