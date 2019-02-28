@@ -3,20 +3,25 @@ import { SearchBox } from "office-ui-fabric-react";
 import styles from "./ProductSearch.module.scss";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/FakeSearchService";
+import { ISearchModel } from "../../models/ProductModel";
 
 export interface IProductSearchProps {
     fakeData?: boolean;
 }
 
 export interface IProductSearchState {
-
+    products: ISearchModel[];
 }
 
 export default class ProductSearch extends React.Component<IProductSearchProps, IProductSearchState> {
     private searchService: ISearchService;
+    private timeout: any;
+    private SEARCH_DELAY = 1000;
     constructor(props: any) {
         super(props);
-        this.state = {};
+        this.state = {
+            products: []
+        };
         this.searchService = this.props.fakeData ? new FakeSearchService() : new SearchService();
     }
     public render(): JSX.Element {
@@ -29,12 +34,17 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         );
     }
 
-    private onProductSearch = async (value: string) => {
-        // make this function do a delay before executing next function
-        this.executeProductSearch(value);
+    private onProductSearch = async (value: string): Promise<void> => {
+        if (this.timeout) {
+            window.clearTimeout(this.timeout);
+        }
+        this.timeout = window.setTimeout(() => {
+            this.executeProductSearch(value);
+        }, 1000);
     }
 
-    private executeProductSearch = async (value: string) => {
-        let results = await this.searchService.getProduct(value);
+    private executeProductSearch = async (value: string): Promise<void> => {
+        let products = await this.searchService.getProduct(value);
+        this.setState({ products: products });
     }
 }
