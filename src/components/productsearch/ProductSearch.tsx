@@ -3,14 +3,14 @@ import { SearchBox } from "office-ui-fabric-react";
 import styles from "./ProductSearch.module.scss";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/FakeSearchService";
-import { ISearchModel } from "../../models/ProductModel";
+import { IProduct } from "../../models/ProductModel";
 
 export interface IProductSearchProps {
     fakeData?: boolean;
 }
 
 export interface IProductSearchState {
-    products: ISearchModel[];
+    products: IProduct[];
 }
 
 export default class ProductSearch extends React.Component<IProductSearchProps, IProductSearchState> {
@@ -27,9 +27,11 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     public render(): JSX.Element {
         return (
             <div className={styles.productSearchContainer}>
-                <SearchBox
-                    placeholder="Search"
-                    onChange={value => this.onProductSearch(value)} />
+                <div className={styles.searchBoxContainer}>
+                    <SearchBox
+                        placeholder="Search"
+                        onChange={value => this.onProductSearch(value)} />
+                </div>
             </div>
         );
     }

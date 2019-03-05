@@ -1,9 +1,11 @@
-export interface ISearchModel {
+export interface IProduct {
     id: string;
+    image: string;
     name: string;
-    quantity: number;
+    quantity: string;
+    description: string;
+    price: string;
     location: ILocation;
-    // Lots of other stuff TBD
 }
 
 export interface ILocation {
