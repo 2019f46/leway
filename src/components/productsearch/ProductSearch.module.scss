@@ -4,8 +4,15 @@
     display: block;
     position: absolute;
     padding-top: 25px;
+    min-width: 40%;
     .searchBoxContainer {
-        justify-content: center;
-        display: flex;
+        display: block;
     }
 }
+
+.productSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
