@@ -5,13 +5,18 @@ import styles from "./Product.module.scss";
 
 /**
  * Properties recived by the Product Component.
- * @param product Required prop, and is the product object to be rendered.
+ * @param product Required prop, Is the product object to be rendered.
+ * @param onProductClick Optional prop, callback to parent component, telling the parent which product was selected.
  */
 export interface IProductProps {
     product: IProduct;
     onProductClick?: (prod: IProduct) => void;
 }
 
+/**
+ * States managed by Product
+ * @param currentProduct The product which is currently being handled.
+ */
 export interface IProductState {
     currentProduct: IProduct;
 }

@@ -16,6 +16,8 @@ export interface IProductSearchProps {
 
 /**
  * States managed by ProductSearchComponent
+ * @param products Required prop, List of products to show
+ * @param selectedProduct Optional prop, is set when a product is selected. 
  */
 export interface IProductSearchState {
     products: IProduct[];
@@ -67,12 +69,21 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         );
     }
 
+    /**
+     * This method is called when clicking the icon on the searchbox when the selected product state is set.
+     * This method handles the transition from a single product item to showing the rpevios list of products. 
+     */
     private onIconClick = () => {
         if (this.state.selectedProduct) {
             this.setState({ selectedProduct: undefined });
         }
     }
 
+    /**
+     * This method is called when a list is products is rendered, and a product is selected by the end user.
+     * This methods sets the state of the selected product which then changes the view from a list of products to a single product.
+     * @param product The selected product
+     */
     private onProductClick = (product: IProduct) => {
         this.setState({ selectedProduct: product });
     }
