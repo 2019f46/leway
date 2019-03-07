@@ -1,6 +1,10 @@
 import { ISearchService } from "./SearchService";
 import { IProduct } from "../models/ProductModel";
 
+/**
+ * This service class is responsible for rendered a fake product search.
+ * The implemented metjods are defined in the IMapService Interface. 
+ */
 export default class FakeSearchService implements ISearchService {
     public getProduct = async (value: string): Promise<IProduct[]> => {
         let prod1: IProduct = {

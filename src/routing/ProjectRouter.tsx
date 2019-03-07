@@ -4,6 +4,9 @@ import Home from "../components/Home";
 import PageNotFound from "../components/pagenotfound/PageNotFound";
 import SettingsPage from "../components/settingspage/SettingsPage";
 
+/**
+ * This is the highest ranked component in the application. This component is responsible for reading the current URL and deciding which component to render
+ */
 export class ProjectRouter extends React.Component {
     public render() {
         return (
