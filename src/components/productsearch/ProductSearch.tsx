@@ -19,7 +19,7 @@ export interface IProductSearchProps {
  */
 export interface IProductSearchState {
     products: IProduct[];
-    selectedProduct: IProduct;
+    selectedProduct?: IProduct;
 }
 
 /**
@@ -35,7 +35,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         super(props);
         this.state = {
             products: [],
-            selectedProduct: undefined as any
+            selectedProduct: undefined
         };
         this.searchService = this.props.fakeData ? new FakeSearchService() : new SearchService();
     }
@@ -46,11 +46,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     public render(): JSX.Element {
         let searchResults: JSX.Element[] = [];
 
-        if (!this.state.selectedProduct) {
-            this.state.products.forEach(element => {
-                searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.name} />);
-            });
-        }
+        this.state.products.forEach(element => {
+            searchResults.push(<Product product={element} onProductClick={this.onProductClick} onCancel={this.onCancel} key={element.price} />);
+        });
 
         return (
             <div className={styles.productSearchContainer}>
@@ -60,14 +58,17 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
                 </div>
-                {this.state.selectedProduct ? <Product product={this.state.selectedProduct} onProductClick={this.onProductClick} isProductresult={true} /> : searchResults}
+                {searchResults}
             </div>
         );
     }
 
     private onProductClick = (product: IProduct) => {
-        console.log(product);
         this.setState({ selectedProduct: product });
+    }
+
+    private onCancel = () => {
+        this.setState({ selectedProduct: undefined });
     }
 
     /**

@@ -10,11 +10,10 @@ import styles from "./Product.module.scss";
 export interface IProductProps {
     product: IProduct;
     onProductClick: (prod: IProduct) => void;
-    isProductresult?: boolean;
+    onCancel?: () => void;
 }
 
 export interface IProductState {
-    isResult: boolean | undefined;
     currentProduct: IProduct;
 }
 
@@ -25,7 +24,6 @@ export default class Product extends React.Component<IProductProps, IProductStat
     constructor(props: any) {
         super(props);
         this.state = {
-            isResult: this.props.isProductresult,
             currentProduct: this.props.product
         };
     }
@@ -33,9 +31,12 @@ export default class Product extends React.Component<IProductProps, IProductStat
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
-        let backBtn: JSX.Element = this.state.isResult ?
-            <Icon iconName="NavigateBack" onClick={() => this.props.onProductClick(undefined as any)} style={{ fontSize: "50px" }} />
-            : undefined as any;
+
+        let returnBtn: JSX.Element = <div></div>;
+
+        if (this.props.onCancel) {
+            returnBtn = <div onClick={this.props.onCancel}>Go back</div>;
+        }
 
         let searchResults: JSX.Element = (
             <div className={styles.resultsContainer} onClick={() => this.props.onProductClick(this.props.product)}>
@@ -47,7 +48,7 @@ export default class Product extends React.Component<IProductProps, IProductStat
                     <Image src={this.state.currentProduct.image} height={75} width={75} />
                     <h4>{this.props.product.price + "DKK"}</h4>
                 </div>
-                {backBtn}
+                {returnBtn}
             </div>
         );
         return (searchResults);
