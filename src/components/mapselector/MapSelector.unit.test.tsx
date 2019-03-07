@@ -1,6 +1,6 @@
 import React from "react";
 import MapSelector from "./MapSelector";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
@@ -12,9 +12,10 @@ import { IMapService } from "../../services/MapService";
 configure({ adapter: new Adapter() });
 
 describe("MapSelector", () => {
+
     it("MapSelector - Initial state of twodimensions is set to true", () => {
         const wrapper = shallow(
-            <MapSelector fakeData={true} unitTest={true} />
+            <MapSelector fakeData={true} />
         );
 
         expect(wrapper.state("twoDimensions")).toEqual(true);
@@ -23,7 +24,7 @@ describe("MapSelector", () => {
 
     it("MapSelector - 3D map is rendered on twodimensions state equals false", () => {
         const wrapper = shallow(
-            <MapSelector fakeData={true} unitTest={true} />
+            <MapSelector fakeData={true} />
         );
 
         wrapper.setState({ twoDimensions: false, dataReady: true });
@@ -43,14 +44,14 @@ describe("MapSelector", () => {
 
     it("MapSelector - 2D map is NOT rendered on twodimensions state equals false", async () => {
         const wrapper = shallow(
-            <MapSelector fakeData={true} unitTest={true} />
+            <MapSelector fakeData={true} />
         );
 
         wrapper.setState({ twoDimensions: false, dataReady: true });
         let fakeService: IMapService = new FakeMapService();
         let data = await fakeService.getMapData();
 
-        expect(wrapper.contains(<TwoDimensionalMap polygonData={data} unitTest={true} />)).toEqual(false);
+        expect(wrapper.contains(<TwoDimensionalMap polygonData={data} />)).toEqual(false);
         wrapper.unmount();
     });
 });

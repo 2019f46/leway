@@ -6,7 +6,6 @@ import { IMapModel } from "../../models/MapModel";
 export interface ITwoDimensionalMapProps {
     polygonData: IMapModel;
     onEditMap?: (data: IMapModel) => void;
-    unitTest?: boolean;
 }
 
 export interface ITwoDimensionalMapState {
@@ -25,9 +24,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         let map = <div className={styles.twoDimensionalMapContainer}>
             <svg id="svg" className={styles.svgMap} viewBox={"0 0 800 650"} />
         </div>;
-        return (
-            map
-        );
+        return (map);
     }
 
     public componentDidMount() {
@@ -35,8 +32,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     }
 
     private generateMap = () => {
-        if (this.state.mapData && !this.props.unitTest) {
+        if (this.state.mapData) {
             let snap: Snap.Paper = Snap("#svg");
+            if (!snap) {
+                return;
+            }
 
             // Process outer polygon
             let polygon: string = "";

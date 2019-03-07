@@ -18,7 +18,7 @@ describe("TwoDimensionalMap", () => {
         let data = await fakeService.getMapData();
 
         const wrapper = shallow(
-            <TwoDimensionalMap polygonData={data} unitTest={true} />
+            <TwoDimensionalMap polygonData={data} />
         );
 
         expect(wrapper.state("mapData")).toEqual(data);
@@ -29,12 +29,12 @@ describe("TwoDimensionalMap", () => {
         let fakeService: IMapService = new FakeMapService();
         let data = await fakeService.getMapData();
 
-        const wrapper = mount(
-            <TwoDimensionalMap polygonData={data} unitTest={true} />
+        const wrapper = shallow(
+            <TwoDimensionalMap polygonData={data} />
         );
 
         expect(wrapper.contains(<div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={"0 0 900 900"} />
+            <svg id="svg" className={styles.svgMap} viewBox={"0 0 800 650"} />
         </div>)).toEqual(true);
         wrapper.unmount();
     });

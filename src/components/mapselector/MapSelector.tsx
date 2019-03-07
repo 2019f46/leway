@@ -7,10 +7,12 @@ import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/FakeMapService";
 import { IMapModel } from "../../models/MapModel";
 
-
+/**
+ * Properties recived by the MapSelector Component.
+ * @param fakeData Optional prop, determines whether or not the map data is produced by the real or fake service.
+ */
 export interface IMapSelectorProps {
     fakeData?: boolean;
-    unitTest?: boolean;
 }
 
 export interface IMapSelectorState {
@@ -35,8 +37,13 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
     }
 
     public render(): JSX.Element {
-        let map: JSX.Element = this.state.twoDimensions ? <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} unitTest={this.props.unitTest} /> : <ThreeDimensionalMap />;
-        let toggle: JSX.Element = <Toggle onText={"3D Map"} offText={"2D Map"} disabled={false} className={styles.toggleSwitch} onClick={this.onToggleClick} />;
+        let map: JSX.Element = this.state.twoDimensions ?
+            <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} /> :
+            <ThreeDimensionalMap />;
+        let toggle: JSX.Element = <Toggle onText={"3D Map"}
+            offText={"2D Map"} disabled={false}
+            className={styles.toggleSwitch}
+            onClick={this.onToggleClick} />;
         return (
             <div className={styles.mapSelectorContainer}>
                 {toggle}

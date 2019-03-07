@@ -1,14 +1,11 @@
 import React, { PureComponent } from "react";
 
-export interface SettingsPageProps {}
+export interface SettingsPageProps { }
 
-export interface SettingsPageState {}
+export interface SettingsPageState { }
 
-class SettingsPage extends React.Component<
-  SettingsPageProps,
-  SettingsPageState
-> {
-  render() {
+export default class SettingsPage extends React.Component<SettingsPageProps, SettingsPageState> {
+  public render(): JSX.Element {
     return (
       <div>
         <h1>This is the settings page.</h1>
@@ -17,5 +14,3 @@ class SettingsPage extends React.Component<
     );
   }
 }
-
-export default SettingsPage;

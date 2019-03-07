@@ -3,16 +3,23 @@ import { Image } from "office-ui-fabric-react";
 import { IProduct } from "../../models/ProductModel";
 import styles from "./Product.module.scss";
 
+/**
+ * Properties recived by the Product Component.
+ * @param product Required prop, and is the product object to be rendered.
+ */
 export interface IProductProps {
     product: IProduct;
 }
 
-export interface IProductState {
+export interface IProductState { }
 
-}
-
+/**
+ * This component is used by the ProductSearch component. This component contains no logic and is only responsible for rendering a product.
+ */
 export default class Product extends React.Component<IProductProps, IProductState> {
-
+    /**
+     * Standard function in all react components. This function activates the react render engine and renders the desired content.
+     */
     public render(): JSX.Element {
         let searchResults: JSX.Element = (
             <div className={styles.resultsContainer}>
@@ -26,8 +33,6 @@ export default class Product extends React.Component<IProductProps, IProductStat
                 </div>
             </div>
         );
-        return (
-            searchResults
-        );
+        return (searchResults);
     }
 }
