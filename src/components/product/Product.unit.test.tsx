@@ -31,11 +31,11 @@ describe("Product", () => {
         wrapper.unmount();
     });
 
-    it("Product - Prpduct name is rendered together with description", async () => {
+    it("Product - Product name is rendered together with description", async () => {
         let products = await service.getProduct("");
         let product = products[0];
 
-        const wrapper = mount(<Product product={product} />);
+        const wrapper = shallow(<Product product={product} />);
 
         let result: JSX.Element = (
             <div className={styles.left}>

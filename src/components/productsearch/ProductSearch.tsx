@@ -19,6 +19,7 @@ export interface IProductSearchProps {
  */
 export interface IProductSearchState {
     products: IProduct[];
+    selectedProduct: IProduct;
 }
 
 /**
@@ -33,7 +34,8 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     constructor(props: any) {
         super(props);
         this.state = {
-            products: []
+            products: [],
+            selectedProduct: undefined as any
         };
         this.searchService = this.props.fakeData ? new FakeSearchService() : new SearchService();
     }
@@ -44,9 +46,11 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     public render(): JSX.Element {
         let searchResults: JSX.Element[] = [];
 
-        this.state.products.forEach(element => {
-            searchResults.push(<Product product={element} />);
-        });
+        if (!this.state.selectedProduct) {
+            this.state.products.forEach(element => {
+                searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.name} />);
+            });
+        }
 
         return (
             <div className={styles.productSearchContainer}>
@@ -56,9 +60,14 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
                 </div>
-                {searchResults}
+                {this.state.selectedProduct ? <Product product={this.state.selectedProduct} onProductClick={this.onProductClick} isProductresult={true} /> : searchResults}
             </div>
         );
+    }
+
+    private onProductClick = (product: IProduct) => {
+        console.log(product);
+        this.setState({ selectedProduct: product });
     }
 
     /**
