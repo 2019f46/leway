@@ -7,6 +7,7 @@ import ISearchService from "../../services/FakeSearchService";
 import { Image, SearchBox } from "office-ui-fabric-react";
 import ProductSearch from "./ProductSearch";
 import Product from "../product/Product";
+import { IProduct } from "../../models/ProductModel";
 
 // automatically unmount and cleanup DOM after the test is finished.
 configure({ adapter: new Adapter() });
@@ -17,14 +18,16 @@ describe("productSearch", () => {
     it("productSearch - Product 1 and 2 are rendered from the fakeservice", async () => {
         let products = await service.getProduct("");
 
-        let result: JSX.Element[] = [];
-        result.push(<Product product={products[0]} />);
-        result.push(<Product product={products[1]} />);
-
         const wrapper = shallow(<ProductSearch fakeData={true} />);
         wrapper.setState({ products: products });
 
-        expect(wrapper.contains(result)).toEqual(true);
+        expect(wrapper.find(Product)).toHaveLength(2);
+        wrapper.unmount();
+    });
+
+    it("productSearch - Renders a searchBox", async () => {
+        const wrapper = shallow(<ProductSearch fakeData={true} />);
+        expect(wrapper.find(SearchBox)).toHaveLength(1);
         wrapper.unmount();
     });
 });

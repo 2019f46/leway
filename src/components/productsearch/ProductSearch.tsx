@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SearchBox, Image } from "office-ui-fabric-react";
+import { SearchBox } from "office-ui-fabric-react";
 import styles from "./ProductSearch.module.scss";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/FakeSearchService";
@@ -44,31 +44,37 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
+
         let searchResults: JSX.Element[] = [];
 
-        this.state.products.forEach(element => {
-            searchResults.push(<Product product={element} onProductClick={this.onProductClick} onCancel={this.onCancel} key={element.price} />);
-        });
+        if (!this.state.selectedProduct) {
+            this.state.products.forEach(element => {
+                searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.price} />);
+            });
+        }
 
         return (
             <div className={styles.productSearchContainer}>
                 <div className={styles.searchBoxContainer}>
                     <SearchBox
-                        placeholder="Search"
+                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onIconClick }}
+                        placeholder="Search for products"
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
                 </div>
-                {searchResults}
+                {this.state.selectedProduct ? <Product product={this.state.selectedProduct} /> : searchResults}
             </div>
         );
     }
 
-    private onProductClick = (product: IProduct) => {
-        this.setState({ selectedProduct: product });
+    private onIconClick = () => {
+        if (this.state.selectedProduct) {
+            this.setState({ selectedProduct: undefined });
+        }
     }
 
-    private onCancel = () => {
-        this.setState({ selectedProduct: undefined });
+    private onProductClick = (product: IProduct) => {
+        this.setState({ selectedProduct: product });
     }
 
     /**
@@ -104,6 +110,6 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      */
     private executeProductSearch = async (value: string): Promise<void> => {
         let products = await this.searchService.getProduct(value);
-        this.setState({ products: products });
+        this.setState({ products: products, selectedProduct: undefined });
     }
 }

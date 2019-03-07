@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, Icon } from "office-ui-fabric-react";
+import { Image, Icon, Link } from "office-ui-fabric-react";
 import { IProduct } from "../../models/ProductModel";
 import styles from "./Product.module.scss";
 
@@ -9,8 +9,7 @@ import styles from "./Product.module.scss";
  */
 export interface IProductProps {
     product: IProduct;
-    onProductClick: (prod: IProduct) => void;
-    onCancel?: () => void;
+    onProductClick?: (prod: IProduct) => void;
 }
 
 export interface IProductState {
@@ -32,14 +31,8 @@ export default class Product extends React.Component<IProductProps, IProductStat
      */
     public render(): JSX.Element {
 
-        let returnBtn: JSX.Element = <div></div>;
-
-        if (this.props.onCancel) {
-            returnBtn = <div onClick={this.props.onCancel}>Go back</div>;
-        }
-
         let searchResults: JSX.Element = (
-            <div className={styles.resultsContainer} onClick={() => this.props.onProductClick(this.props.product)}>
+            <div className={styles.resultsContainer} onClick={() => this.props.onProductClick ? this.props.onProductClick(this.props.product) : undefined}>
                 <div className={styles.left}>
                     <h3>{this.state.currentProduct.name}</h3>
                     <span>{this.props.product.description}</span>
@@ -48,7 +41,6 @@ export default class Product extends React.Component<IProductProps, IProductStat
                     <Image src={this.state.currentProduct.image} height={75} width={75} />
                     <h4>{this.props.product.price + "DKK"}</h4>
                 </div>
-                {returnBtn}
             </div>
         );
         return (searchResults);

@@ -29,12 +29,12 @@ describe("TwoDimensionalMap", () => {
         let fakeService: IMapService = new FakeMapService();
         let data = await fakeService.getMapData();
 
-        const wrapper = shallow(
+        const wrapper = mount(
             <TwoDimensionalMap polygonData={data} />
         );
 
         expect(wrapper.contains(<div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={"0 0 800 650"} />
+            <svg id="svg" className={styles.svgMap} viewBox={"0 0 800 650"} preserveAspectRatio="none" />
         </div>)).toEqual(true);
         wrapper.unmount();
     });
