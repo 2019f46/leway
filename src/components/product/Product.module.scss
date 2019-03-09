@@ -1,0 +1,28 @@
+.resultsContainer {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    .left {
+        display: block;
+        padding: 10px;
+    }
+    .right {
+        display: block;
+        padding: 10px;
+    }
+}
+
+.resultsContainer:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+.resultsContainer:nth-child(odd) {
+    background-color: antiquewhite;
+}
+
+.resultsContainer:nth-child(even) {
+    background-color: azure;
+}

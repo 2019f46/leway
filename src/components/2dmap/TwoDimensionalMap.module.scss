@@ -2,13 +2,13 @@
     text-align: center;
     height: 100%;
     width: 90%;
+    padding-top: 15px;
     .svgMap {
+        height: 90%;
+        width: 80%;
         fill: transparent;
         stroke-width: 1px;
         stroke: black;
-        height: 100%;
-        width: 100%;
-        padding: 20px;
         .polygonObject {
             fill: #f1f1f1;
         }
