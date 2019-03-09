@@ -5,8 +5,6 @@ import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import FakeMapService from "../../services/FakeMapService";
-import { IMapService } from "../../services/MapService";
 
 // automatically unmount and cleanup DOM after the test is finished.
 configure({ adapter: new Adapter() });
@@ -28,7 +26,7 @@ describe("MapSelector", () => {
         );
 
         wrapper.setState({ twoDimensions: false, dataReady: true });
-        expect(wrapper.contains(<ThreeDimensionalMap />)).toEqual(true);
+        expect(wrapper.find(ThreeDimensionalMap)).toHaveLength(1);
         wrapper.unmount();
     });
 
@@ -38,7 +36,7 @@ describe("MapSelector", () => {
         );
 
         wrapper.setState({ twoDimensions: false, dataReady: false });
-        expect(wrapper.contains(<ThreeDimensionalMap />)).toEqual(false);
+        expect(wrapper.find(ThreeDimensionalMap)).toHaveLength(0);
         wrapper.unmount();
     });
 
@@ -48,10 +46,7 @@ describe("MapSelector", () => {
         );
 
         wrapper.setState({ twoDimensions: false, dataReady: true });
-        let fakeService: IMapService = new FakeMapService();
-        let data = await fakeService.getMapData();
-
-        expect(wrapper.contains(<TwoDimensionalMap polygonData={data} />)).toEqual(false);
+        expect(wrapper.find(TwoDimensionalMap)).toHaveLength(0);
         wrapper.unmount();
     });
 });
