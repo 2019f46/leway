@@ -57,56 +57,55 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      * An outer polygon is rendered aswell as the inner polygons. 
      */
     private generateMap = () => {
-        if (this.state.mapData) {
-            let snap: Snap.Paper = Snap("#svg");
-            if (!snap) {
-                return;
-            }
+        let snap: Snap.Paper = Snap("#svg");
+        if (!snap) {
+            return;
+        }
 
-            // Target red dot
-            if (this.state.selectedProduct) {
-                let redCircle = snap.circle(this.state.selectedProduct.location.x, this.state.selectedProduct.location.y, 5);
-                redCircle.addClass(styles.target);
-            }
+        // Target red dot
+        if (this.state.selectedProduct) {
+            let redCircle = snap.circle(this.state.selectedProduct.location.x, this.state.selectedProduct.location.y, 5);
+            redCircle.addClass(styles.target);
+        }
 
-            // products blue dots
-            if (this.state.products) {
-                this.state.products.forEach(product => {
-                    let redCircle = snap.circle(product.location.x, product.location.y, 5);
-                    redCircle.addClass(styles.products);
-                });
-            }
+        // products blue dots
+        if (this.state.products) {
+            this.state.products.forEach(product => {
+                let redCircle = snap.circle(product.location.x, product.location.y, 5);
+                redCircle.addClass(styles.products);
+            });
+        }
 
-            // Process outer polygon
-            let polygon: string = "";
-            this.state.mapData.outerPolygon.polygon.forEach(coord => {
+        // Process outer polygon
+        let polygon: string = "";
+        this.state.mapData.outerPolygon.polygon.forEach(coord => {
+            polygon += `${coord.x}, ${coord.y} `;
+        });
+
+        snap.polygon(polygon as any);
+
+        // Reset the string container
+        polygon = "";
+
+        // Iterate all inner polygons
+        this.state.mapData.innerPolygon.forEach(it => {
+
+            // for each inner polygon
+            it.polygon.forEach(coord => {
+                // generate string with coordinates
                 polygon += `${coord.x}, ${coord.y} `;
             });
 
-            snap.polygon(polygon as any);
+            // create the polygon
+            let pol: Snap.Element = snap.polygon(polygon as any);
 
-            // Reset the string container
+            // style the polygon
+            pol.addClass(styles.polygonObject);
+
+            // reset the string
             polygon = "";
+        });
 
-            // Iterate all inner polygons
-            this.state.mapData.innerPolygon.forEach(it => {
-
-                // for each inner polygon
-                it.polygon.forEach(coord => {
-                    // generate string with coordinates
-                    polygon += `${coord.x}, ${coord.y} `;
-                });
-
-                // create the polygon
-                let pol: Snap.Element = snap.polygon(polygon as any);
-
-                // style the polygon
-                pol.addClass(styles.polygonObject);
-
-                // reset the string
-                polygon = "";
-            });
-        }
     }
 
     /**
