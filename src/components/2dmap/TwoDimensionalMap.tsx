@@ -62,18 +62,31 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             return;
         }
 
+        let container = document.getElementById("svg");
+        if (container) {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+        }
+
         // Target red dot
         if (this.state.selectedProduct) {
-            let redCircle = snap.circle(this.state.selectedProduct.location.x, this.state.selectedProduct.location.y, 5);
+            let redCircle = snap.circle(this.state.selectedProduct.location.x + 20, this.state.selectedProduct.location.y + 20, 5);
             redCircle.addClass(styles.target);
+            console.log("rendering selected");
+        } else {
+            console.log("skipped selected");
         }
 
         // products blue dots
-        if (this.state.products) {
+        if (this.state.products && this.state.products.length > 0) {
             this.state.products.forEach(product => {
                 let redCircle = snap.circle(product.location.x, product.location.y, 5);
                 redCircle.addClass(styles.products);
             });
+            console.log("rendering products");
+        } else {
+            console.log("skipped products");
         }
 
         // Process outer polygon
@@ -108,16 +121,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     }
 
-    /**
-     * Lifecycle method, this method is triggered when a new property(s) is(are) received.
-     * React does not by default rerender when new properties are recieved.
-     * @param nextProps This property are the new received properties, usually its a good ide to compare them to the current properties before triggeren a method.
-     */
-    public componentWillReceiveProps(nextProps: ITwoDimensionalMapProps) {
-        this.setState({ mapData: nextProps.polygonData });
-        this.generateMap();
-    }
-
     public componentWillMount() {
         ProductSearchStore.on("productsChange", () => {
             this.setState({ products: ProductSearchStore.getProductsState() });
@@ -127,6 +130,5 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
             this.generateMap();
         });
-
     }
 }
