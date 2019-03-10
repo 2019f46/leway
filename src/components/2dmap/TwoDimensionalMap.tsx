@@ -2,7 +2,8 @@ import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
 import { IMapModel } from "../../models/MapModel";
-
+import { IProduct } from "../../models/ProductModel";
+import ProductSearchStore from "../../flux/ProductSearchStore";
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -19,6 +20,8 @@ export interface ITwoDimensionalMapProps {
  */
 export interface ITwoDimensionalMapState {
     mapData: IMapModel;
+    products?: IProduct[];
+    selectedProduct?: IProduct;
 }
 
 /**
@@ -60,11 +63,26 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 return;
             }
 
+            // Target red dot
+            if (this.state.selectedProduct) {
+                let redCircle = snap.circle(this.state.selectedProduct.location.x, this.state.selectedProduct.location.y, 5);
+                redCircle.addClass(styles.target);
+            }
+
+            // products blue dots
+            if (this.state.products) {
+                this.state.products.forEach(product => {
+                    let redCircle = snap.circle(product.location.x, product.location.y, 5);
+                    redCircle.addClass(styles.products);
+                });
+            }
+
             // Process outer polygon
             let polygon: string = "";
             this.state.mapData.outerPolygon.polygon.forEach(coord => {
                 polygon += `${coord.x}, ${coord.y} `;
             });
+
             snap.polygon(polygon as any);
 
             // Reset the string container
@@ -99,5 +117,17 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     public componentWillReceiveProps(nextProps: ITwoDimensionalMapProps) {
         this.setState({ mapData: nextProps.polygonData });
         this.generateMap();
+    }
+
+    public componentWillMount() {
+        ProductSearchStore.on("productsChange", () => {
+            this.setState({ products: ProductSearchStore.getProductsState() });
+            this.generateMap();
+        });
+        ProductSearchStore.on("selectedProductChange", () => {
+            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
+            this.generateMap();
+        });
+
     }
 }
