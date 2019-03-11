@@ -8,9 +8,7 @@ import PageNotFound from "../components/pagenotfound/PageNotFound";
 import { MemoryRouter } from "react-router";
 import SettingsPage from "../components/settingspage/SettingsPage";
 
-
 describe("Routing", () => {
-
   configure({ adapter: new Adapter() });
 
   it("Routing - /home should redirect to home", () => {
