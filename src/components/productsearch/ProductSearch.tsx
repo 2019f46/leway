@@ -127,6 +127,10 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         this.onBackIconClick();
     }
 
+    /**
+     * When the component mounts, a listener will begin to listen for product changes and selected product changes.
+     * Component will mount is a lifecycle method, therefore by setting the listeners here, they are ensure to work throught the licecycle of the component.
+     */
     public componentDidMount() {
         ProductSearchStore.on("productsChange", () => {
             this.setState({ products: ProductSearchStore.getProductsState() });
@@ -136,6 +140,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         });
     }
 
+    /**
+     * When the component unmounts, it is important to remove the listeners
+     */
     public componentWillUnmount() {
         ProductSearchStore.removeAllListeners();
     }

@@ -121,10 +121,15 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     }
 
+    /**
+     * When the component mounts, a listener will be listening to the prodsStateChange event which is emited by the product search store.
+     * This event will enable this component to know the current searchresults without being coupled with the productSearch component.
+     */
     public componentWillMount() {
         ProductSearchStore.on("prodsStateChange", this.onSelectedChange);
     }
 
+    // This is the method which runs when the event prodsStateChange is emited. 
     private onSelectedChange = () => {
         let selected = ProductSearchStore.getSelectedProduct();
         let prods = ProductSearchStore.getProductsState();
