@@ -2,7 +2,8 @@ import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
 import { IMapModel } from "../../models/MapModel";
-
+import { IProduct } from "../../models/ProductModel";
+import ProductSearchStore from "../../flux/ProductSearchStore";
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -19,6 +20,8 @@ export interface ITwoDimensionalMapProps {
  */
 export interface ITwoDimensionalMapState {
     mapData: IMapModel;
+    products?: IProduct[];
+    selectedProduct?: IProduct;
 }
 
 /**
@@ -54,50 +57,78 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      * An outer polygon is rendered aswell as the inner polygons. 
      */
     private generateMap = () => {
-        if (this.state.mapData) {
-            let snap: Snap.Paper = Snap("#svg");
-            if (!snap) {
-                return;
-            }
+        let snap: Snap.Paper = Snap("#svg");
+        if (!snap) {
+            return;
+        }
 
-            // Process outer polygon
-            let polygon: string = "";
-            this.state.mapData.outerPolygon.polygon.forEach(coord => {
+        let container = document.getElementById("svg");
+        if (container) {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+        }
+
+        // Target red dot
+        if (this.state.selectedProduct) {
+            let redCircle = snap.circle(this.state.selectedProduct.location.x + 20, this.state.selectedProduct.location.y + 20, 5);
+            redCircle.addClass(styles.target);
+            console.log("rendering selected");
+        } else {
+            console.log("skipped selected");
+        }
+
+        // products blue dots
+        if (this.state.products && this.state.products.length > 0) {
+            this.state.products.forEach(product => {
+                let redCircle = snap.circle(product.location.x, product.location.y, 5);
+                redCircle.addClass(styles.products);
+            });
+            console.log("rendering products");
+        } else {
+            console.log("skipped products");
+        }
+
+        // Process outer polygon
+        let polygon: string = "";
+        this.state.mapData.outerPolygon.polygon.forEach(coord => {
+            polygon += `${coord.x}, ${coord.y} `;
+        });
+
+        snap.polygon(polygon as any);
+
+        // Reset the string container
+        polygon = "";
+
+        // Iterate all inner polygons
+        this.state.mapData.innerPolygon.forEach(it => {
+
+            // for each inner polygon
+            it.polygon.forEach(coord => {
+                // generate string with coordinates
                 polygon += `${coord.x}, ${coord.y} `;
             });
-            snap.polygon(polygon as any);
 
-            // Reset the string container
+            // create the polygon
+            let pol: Snap.Element = snap.polygon(polygon as any);
+
+            // style the polygon
+            pol.addClass(styles.polygonObject);
+
+            // reset the string
             polygon = "";
+        });
 
-            // Iterate all inner polygons
-            this.state.mapData.innerPolygon.forEach(it => {
-
-                // for each inner polygon
-                it.polygon.forEach(coord => {
-                    // generate string with coordinates
-                    polygon += `${coord.x}, ${coord.y} `;
-                });
-
-                // create the polygon
-                let pol: Snap.Element = snap.polygon(polygon as any);
-
-                // style the polygon
-                pol.addClass(styles.polygonObject);
-
-                // reset the string
-                polygon = "";
-            });
-        }
     }
 
-    /**
-     * Lifecycle method, this method is triggered when a new property(s) is(are) received.
-     * React does not by default rerender when new properties are recieved.
-     * @param nextProps This property are the new received properties, usually its a good ide to compare them to the current properties before triggeren a method.
-     */
-    public componentWillReceiveProps(nextProps: ITwoDimensionalMapProps) {
-        this.setState({ mapData: nextProps.polygonData });
-        this.generateMap();
+    public componentWillMount() {
+        ProductSearchStore.on("productsChange", () => {
+            this.setState({ products: ProductSearchStore.getProductsState() });
+            this.generateMap();
+        });
+        ProductSearchStore.on("selectedProductChange", () => {
+            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
+            this.generateMap();
+        });
     }
 }

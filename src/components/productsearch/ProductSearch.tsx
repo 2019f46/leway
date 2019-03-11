@@ -5,6 +5,8 @@ import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/FakeSearchService";
 import { IProduct } from "../../models/ProductModel";
 import Product from "../product/Product";
+import ProductSearchStore from "../../flux/ProductSearchStore";
+import ProductSearchActions from "../../flux/ProductSearchActions";
 
 /**
  * Properties recived by the product Search Component.
@@ -36,8 +38,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     constructor(props: any) {
         super(props);
         this.state = {
-            products: [],
-            selectedProduct: undefined
+            products: ProductSearchStore.getProductsState(),
+            selectedProduct: ProductSearchStore.getSelectedProduct(),
+
         };
         this.searchService = this.props.fakeData ? new FakeSearchService() : new SearchService();
     }
@@ -46,9 +49,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
-
         let searchResults: JSX.Element[] = [];
-
         if (!this.state.selectedProduct) {
             this.state.products.forEach(element => {
                 searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.price} />);
@@ -56,7 +57,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         }
 
         return (
-            <div className={styles.productSearchContainer}>
+            <div className={styles.productSearchContainer} >
                 <div className={styles.searchBoxContainer}>
                     <SearchBox
                         iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onIconClick }}
@@ -75,7 +76,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      */
     private onIconClick = () => {
         if (this.state.selectedProduct) {
-            this.setState({ selectedProduct: undefined });
+            ProductSearchActions.setSelectedProduct(undefined as any);
         }
     }
 
@@ -85,14 +86,15 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * @param product The selected product
      */
     private onProductClick = (product: IProduct) => {
-        this.setState({ selectedProduct: product });
+        ProductSearchActions.setSelectedProduct(product);
     }
 
     /**
      * When clearing the searchbox, any earlier search results are removed from the component state.
      */
     private clearSearch = () => {
-        this.setState({ products: [] });
+        ProductSearchActions.setProducts([]);
+        this.onIconClick();
     }
 
     /**
@@ -121,6 +123,20 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      */
     private executeProductSearch = async (value: string): Promise<void> => {
         let products = await this.searchService.getProduct(value);
-        this.setState({ products: products, selectedProduct: undefined });
+        ProductSearchActions.setProducts(products);
+        this.onIconClick();
+    }
+
+    public componentDidMount() {
+        ProductSearchStore.on("productsChange", () => {
+            this.setState({ products: ProductSearchStore.getProductsState() });
+        });
+        ProductSearchStore.on("selectedProductChange", () => {
+            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
+        });
+    }
+
+    public componentWillUnmount() {
+        ProductSearchStore.removeAllListeners();
     }
 }

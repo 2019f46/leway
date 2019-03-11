@@ -14,7 +14,7 @@ export default class FakeSearchService implements ISearchService {
             quantity: "700",
             price: "5",
             description: "Its white",
-            location: { x: 20, y: 50 }
+            location: { x: 600, y: 50 }
         };
 
         let prod2: IProduct = {
@@ -24,7 +24,7 @@ export default class FakeSearchService implements ISearchService {
             quantity: "100",
             price: "25",
             description: "It be smelly",
-            location: { x: 200, y: 500 }
+            location: { x: 500, y: 500 }
         };
 
         let data: IProduct[] = [prod1, prod2];
