@@ -12,7 +12,7 @@ class ProductSearchStore extends EventEmitter {
     private products: IProduct[];
     private selectedProduct: IProduct;
     constructor() {
-        super()
+        super();
         this.products = [];
         this.selectedProduct = undefined as any;
     }

@@ -132,7 +132,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
             this.setState({ products: ProductSearchStore.getProductsState() });
         });
         ProductSearchStore.on("selectedProductChange", () => {
-            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() })
+            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
         });
     }
 
