@@ -21,7 +21,7 @@ class ProductSearchActions {
      * This method crates a action object which is sent to the store to handle
      * @param products Product to set
      */
-    public setSelectedProduct(product: IProduct): void {
+    public setSelectedProduct(product: IProduct | undefined): void {
         dispatcher.dispatch({
             type: "SET_SELECTED",
             product: product

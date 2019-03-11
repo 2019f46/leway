@@ -10,7 +10,7 @@ import dispatcher from "./Dispatchers";
  */
 class ProductSearchStore extends EventEmitter {
     private products: IProduct[];
-    private selectedProduct: IProduct;
+    private selectedProduct: IProduct | undefined;
     constructor() {
         super();
         this.products = [];
@@ -31,6 +31,7 @@ class ProductSearchStore extends EventEmitter {
     private setProductsState(products: IProduct[]) {
         this.products = products;
         this.emit("productsChange");
+        this.emit("prodsStateChange");
     }
 
     /**
@@ -47,6 +48,7 @@ class ProductSearchStore extends EventEmitter {
     private setSelectedProduct(product: IProduct) {
         this.selectedProduct = product;
         this.emit("selectedProductChange");
+        this.emit("prodsStateChange");
     }
 
     /**

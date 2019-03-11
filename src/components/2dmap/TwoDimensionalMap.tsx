@@ -56,7 +56,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      * This method renders the map using the snapsvg framework.
      * An outer polygon is rendered aswell as the inner polygons. 
      */
-    private generateMap = () => {
+    private generateMap = (selectedProduct: IProduct | undefined = undefined, products: IProduct[] | undefined = this.state.products) => {
         let snap: Snap.Paper = Snap("#svg");
         if (!snap) {
             return;
@@ -70,8 +70,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         }
 
         // Target red dot
-        if (this.state.selectedProduct) {
-            let redCircle = snap.circle(this.state.selectedProduct.location.x + 20, this.state.selectedProduct.location.y + 20, 5);
+        if (selectedProduct) {
+            let redCircle = snap.circle(selectedProduct.location.x + 20, selectedProduct.location.y + 20, 5);
             redCircle.addClass(styles.target);
             console.log("rendering selected");
         } else {
@@ -79,8 +79,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         }
 
         // products blue dots
-        if (this.state.products && this.state.products.length > 0) {
-            this.state.products.forEach(product => {
+        if (products && products.length > 0) {
+            products.forEach(product => {
                 let redCircle = snap.circle(product.location.x, product.location.y, 5);
                 redCircle.addClass(styles.products);
             });
@@ -122,13 +122,13 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     }
 
     public componentWillMount() {
-        ProductSearchStore.on("productsChange", () => {
-            this.setState({ products: ProductSearchStore.getProductsState() });
-            this.generateMap();
-        });
-        ProductSearchStore.on("selectedProductChange", () => {
-            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
-            this.generateMap();
-        });
+        ProductSearchStore.on("prodsStateChange", this.onSelectedChange);
+    }
+
+    private onSelectedChange = () => {
+        let selected = ProductSearchStore.getSelectedProduct();
+        let prods = ProductSearchStore.getProductsState();
+        this.setState({ selectedProduct: selected, products: prods });
+        this.generateMap(selected, prods);
     }
 }

@@ -60,7 +60,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
             <div className={styles.productSearchContainer} >
                 <div className={styles.searchBoxContainer}>
                     <SearchBox
-                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onIconClick }}
+                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onBackIconClick }}
                         placeholder="Search for products"
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
@@ -74,9 +74,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * This method is called when clicking the icon on the searchbox when the selected product state is set.
      * This method handles the transition from a single product item to showing the rpevios list of products. 
      */
-    private onIconClick = () => {
+    private onBackIconClick = () => {
         if (this.state.selectedProduct) {
-            ProductSearchActions.setSelectedProduct(undefined as any);
+            ProductSearchActions.setSelectedProduct(undefined);
         }
     }
 
@@ -90,11 +90,11 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     }
 
     /**
-     * When clearing the searchbox, any earlier search results are removed from the component state.
+     * When clearing the searchbox, any earlier search results are removed from the component state, and the selected product is removed
      */
     private clearSearch = () => {
         ProductSearchActions.setProducts([]);
-        this.onIconClick();
+        this.onBackIconClick();
     }
 
     /**
@@ -124,7 +124,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     private executeProductSearch = async (value: string): Promise<void> => {
         let products = await this.searchService.getProduct(value);
         ProductSearchActions.setProducts(products);
-        this.onIconClick();
+        this.onBackIconClick();
     }
 
     public componentDidMount() {
