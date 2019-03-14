@@ -6,6 +6,7 @@ import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/FakeMapService";
 import { IMapModel } from "../../models/MapModel";
+import BoothError from "../bootherror/BoothError";
 
 /**
  * Properties recived by the MapSelector Component.
