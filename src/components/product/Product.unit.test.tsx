@@ -3,8 +3,8 @@ import { shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import Product from "./Product";
-import FakeSearchService from "../../services/FakeSearchService";
-import ISearchService from "../../services/FakeSearchService";
+import FakeSearchService from "../../services/fakes/FakeSearchService";
+import ISearchService from "../../services/fakes/FakeSearchService";
 import styles from "./Product.module.scss";
 import { Image } from "office-ui-fabric-react";
 

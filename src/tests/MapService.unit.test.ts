@@ -1,5 +1,5 @@
 import MapService, { IMapService } from "../services/MapService";
-import FakeMapService from "../services/FakeMapService";
+import FakeMapService from "../services/fakes/FakeMapService";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { IMapModel } from "../models/MapModel";

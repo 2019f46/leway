@@ -2,7 +2,7 @@ import * as React from "react";
 import { SearchBox } from "office-ui-fabric-react";
 import styles from "./ProductSearch.module.scss";
 import SearchService, { ISearchService } from "../../services/SearchService";
-import FakeSearchService from "../../services/FakeSearchService";
+import FakeSearchService from "../../services/fakes/FakeSearchService";
 import { IProduct } from "../../models/ProductModel";
 import Product from "../product/Product";
 import ProductSearchStore from "../../flux/ProductSearchStore";

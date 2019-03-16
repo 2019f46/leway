@@ -1,5 +1,5 @@
-import { IBooth } from "../models/IBooth";
-import { IBoothService } from "./BoothService";
+import { IBooth } from "../../models/IBooth";
+import { IBoothService } from "../BoothService";
 import { Guid } from "guid-typescript";
 
 export default class FakeBoothService implements IBoothService {

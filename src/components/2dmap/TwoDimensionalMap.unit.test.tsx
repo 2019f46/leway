@@ -3,7 +3,7 @@ import { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
-import FakeMapService from "../../services/FakeMapService";
+import FakeMapService from "../../services/fakes/FakeMapService";
 import { IMapService } from "../../services/MapService";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
