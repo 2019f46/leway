@@ -60,7 +60,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
             <div className={styles.productSearchContainer} >
                 <div className={styles.searchBoxContainer}>
                     <SearchBox
-                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onIconClick }}
+                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onBackIconClick }}
                         placeholder="Search for products"
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
@@ -74,9 +74,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * This method is called when clicking the icon on the searchbox when the selected product state is set.
      * This method handles the transition from a single product item to showing the rpevios list of products. 
      */
-    private onIconClick = () => {
+    private onBackIconClick = () => {
         if (this.state.selectedProduct) {
-            ProductSearchActions.setSelectedProduct(undefined as any);
+            ProductSearchActions.setSelectedProduct(undefined);
         }
     }
 
@@ -90,11 +90,11 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     }
 
     /**
-     * When clearing the searchbox, any earlier search results are removed from the component state.
+     * When clearing the searchbox, any earlier search results are removed from the component state, and the selected product is removed
      */
     private clearSearch = () => {
         ProductSearchActions.setProducts([]);
-        this.onIconClick();
+        this.onBackIconClick();
     }
 
     /**
@@ -124,9 +124,13 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
     private executeProductSearch = async (value: string): Promise<void> => {
         let products = await this.searchService.getProduct(value);
         ProductSearchActions.setProducts(products);
-        this.onIconClick();
+        this.onBackIconClick();
     }
 
+    /**
+     * When the component mounts, a listener will begin to listen for product changes and selected product changes.
+     * Component will mount is a lifecycle method, therefore by setting the listeners here, they are ensure to work throught the licecycle of the component.
+     */
     public componentDidMount() {
         ProductSearchStore.on("productsChange", () => {
             this.setState({ products: ProductSearchStore.getProductsState() });
@@ -136,6 +140,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         });
     }
 
+    /**
+     * When the component unmounts, it is important to remove the listeners
+     */
     public componentWillUnmount() {
         ProductSearchStore.removeAllListeners();
     }
