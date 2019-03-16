@@ -38,10 +38,16 @@ export default class BoothError extends React.Component<BoothErrorProps, BoothEr
         );
     }
 
+    /**
+     * Method used for acknowledging that there are no map settings available, which results in no wayfinding.
+     */
     private acknowledge = () => {
         this.props.acknowledge(true);
     }
 
+    /**
+     * Redirect the url to the settings page
+     */
     private goToSettings = () => {
         window.location.href = "settings";
     }
