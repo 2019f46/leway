@@ -1,5 +1,5 @@
-import { IMapService } from "./MapService";
-import { IMapModel } from "../models/MapModel";
+import { IMapService } from "../MapService";
+import { IMapModel } from "../../models/MapModel";
 import { delay } from "q";
 
 /**

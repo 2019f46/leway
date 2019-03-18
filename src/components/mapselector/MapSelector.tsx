@@ -4,7 +4,7 @@ import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
 import { Toggle, Spinner } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
-import FakeMapService from "../../services/FakeMapService";
+import FakeMapService from "../../services/fakes/FakeMapService";
 import { IMapModel } from "../../models/MapModel";
 import BoothError from "../bootherror/BoothError";
 
