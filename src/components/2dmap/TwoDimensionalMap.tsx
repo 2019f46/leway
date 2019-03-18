@@ -1,10 +1,11 @@
 import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap, { path } from "snapsvg-cjs";
-import { IMapModel } from "../../models/MapModel";
+import { IMapModel, ICoord } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import ProductSearchStore from "../../flux/ProductSearchStore";
 import pathfinder from "pathfinding";
+
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -122,11 +123,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 1 });
 
         let emptyGrid = new pathfinder.Grid(11, 11);
-        let test = this.setUnwalkable(emptyGrid);
-        let grid = finder.findPath(0, 0, 6, 4, test);
+        this.setUnwalkable(emptyGrid);
+        let grid = finder.findPath(0, 0, 4, 3, emptyGrid);
 
         // path Starting position
-        let path = snap.path("").attr({
+        let renderedPath = snap.path("").attr({
             fill: "none",
             stroke: "#bada55",
             strokeWidth: 0.1
@@ -137,13 +138,13 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             route += `${pt[0]} ${pt[1]}L`;
         });
 
-        path.animate({ d: route }, 2000);
+        renderedPath.animate({ d: route }, 2000);
     }
 
-    private setUnwalkable = (path: pathfinder.Grid): pathfinder.Grid => {
-        // this.props.polygonData.innerPolygon.forEach(item => {});
-        let test = path;
-
+    /**
+     * The purpose of this method is to set the grid coordinates which are unavailable for pathfinding
+     */
+    private setUnwalkable = (grid: pathfinder.Grid) => {
         // Iterate each polygon set
         this.props.polygonData.innerPolygon.forEach(pol => {
             for (let i = 0; i < pol.polygon.length; i++) {
@@ -152,47 +153,49 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 let comp1 = pol.polygon[i];
                 let comp2 = pol.polygon[i + 1];
 
+                // If there are no more points to compare, compare to the initial point
                 if (!comp2) { comp2 = pol.polygon[0]; }
 
-                if (comp1.x === comp2.x) {
-                    // x variable stays constant
-                    let y = comp1.y;
-                    let upwards = false;
-                    if (comp2.y > comp1.y) { upwards = true; }
-
-                    if (upwards) {
-                        do {
-                            test.setWalkableAt(comp1.x, y, false);
-                            y++;
-                        } while (y !== comp2.y);
-                    } else {
-                        do {
-                            test.setWalkableAt(comp1.x, y, false);
-                            y--;
-                        } while (y !== comp2.y);
-                    }
-
-                } else if (comp1.y === comp2.y) {
-                    // y stays constant
-                    let x = comp1.x;
-                    let upwards = false;
-                    if (comp2.x > comp1.x) { upwards = true; }
-                    if (upwards) {
-                        do {
-                            test.setWalkableAt(x, comp1.y, false);
-                            x++;
-                        } while (x !== comp2.x);
-                    } else {
-                        do {
-                            test.setWalkableAt(x, comp1.y, false);
-                            x--;
-                        } while (x !== comp2.x);
-                    }
-
-                }
+                this.setUnpathableZones(comp1, comp2, grid);
             }
         });
-        return test;
+    }
+
+    /**
+     * This is a implementation of Bresenham algorithm, which determines the coordinates in the path of a vector in real numbers
+     */
+    private setUnpathableZones = (coord: ICoord, coord1: ICoord, grid: pathfinder.Grid) => {
+        // Pull the coordinates
+        let x0 = coord.x;
+        let y0 = coord.y;
+        let x1 = coord1.x;
+        let y1 = coord1.y;
+
+        // Calculate the absolute Values
+        let absX = Math.abs(x1 - x0);
+        let absY = Math.abs(y1 - y0);
+
+        // Determine which value is greater to know the directing in which to look and iterate through it 1 point at a time
+        let sx = (x0 < x1) ? 1 : -1;
+        let sy = (y0 < y1) ? 1 : -1;
+
+        let errFactor = absX - absY;
+
+        while (true) {
+            grid.setWalkableAt(x0, y0, false);
+
+            if ((x0 === x1) && (y0 === y1)) {
+                break;
+            }
+            let e2 = 2 * errFactor;
+            if (e2 > -absY) {
+                errFactor -= absY;
+                x0 += sx;
+            }
+            if (e2 < absX) {
+                errFactor += absX; y0 += sy;
+            }
+        }
     }
 
     /**
