@@ -7,10 +7,11 @@
         height: 90%;
         width: 80%;
         fill: transparent;
-        stroke-width: 1px;
+        stroke-width: 0.1px;
         stroke: black;
         .polygonObject {
             fill: #f1f1f1;
+            stroke-width: 0.1px;
         }
         .polygonObject:hover {
             fill: beige;

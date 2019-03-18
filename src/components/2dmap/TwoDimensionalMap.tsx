@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
-import Snap from "snapsvg-cjs";
+import Snap, { path } from "snapsvg-cjs";
 import { IMapModel } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import ProductSearchStore from "../../flux/ProductSearchStore";
+import pathfinder from "pathfinding";
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -40,7 +41,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      */
     public render(): JSX.Element {
         let map = <div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={"0 0 800 650"} preserveAspectRatio="none" />
+            <svg id="svg" className={styles.svgMap} viewBox={`0 0 ${this.props.polygonData.outerPolygon.polygon[2].x} ${this.props.polygonData.outerPolygon.polygon[2].y}`} preserveAspectRatio="none" />
         </div>;
         return (map);
     }
@@ -73,9 +74,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         if (selectedProduct) {
             let redCircle = snap.circle(selectedProduct.location.x + 20, selectedProduct.location.y + 20, 5);
             redCircle.addClass(styles.target);
-            console.log("rendering selected");
-        } else {
-            console.log("skipped selected");
         }
 
         // products blue dots
@@ -84,9 +82,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 let redCircle = snap.circle(product.location.x, product.location.y, 5);
                 redCircle.addClass(styles.products);
             });
-            console.log("rendering products");
-        } else {
-            console.log("skipped products");
         }
 
         // Process outer polygon
@@ -119,6 +114,85 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             polygon = "";
         });
 
+        this.calculatePath(snap);
+
+    }
+
+    private calculatePath = (snap: Snap.Paper) => {
+        let finder = new pathfinder.AStarFinder({ diagonalMovement: 1 });
+
+        let emptyGrid = new pathfinder.Grid(11, 11);
+        let test = this.setUnwalkable(emptyGrid);
+        let grid = finder.findPath(0, 0, 5, 5, test);
+
+        // path Starting position
+        let path = snap.path("").attr({
+            fill: "none",
+            stroke: "#bada55",
+            strokeWidth: 0.1
+        });
+
+        let route = "M";
+        grid.forEach(pt => {
+            route += `${pt[0]} ${pt[1]}L`;
+        });
+
+        path.animate({ d: route }, 2000);
+    }
+
+    private setUnwalkable = (path: pathfinder.Grid): pathfinder.Grid => {
+        // this.props.polygonData.innerPolygon.forEach(item => {});
+        let test = path;
+
+        // Iterate each polygon set
+        this.props.polygonData.innerPolygon.forEach(pol => {
+            for (let i = 0; i < pol.polygon.length; i++) {
+
+                // points to compare
+                let comp1 = pol.polygon[i];
+                let comp2 = pol.polygon[i + 1];
+
+                if (!comp2) { comp2 = pol.polygon[0]; }
+
+                if (comp1.x === comp2.x) {
+                    // x variable stays constant
+                    let y = comp1.y;
+                    let upwards = false;
+                    if (comp2.y > comp1.y) { upwards = true; }
+
+                    if (upwards) {
+                        do {
+                            test.setWalkableAt(comp1.x, y, false);
+                            y++;
+                        } while (y !== comp2.y);
+                    } else {
+                        do {
+                            test.setWalkableAt(comp1.x, y, false);
+                            y--;
+                        } while (y !== comp2.y);
+                    }
+
+                } else if (comp1.y === comp2.y) {
+                    // y stays constant
+                    let x = comp1.x;
+                    let upwards = false;
+                    if (comp2.x > comp1.x) { upwards = true; }
+                    if (upwards) {
+                        do {
+                            test.setWalkableAt(x, comp1.y, false);
+                            x++;
+                        } while (x !== comp2.x);
+                    } else {
+                        do {
+                            test.setWalkableAt(x, comp1.y, false);
+                            x--;
+                        } while (x !== comp2.x);
+                    }
+
+                }
+            }
+        });
+        return test;
     }
 
     /**
