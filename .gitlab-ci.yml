@@ -5,24 +5,38 @@ stages:
   - test
   - deploy
 
-buildapp:
+# buildapp:
+#   stage: build
+#   script:
+#   - npm install
+#   - npm run build
+#   - cp web.config build/
+#   artifacts:
+#     paths:
+#     - build
+#     - node_modules
+#     expire_in: 1h
+
+# unittest:
+#   stage: test
+#   script:
+#     - npm install -D babel-core@7.0.0-bridge.0
+#     - npm test unit
+#   dependencies:
+#     - buildapp
+
+buildandtest:
   stage: build
   script:
   - npm install
   - npm run build
   - cp web.config build/
+  - npm install -D babel-core@7.0.0-bridge.0
+  - npm test unit
   artifacts:
     paths:
     - build
-    - node_modules
-
-unittest:
-  stage: test
-  script:
-    - npm install -D babel-core@7.0.0-bridge.0
-    - npm test unit
-  dependencies:
-    - buildapp
+    expire_in: 1h
 
 deploy:
   stage: deploy
@@ -30,6 +44,6 @@ deploy:
     - cd build/
     - az webapp up -n lewayf -l northeurope
   dependencies:
-    - buildapp
+    - buildandtest
   only:
     - master

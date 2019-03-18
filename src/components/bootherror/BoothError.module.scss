@@ -1,0 +1,10 @@
+.dialogContainer {
+    :global div[class*="ms-Dialog-content"] {
+        text-align: center;
+        padding-bottom: 15px;
+        :global div[class*="ms-Dialog-actionsRight"] {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}
