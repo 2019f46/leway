@@ -162,7 +162,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     }
 
     /**
-     * This is a implementation of Bresenham algorithm, which determines the coordinates in the path of a vector in real numbers
+     * This is my implementation of Bresenham algorithm, which determines the coordinates in the path of a vector in real numbers
+     * http://www.javascriptteacher.com/bresenham-line-drawing-algorithm.html
      */
     private setUnpathableZones = (coord: ICoord, coord1: ICoord, grid: pathfinder.Grid) => {
         // Pull the coordinates
