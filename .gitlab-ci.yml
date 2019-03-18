@@ -15,6 +15,7 @@ buildapp:
     paths:
     - build
     - node_modules
+    expire_in: 1h
 
 unittest:
   stage: test
