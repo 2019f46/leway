@@ -44,6 +44,6 @@ deploy:
     - cd build/
     - az webapp up -n lewayf -l northeurope
   dependencies:
-    - buildapp
+    - buildandtest
   only:
     - master
