@@ -46,9 +46,12 @@ export default class FakeMapService implements IMapService {
             innerPolygon: [
                 {
                     polygon: [
-                        { x: 1, y: 1 }, { x: 1, y: 8 }, { x: 3, y: 8 }, { x: 3, y: 7 }, { x: 2, y: 7 }, { x: 2, y: 2 }, { x: 7, y: 2 }, { x: 7, y: 7 }, { x: 5, y: 7 }, { x: 5, y: 8 }, { x: 8, y: 8 }, { x: 8, y: 1 }
+                        { x: 1, y: 1 }, { x: 1, y: 8 }, { x: 2, y: 8 }, { x: 2, y: 7 },
+                        { x: 2, y: 2 }, { x: 7, y: 2 }, { x: 7, y: 7 },
+                        { x: 5, y: 7 }, { x: 5, y: 4 }, { x: 4, y: 4 }, { x: 4, y: 8 }, { x: 5, y: 8 },
+                        { x: 8, y: 8 }, { x: 8, y: 1 }
                     ]
-                }, 
+                },
             ]
         };
         await delay("", 1000);

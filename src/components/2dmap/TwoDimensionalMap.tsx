@@ -123,7 +123,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
         let emptyGrid = new pathfinder.Grid(11, 11);
         let test = this.setUnwalkable(emptyGrid);
-        let grid = finder.findPath(0, 0, 5, 5, test);
+        let grid = finder.findPath(0, 0, 6, 4, test);
 
         // path Starting position
         let path = snap.path("").attr({
