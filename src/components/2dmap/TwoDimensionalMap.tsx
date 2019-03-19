@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
-import Snap, { path } from "snapsvg-cjs";
+import Snap from "snapsvg-cjs";
 import { IMapModel, ICoord } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import ProductSearchStore from "../../flux/ProductSearchStore";
@@ -73,13 +73,19 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
         // Target red dot
         if (selectedProduct) {
-            let redCircle = snap.circle(selectedProduct.location.x + 20, selectedProduct.location.y + 20, 5);
+            let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 5);
             redCircle.addClass(styles.target);
         }
 
         // products blue dots
+        //
         if (products && products.length > 0) {
-            products.forEach(product => {
+            let filter = products.filter(prod => {
+                if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
+                    return prod;
+                }
+            });
+            filter.forEach(product => {
                 let redCircle = snap.circle(product.location.x, product.location.y, 5);
                 redCircle.addClass(styles.products);
             });
@@ -115,27 +121,38 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             polygon = "";
         });
 
-        this.calculatePath(snap);
+        // if (selectedProduct) {
+        this.calculatePath(snap, selectedProduct);
+        // }
 
     }
 
-    private calculatePath = (snap: Snap.Paper) => {
-        let finder = new pathfinder.AStarFinder({ diagonalMovement: 1 });
+    private calculatePath = (snap: Snap.Paper, selected?: IProduct) => {
+        let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
-        let emptyGrid = new pathfinder.Grid(11, 11);
+        let emptyGrid = new pathfinder.Grid(801, 601);
         this.setUnwalkable(emptyGrid);
-        let grid = finder.findPath(0, 0, 4, 3, emptyGrid);
+
+        // Calculate the path to take
+        // let thePath = finder.findPath(0, 0, selected.location.x, selected.location.y, emptyGrid);
+        let thePath = finder.findPath(0, 0, 800, 600, emptyGrid);
+
+        // Smooth out the path
+        let smooth = pathfinder.Util.smoothenPath(emptyGrid, thePath);
 
         // path Starting position
-        let renderedPath = snap.path("").attr({
-            fill: "none",
-            stroke: "#bada55",
-            strokeWidth: 0.1
-        });
+        let renderedPath = snap.path("");
+        renderedPath.addClass(styles.elPath);
+        // .attr({
+        //     fill: "none",
+        //     stroke: "#bada55",
+        //     strokeWidth: 5
+        // });
 
         let route = "M";
-        grid.forEach(pt => {
+        smooth.forEach(pt => {
             route += `${pt[0]} ${pt[1]}L`;
+            // renderedPath.animate({ d: `M${pt[0]} ${pt[1]}L` }, 500);
         });
 
         renderedPath.animate({ d: route }, 2000);

@@ -26,3 +26,10 @@
 .products {
     fill: blue;
 }
+
+.elPath {
+    fill: none;
+    stroke: #bada55;
+    stroke-width: 5px;
+    animation: dash 1s linear;
+}
