@@ -121,41 +121,26 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             polygon = "";
         });
 
-        // if (selectedProduct) {
-        this.calculatePath(snap, selectedProduct);
-        // }
+        if (selectedProduct) {
+            this.calculatePath(snap, selectedProduct.location.x, selectedProduct.location.y);
+        }
 
     }
 
-    private calculatePath = (snap: Snap.Paper, selected?: IProduct) => {
+    private calculatePath = (snap: Snap.Paper, x1: number, y1: number) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
-        let emptyGrid = new pathfinder.Grid(801, 601);
+        let emptyGrid = new pathfinder.Grid(801, 651);
         this.setUnwalkable(emptyGrid);
 
         // Calculate the path to take
-        // let thePath = finder.findPath(0, 0, selected.location.x, selected.location.y, emptyGrid);
-        let thePath = finder.findPath(0, 0, 800, 600, emptyGrid);
+        let rawPath = finder.findPath(0, 0, x1, y1, emptyGrid);
 
         // Smooth out the path
-        let smooth = pathfinder.Util.smoothenPath(emptyGrid, thePath);
+        let smoothPath = pathfinder.Util.smoothenPath(emptyGrid, rawPath);
 
-        // path Starting position
-        let renderedPath = snap.path("");
-        renderedPath.addClass(styles.elPath);
-        // .attr({
-        //     fill: "none",
-        //     stroke: "#bada55",
-        //     strokeWidth: 5
-        // });
-
-        let route = "M";
-        smooth.forEach(pt => {
-            route += `${pt[0]} ${pt[1]}L`;
-            // renderedPath.animate({ d: `M${pt[0]} ${pt[1]}L` }, 500);
-        });
-
-        renderedPath.animate({ d: route }, 2000);
+        // Render & animate the path
+        snap.path("M" + smoothPath).addClass(styles.elPath);
     }
 
     /**
