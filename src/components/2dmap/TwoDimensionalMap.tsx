@@ -127,10 +127,18 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     }
 
+    /**
+     * This method will calculate the shortest path fron your current location to the selected item.
+     * @param snap Snap is the snap svg object which populates the entire svg
+     * @param x1 Target location x coord
+     * @param y1 Target location y coord
+     */
     private calculatePath = (snap: Snap.Paper, x1: number, y1: number) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
         let emptyGrid = new pathfinder.Grid(801, 651);
+
+        // Define where you cant move
         this.setUnwalkable(emptyGrid);
 
         // Calculate the path to take
@@ -145,6 +153,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     /**
      * The purpose of this method is to set the grid coordinates which are unavailable for pathfinding
+     * @param grid The invisible grid which controls areas where you can move and areas where you cant
      */
     private setUnwalkable = (grid: pathfinder.Grid) => {
         // Iterate each polygon set
