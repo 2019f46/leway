@@ -41,25 +41,6 @@ export default class FakeMapService implements IMapService {
                 },
             ]
         };
-        // let fakeData: IMapModel = {
-        //     outerPolygon: { polygon: [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 10, y: 10 }, { x: 10, y: 0 }] },
-        //     innerPolygon: [
-        //         {
-        //             polygon: [
-        //                 { x: 0, y: 1 }, { x: 1, y: 8 }, { x: 2, y: 8 }, { x: 2, y: 7 },
-        //                 { x: 2, y: 2 }, { x: 7, y: 2 }, { x: 7, y: 7 },
-        //                 { x: 5, y: 7 }, { x: 5, y: 4 }, { x: 4, y: 4 }, { x: 4, y: 8 }, { x: 5, y: 8 },
-        //                 { x: 8, y: 8 }, { x: 8, y: 1 }
-        //             ],
-        //             // polygon: [
-        //             //     { x: 2, y: 1 }, { x: 1, y: 8 }, { x: 2, y: 8 }, { x: 2, y: 7 },
-        //             //     { x: 3, y: 2 }, { x: 8, y: 2 }, { x: 7, y: 7 },
-        //             //     { x: 5, y: 7 }, { x: 6, y: 4 }, { x: 5, y: 4 }, { x: 4, y: 8 }, { x: 5, y: 8 },
-        //             //     { x: 7, y: 8 }, { x: 9, y: 1 }
-        //             // ]
-        //         },
-        //     ]
-        // };
         await delay("", 1000);
         return fakeData;
     }
