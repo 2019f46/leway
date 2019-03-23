@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { IMapModel } from "../models/MapModel";
 
 /**
@@ -14,7 +14,10 @@ export interface IMapService {
  */
 export default class MapService implements IMapService {
     public getMapData = async (): Promise<IMapModel> => {
-        let obj = await axios.get("https://www.endpoint.com/_api/get");
+        let config: AxiosRequestConfig = {
+            xsrfHeaderName: "sessionId",
+        };
+        let obj = await axios.get("https://wf-backend-mapservice.herokuapp.com/api/map", config);
         let data: IMapModel = obj.data;
         return data;
     }

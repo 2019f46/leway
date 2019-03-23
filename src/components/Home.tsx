@@ -13,7 +13,7 @@ export default class Home extends React.Component {
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render() {
-        let selector: JSX.Element = <MapSelector fakeData={true} />;
+        let selector: JSX.Element = <MapSelector />;
         let prodSearch: JSX.Element = <ProductSearch fakeData={true} />;
         return (<div className={styles.homeContainer}>
             {prodSearch}

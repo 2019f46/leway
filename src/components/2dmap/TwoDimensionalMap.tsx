@@ -42,7 +42,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      */
     public render(): JSX.Element {
         let map = <div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={`0 0 ${this.props.polygonData.outerPolygon.polygon[2].x} ${this.props.polygonData.outerPolygon.polygon[2].y}`} preserveAspectRatio="none" />
+            <svg id="svg" className={styles.svgMap} viewBox={`0 0 ${this.props.polygonData.outerPolygon.points[2].x} ${this.props.polygonData.outerPolygon.points[2].y}`} preserveAspectRatio="none" />
         </div>;
         return (map);
     }
@@ -93,7 +93,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
         // Process outer polygon
         let polygon: string = "";
-        this.state.mapData.outerPolygon.polygon.forEach(coord => {
+        this.state.mapData.outerPolygon.points.forEach(coord => {
             polygon += `${coord.x}, ${coord.y} `;
         });
 
@@ -106,7 +106,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         this.state.mapData.innerPolygon.forEach(it => {
 
             // for each inner polygon
-            it.polygon.forEach(coord => {
+            it.points.forEach(coord => {
                 // generate string with coordinates
                 polygon += `${coord.x}, ${coord.y} `;
             });
@@ -158,14 +158,14 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     private setUnwalkable = (grid: pathfinder.Grid) => {
         // Iterate each polygon set
         this.props.polygonData.innerPolygon.forEach(pol => {
-            for (let i = 0; i < pol.polygon.length; i++) {
+            for (let i = 0; i < pol.points.length; i++) {
 
                 // points to compare
-                let comp1 = pol.polygon[i];
-                let comp2 = pol.polygon[i + 1];
+                let comp1 = pol.points[i];
+                let comp2 = pol.points[i + 1];
 
                 // If there are no more points to compare, compare to the initial point
-                if (!comp2) { comp2 = pol.polygon[0]; }
+                if (!comp2) { comp2 = pol.points[0]; }
 
                 this.setUnpathableZones(comp1, comp2, grid);
             }

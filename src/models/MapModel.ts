@@ -10,7 +10,7 @@ export interface IMapModel {
  * Interface model which defines how a polygon object is interpreted.
  */
 export interface IPolygon {
-    polygon: ICoord[];
+    points: ICoord[];
 }
 
 /**
