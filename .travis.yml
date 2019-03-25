@@ -12,5 +12,4 @@ deploy:
   provider: azure_web_apps
   username: $wf-frontend
   password: SYYz6nzGnAASmFn51BJeu4xFh0jRgzmAuksuhASLt95fpozqf0ssb48ZFkdo
-  site: azure_deployment_sitename
-  slot: azure_deployment_slotname
+  site: wf-frontend
