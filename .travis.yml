@@ -6,7 +6,7 @@ script:
 - npm run test
 deploy:
   on:
-    branch: feature/migration
+    branch: master
   provider: heroku
   api_key:
     secure: "f54a0f06-9e52-497f-b4e3-a5e5fd4a2133"
