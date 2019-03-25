@@ -14,7 +14,7 @@ export default class Home extends React.Component {
      */
     public render() {
         let selector: JSX.Element = <MapSelector />;
-        let prodSearch: JSX.Element = <ProductSearch fakeData={true} />;
+        let prodSearch: JSX.Element = <ProductSearch />;
         return (<div className={styles.homeContainer}>
             {prodSearch}
             {selector}

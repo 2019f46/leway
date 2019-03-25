@@ -42,9 +42,9 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      */
     public render(): JSX.Element {
         let map = <div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={`0 0 ${this.props.polygonData.outerPolygon.points[2].x} ${this.props.polygonData.outerPolygon.points[2].y}`} preserveAspectRatio="none" />
+            <svg id="svg" className={styles.svgMap} viewBox={`0 0 800 650`} preserveAspectRatio="none" />
         </div>;
-        return (map);
+        return map;
     }
 
     /**
@@ -72,13 +72,12 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
         }
 
         // Target red dot
-        if (selectedProduct) {
+        if (selectedProduct && selectedProduct.location) {
             let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 5);
             redCircle.addClass(styles.target);
         }
 
         // products blue dots
-        //
         if (products && products.length > 0) {
             let filter = products.filter(prod => {
                 if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
@@ -86,11 +85,16 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 }
             });
             filter.forEach(product => {
-                let redCircle = snap.circle(product.location.x, product.location.y, 5);
-                redCircle.addClass(styles.products);
+                if (product.location) {
+                    let bluecircle = snap.circle(product.location.x, product.location.y, 5);
+                    bluecircle.addClass(styles.products);
+                }
             });
         }
 
+        if (!this.state.mapData.outerPolygon.points.length || this.state.mapData.outerPolygon.points.length < 1) {
+            return;
+        }
         // Process outer polygon
         let polygon: string = "";
         this.state.mapData.outerPolygon.points.forEach(coord => {
@@ -121,7 +125,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
             polygon = "";
         });
 
-        if (selectedProduct) {
+        if (selectedProduct && selectedProduct.location) {
             this.calculatePath(snap, selectedProduct.location.x, selectedProduct.location.y);
         }
 

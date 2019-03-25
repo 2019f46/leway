@@ -14,7 +14,7 @@ export interface ISearchService {
  */
 export default class SearchService implements ISearchService {
     public getProduct = async (value: string): Promise<IProduct[]> => {
-        let obj = await axios.get("https://www.endpoint.com/_api/get");
+        let obj = await axios.get("https://wayfinder-searchservice.herokuapp.com/api/search/" + value);
         let data: IProduct[] = obj.data;
         return data;
     }
