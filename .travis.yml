@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- '10.10.0'
+before_install:
+- npm install
+script:
+- npm run test
+deploy:
+  on:
+    branch: master
+  provider: heroku
+  api_key:
+    secure: "f2024b66-887d-4d12-9b14-30171720affd"
+  app: wf-backend-mapservice
