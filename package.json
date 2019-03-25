@@ -6,6 +6,7 @@
     "@turf/boolean-point-in-polygon": "^6.0.1",
     "@types/enzyme": "^3.1.17",
     "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/flux": "^3.1.8",
     "@types/jest": "^23.3.10",
     "@types/node": "10.12.18",
     "@types/pathfinding": "0.0.2",
@@ -27,11 +28,10 @@
     "react-dom": "^16.6.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.5",
+    "react-scripts": "^2.1.8",
     "sinon": "^7.2.7",
     "snapsvg-cjs": "0.0.6",
-    "typescript": "3.2.2",
-    "@types/flux": "^3.1.8"
+    "typescript": "3.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
