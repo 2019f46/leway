@@ -1,9 +1,6 @@
 language: node_js
 node_js:
 - '10.10.0'
-cache:
-  directories:
-  - node_modules
 script:
 - npm install
 - npm run test
@@ -12,10 +9,10 @@ script:
 deploy:
   on:
     branch: feature/migration
-  provider: azure_web_apps
-  script: 
-  - cp web.config build/
-  local_dir: build
-  username: wf-frontend
-  password: crqnRjLtCarr4obEYu1ohJkCTKQ53iT3bwnjLr75aqgpYdZoiXrmP9rlgvuc
-  site: wf-frontend
+  provider: heroku
+  api_key:
+    secure: "f54a0f06-9e52-497f-b4e3-a5e5fd4a2133"
+  app: lewayfinder
+
+
+  
