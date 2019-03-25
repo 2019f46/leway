@@ -17,7 +17,7 @@ export default class MapService implements IMapService {
         let config: AxiosRequestConfig = {
             xsrfHeaderName: "sessionId",
         };
-        let obj = await axios.get("https://wf-backend-mapservice.herokuapp.com/api/map", config);
+        let obj = await axios.get("https://wayfinder-mapservice.herokuapp.com/api/map", config);
         let data: IMapModel = obj.data;
         return data;
     }

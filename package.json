@@ -30,7 +30,8 @@
     "react-scripts": "^2.1.5",
     "sinon": "^7.2.7",
     "snapsvg-cjs": "0.0.6",
-    "typescript": "3.2.2"
+    "typescript": "3.2.2",
+    "@types/flux": "^3.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,7 +51,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/flux": "^3.1.8",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "tslint": "^5.12.1"
