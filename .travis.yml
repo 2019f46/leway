@@ -13,6 +13,9 @@ deploy:
   on:
     branch: feature/migration
   provider: azure_web_apps
+  script: 
+  - cp web.config build/
+  local_dir: build
   username: $wf-frontend
   password: SYYz6nzGnAASmFn51BJeu4xFh0jRgzmAuksuhASLt95fpozqf0ssb48ZFkdo
   site: wf-frontend
