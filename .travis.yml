@@ -9,6 +9,7 @@ before_install:
 script:
 - npm run test
 - npm run build
+- cp web.config build/
 deploy:
   on:
     branch: feature/migration
