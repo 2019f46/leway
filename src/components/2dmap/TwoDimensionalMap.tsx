@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
-import { IMapModel, ICoord } from "../../models/MapModel";
+import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import ProductSearchStore from "../../flux/ProductSearchStore";
 import pathfinder from "pathfinding";
@@ -212,6 +212,24 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
                 errFactor += absX; y0 += sy;
             }
         }
+    }
+
+    /**
+     * Finds the dimensions of a polygon
+     * from 0,0 to the largest x and y
+     * @param polygon the outer polygon
+     * @returns A coordinate object, that contains the length and height of the polygon
+     */
+    public findDimensions(polygon: IPolygon): ICoord{
+        let lx: number = 0;
+        let ly: number = 0;
+
+        polygon.points.forEach(coord => {
+            if(coord.x > lx) lx = coord.x;
+            if(coord.y > ly) ly = coord.y;
+        });
+
+        return {x: lx, y: ly};
     }
 
     /**
