@@ -16,6 +16,6 @@ deploy:
   script: 
   - cp web.config build/
   local_dir: build
-  username: $wf-frontend
-  password: SYYz6nzGnAASmFn51BJeu4xFh0jRgzmAuksuhASLt95fpozqf0ssb48ZFkdo
+  username: wf-frontend
+  password: crqnRjLtCarr4obEYu1ohJkCTKQ53iT3bwnjLr75aqgpYdZoiXrmP9rlgvuc
   site: wf-frontend
