@@ -39,7 +39,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         this.state = {
             mapData: {
                 innerPolygon: [],
-                outerPolygon: { polygon: [] },
+                outerPolygon: { points: [] },
             },
             twoDimensions: true,
             dataReady: false

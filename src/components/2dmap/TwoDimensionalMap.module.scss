@@ -11,6 +11,7 @@
         stroke: black;
         .polygonObject {
             fill: #f1f1f1;
+            stroke-width: 1px;
         }
         .polygonObject:hover {
             fill: beige;
@@ -24,4 +25,26 @@
 
 .products {
     fill: blue;
+}
+
+.elPath {
+    fill: none;
+    stroke-width: 5px;
+    opacity: 0.5;
+    stroke-linecap: round;
+    stroke: #bada55;
+    animation: animateDash ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+}
+
+@keyframes animateDash {
+    from {
+        opacity: 0.5;
+        stroke-dasharray: 50%;
+    }
+    to {
+        opacity: 1;
+        stroke-dasharray: 110%;
+    }
 }
