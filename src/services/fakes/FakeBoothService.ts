@@ -30,8 +30,8 @@ export default class FakeBoothService implements IBoothService {
     let booth: IBooth = {
       boothId: "id",
       coordinates: {
-        x: 200,
-        y: 400
+        x: 40,
+        y: 40
       }
     };
     return booth;
