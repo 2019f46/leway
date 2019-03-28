@@ -14,6 +14,7 @@ import MapService from "../../services/MapService";
  */
 export interface ITwoDimensionalMapProps {
   polygonData: IMapModel;
+  boothLocation?: ICoord | undefined;
   onEditMap?: (data: IMapModel) => void;
 }
 

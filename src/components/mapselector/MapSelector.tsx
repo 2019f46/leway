@@ -5,10 +5,11 @@ import { Toggle, Spinner, autobind } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/fakes/FakeMapService";
-import { IMapModel } from "../../models/MapModel";
+import { IMapModel, ICoord } from "../../models/MapModel";
 import BoothError from "../bootherror/BoothError";
 import { IBoothService } from "../../services/BoothService";
 import FakeBoothService from "../../services/fakes/FakeBoothService";
+import { IBooth } from "../../models/IBooth";
 
 /**
  * Properties recived by the MapSelector Component.
@@ -58,10 +59,10 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
-        let blocation = this.boothService.getBooth();
+        let blocation: IBooth | undefined = this.boothService.getBooth();
 
         let map: JSX.Element = this.state.twoDimensions ?
-            <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} /> :
+            <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} boothLocation={blocation ? blocation.coordinates : undefined}/> :
             <ThreeDimensionalMap />;
         let toggle: JSX.Element = <Toggle onText={"3D Map"}
             offText={"2D Map"} disabled={false}
