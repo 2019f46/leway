@@ -82,35 +82,9 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       }
     }
 
-    // Target red dot
-    if (selectedProduct && selectedProduct.location) {
-      let redCircle = snap.circle(
-        selectedProduct.location.x,
-        selectedProduct.location.y,
-        5
-      );
-      redCircle.addClass(styles.target);
-    }
-
-    // products blue dots
-    if (products && products.length > 0) {
-      let filter = products.filter(prod => {
-        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
-          return prod;
-        }
-      });
-      filter.forEach(product => {
-        if (product.location) {
-          let bluecircle = snap.circle(
-            product.location.x,
-            product.location.y,
-            5
-          );
-          bluecircle.addClass(styles.products);
-        }
-      });
-    }
-
+    /**
+     * POLYGONS
+     */
     if (
       !this.state.mapData.outerPolygon.points.length ||
       this.state.mapData.outerPolygon.points.length < 1
@@ -146,6 +120,50 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       polygon = "";
     });
 
+    /**
+     * DOTS
+     */
+    if(this.props.boothLocation){
+      let bloc = snap.circle(
+        this.props.boothLocation.x,
+        this.props.boothLocation.y,
+        5
+      );
+      bloc.addClass(styles.booth);
+    }
+
+    // Target red dot
+    if (selectedProduct && selectedProduct.location) {
+      let redCircle = snap.circle(
+        selectedProduct.location.x,
+        selectedProduct.location.y,
+        5
+      );
+      redCircle.addClass(styles.target);
+    }
+
+    // products blue dots
+    if (products && products.length > 0) {
+      let filter = products.filter(prod => {
+        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
+          return prod;
+        }
+      });
+      filter.forEach(product => {
+        if (product.location) {
+          let bluecircle = snap.circle(
+            product.location.x,
+            product.location.y,
+            5
+          );
+          bluecircle.addClass(styles.products);
+        }
+      });
+    }
+
+    /**
+     * PATH
+     */
     if (selectedProduct && selectedProduct.location) {
       this.calculatePath(
         snap,
