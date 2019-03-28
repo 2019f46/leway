@@ -5,11 +5,11 @@
     padding-top: 15px;
     .svgMap {
         fill: transparent;
-        stroke-width: 1px;
+        stroke-width: 0.3px;
         stroke: black;
         .polygonObject {
             fill: #f1f1f1;
-            stroke-width: 1px;
+            stroke-width: 0.3px;
         }
         .polygonObject:hover {
             fill: beige;

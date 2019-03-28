@@ -126,7 +126,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       let bloc = snap.circle(
         this.props.boothLocation.x,
         this.props.boothLocation.y,
-        5
+        1
       );
       bloc.addClass(styles.booth);
     }
@@ -136,7 +136,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       let redCircle = snap.circle(
         selectedProduct.location.x,
         selectedProduct.location.y,
-        5
+        1
       );
       redCircle.addClass(styles.target);
     }
@@ -153,7 +153,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
           let bluecircle = snap.circle(
             product.location.x,
             product.location.y,
-            5
+            1
           );
           bluecircle.addClass(styles.products);
         }
