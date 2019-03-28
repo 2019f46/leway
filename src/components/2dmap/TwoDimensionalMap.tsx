@@ -5,6 +5,7 @@ import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import ProductSearchStore from "../../flux/ProductSearchStore";
 import pathfinder from "pathfinding";
+import MapService from "../../services/MapService";
 
 /**
  * Properties recived by the Product Component.
@@ -22,6 +23,7 @@ export interface ITwoDimensionalMapProps {
  */
 export interface ITwoDimensionalMapState {
     mapData: IMapModel;
+    mapSize: ICoord;
     products?: IProduct[];
     selectedProduct?: IProduct;
 }
@@ -33,7 +35,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     constructor(props: any) {
         super(props);
         this.state = {
-            mapData: this.props.polygonData
+            mapData: this.props.polygonData,
+            mapSize: this.findDimensions(this.props.polygonData.outerPolygon)
         };
     }
 
@@ -42,7 +45,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
      */
     public render(): JSX.Element {
         let map = <div className={styles.twoDimensionalMapContainer}>
-            <svg id="svg" className={styles.svgMap} viewBox={`0 0 800 650`} preserveAspectRatio="none" />
+            <svg id="svg" className={styles.svgMap} viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`} preserveAspectRatio="none" />
         </div>;
         return map;
     }
@@ -140,7 +143,7 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     private calculatePath = (snap: Snap.Paper, x1: number, y1: number) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
-        let emptyGrid = new pathfinder.Grid(801, 651);
+        let emptyGrid = new pathfinder.Grid(this.state.mapSize.x + 1, this.state.mapSize.y + 1);
 
         // Define where you cant move
         this.setUnwalkable(emptyGrid);
