@@ -52,7 +52,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         let searchResults: JSX.Element[] = [];
         if (!this.state.selectedProduct) {
             this.state.products.forEach(element => {
-                searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.price} />);
+                searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.id} />);
             });
         }
 
