@@ -163,8 +163,9 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
 
     /**
      * PATH
+     * Should NOT be rendered if there is no booth location
      */
-    if (selectedProduct && selectedProduct.location) {
+    if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
       this.calculatePath(
         snap,
         selectedProduct.location.x,
@@ -191,7 +192,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     this.setUnwalkable(emptyGrid);
 
     // Calculate the path to take
-    let rawPath = finder.findPath(0, 0, x1, y1, emptyGrid);
+    let bloc = this.props.boothLocation ? this.props.boothLocation : {x:0,y:0};
+    let rawPath = finder.findPath(bloc.x, bloc.y, x1, y1, emptyGrid);
 
     // Smooth out the path
     let smoothPath = pathfinder.Util.smoothenPath(emptyGrid, rawPath);
