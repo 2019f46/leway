@@ -6,7 +6,7 @@ import styles from "./BoothError.module.scss";
  * @param acknowledge Optional prop, prop which the parent uses to ackowledge no location.
  */
 export interface BoothErrorProps {
-    acknowledge: (state: boolean) => void;
+    acknowledge: () => void;
 }
 
 export interface BoothErrorState {
@@ -25,7 +25,7 @@ export default class BoothError extends React.Component<BoothErrorProps, BoothEr
      */
     public render(): JSX.Element {
         let dialog: JSX.Element = (
-            <Dialog hidden={false} modalProps={{ isDarkOverlay: true }} className={styles.dialogContainer}>
+            <Dialog hidden={false} onDismiss={this.acknowledge} modalProps={{ isDarkOverlay: true }} className={styles.dialogContainer}>
                 <h3>Booth is not configured.</h3>
                 <DialogFooter>
                     <DefaultButton text={"Booth Settings"} onClick={this.goToSettings} />
@@ -42,7 +42,7 @@ export default class BoothError extends React.Component<BoothErrorProps, BoothEr
      * Method used for acknowledging that there are no map settings available, which results in no wayfinding.
      */
     private acknowledge = () => {
-        this.props.acknowledge(true);
+        this.props.acknowledge();
     }
 
     /**

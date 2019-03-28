@@ -35,7 +35,6 @@ describe("TwoDimensionalMap", () => {
             id="svg"
             className={styles.svgMap}
             viewBox={"0 0 800 650"}
-            preserveAspectRatio="none"
           />
         </div>
       )

@@ -1,5 +1,6 @@
+import { ICoord } from "./MapModel";
+
 export interface IBooth {
     boothId: string;
-    x: number;
-    y: number;
+    coordinates: ICoord;
 }

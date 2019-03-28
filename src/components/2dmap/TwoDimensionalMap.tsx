@@ -14,6 +14,7 @@ import MapService from "../../services/MapService";
  */
 export interface ITwoDimensionalMapProps {
   polygonData: IMapModel;
+  boothLocation?: ICoord | undefined;
   onEditMap?: (data: IMapModel) => void;
 }
 
@@ -50,7 +51,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
           id="svg"
           className={styles.svgMap}
           viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-          preserveAspectRatio="none"
         />
       </div>
     );
@@ -81,35 +81,9 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       }
     }
 
-    // Target red dot
-    if (selectedProduct && selectedProduct.location) {
-      let redCircle = snap.circle(
-        selectedProduct.location.x,
-        selectedProduct.location.y,
-        5
-      );
-      redCircle.addClass(styles.target);
-    }
-
-    // products blue dots
-    if (products && products.length > 0) {
-      let filter = products.filter(prod => {
-        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
-          return prod;
-        }
-      });
-      filter.forEach(product => {
-        if (product.location) {
-          let bluecircle = snap.circle(
-            product.location.x,
-            product.location.y,
-            5
-          );
-          bluecircle.addClass(styles.products);
-        }
-      });
-    }
-
+    /**
+     * POLYGONS
+     */
     if (
       !this.state.mapData.outerPolygon.points.length ||
       this.state.mapData.outerPolygon.points.length < 1
@@ -145,7 +119,52 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       polygon = "";
     });
 
+    /**
+     * DOTS
+     */
+    if(this.props.boothLocation){
+      let bloc = snap.circle(
+        this.props.boothLocation.x,
+        this.props.boothLocation.y,
+        1
+      );
+      bloc.addClass(styles.booth);
+    }
+
+    // Target red dot
     if (selectedProduct && selectedProduct.location) {
+      let redCircle = snap.circle(
+        selectedProduct.location.x,
+        selectedProduct.location.y,
+        1
+      );
+      redCircle.addClass(styles.target);
+    }
+
+    // products blue dots
+    if (products && products.length > 0) {
+      let filter = products.filter(prod => {
+        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
+          return prod;
+        }
+      });
+      filter.forEach(product => {
+        if (product.location) {
+          let bluecircle = snap.circle(
+            product.location.x,
+            product.location.y,
+            1
+          );
+          bluecircle.addClass(styles.products);
+        }
+      });
+    }
+
+    /**
+     * PATH
+     * Should NOT be rendered if there is no booth location
+     */
+    if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
       this.calculatePath(
         snap,
         selectedProduct.location.x,
@@ -172,7 +191,8 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     this.setUnwalkable(emptyGrid);
 
     // Calculate the path to take
-    let rawPath = finder.findPath(0, 0, x1, y1, emptyGrid);
+    let bloc = this.props.boothLocation ? this.props.boothLocation : {x:0,y:0};
+    let rawPath = finder.findPath(bloc.x, bloc.y, x1, y1, emptyGrid);
 
     // Smooth out the path
     let smoothPath = pathfinder.Util.smoothenPath(emptyGrid, rawPath);
@@ -249,9 +269,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
    * @returns A coordinate object, that contains the length and height of the polygon
    */
   public findDimensions(polygon: IPolygon): ICoord {
+    if(!polygon){return {x:0,y:0};}
+    
     let lx: number = 0;
     let ly: number = 0;
-
+    
     polygon.points.forEach(coord => {
       if (coord.x > lx) {
         lx = coord.x;
