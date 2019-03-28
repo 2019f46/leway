@@ -1,12 +1,14 @@
 import React from "react";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle, Spinner } from "office-ui-fabric-react";
+import { Toggle, Spinner, autobind } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/fakes/FakeMapService";
 import { IMapModel } from "../../models/MapModel";
 import BoothError from "../bootherror/BoothError";
+import { IBoothService } from "../../services/BoothService";
+import FakeBoothService from "../../services/fakes/FakeBoothService";
 
 /**
  * Properties recived by the MapSelector Component.
@@ -26,6 +28,7 @@ export interface IMapSelectorState {
     twoDimensions: boolean;
     mapData: IMapModel;
     dataReady: boolean;
+    disableBoothError: boolean;
 }
 
 /**
@@ -34,6 +37,8 @@ export interface IMapSelectorState {
  */
 export default class MapSelector extends React.Component<IMapSelectorProps, IMapSelectorState>{
     private mapService: IMapService;
+    private boothService: IBoothService;
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -42,15 +47,19 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
                 outerPolygon: { points: [] },
             },
             twoDimensions: true,
-            dataReady: false
+            dataReady: false,
+            disableBoothError: false
         };
         this.mapService = this.props.fakeData ? new FakeMapService() : new MapService();
+        this.boothService = new FakeBoothService();
     }
 
     /**
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
+        let blocation = this.boothService.getBooth();
+
         let map: JSX.Element = this.state.twoDimensions ?
             <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} /> :
             <ThreeDimensionalMap />;
@@ -58,8 +67,11 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
             offText={"2D Map"} disabled={false}
             className={styles.toggleSwitch}
             onClick={this.onToggleClick} />;
+        let bError: JSX.Element = <BoothError acknowledge={this.ackMissingConfiguration}/>;
+
         return (
             <div className={styles.mapSelectorContainer}>
+                {blocation || this.state.disableBoothError ? null : bError }
                 {toggle}
                 {this.state.dataReady ? map : <Spinner />}
             </div>
@@ -88,5 +100,12 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
      */
     private onEditMap = (data: IMapModel) => {
         console.log("Map has been edited");
+    }
+
+    /**
+     * Method to disable the rendering of the booth error, if the error is acknowledged
+     */
+    private ackMissingConfiguration = () => {
+        this.setState({disableBoothError: true});
     }
 }
