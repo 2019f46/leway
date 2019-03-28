@@ -51,7 +51,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
           id="svg"
           className={styles.svgMap}
           viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-          preserveAspectRatio="none"
         />
       </div>
     );
