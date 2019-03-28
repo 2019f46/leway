@@ -270,9 +270,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
    * @returns A coordinate object, that contains the length and height of the polygon
    */
   public findDimensions(polygon: IPolygon): ICoord {
+    if(!polygon){return {x:0,y:0};}
+    
     let lx: number = 0;
     let ly: number = 0;
-
+    
     polygon.points.forEach(coord => {
       if (coord.x > lx) {
         lx = coord.x;
