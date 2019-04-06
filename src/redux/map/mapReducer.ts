@@ -1,5 +1,5 @@
 import { IProduct } from "../../models/ProductModel";
-import { SET_SELECTED_PRODUCT, SET_PRODUCT_LIST, GET_SELECTED_PRODUCT, GET_PRODUCT_LIST } from "../types";
+import { SET_SELECTED_PRODUCT, SET_PRODUCT_LIST } from "../types";
 
 const initialState: { products: IProduct[]; selectedProduct?: IProduct | undefined; } = {
     products: [], selectedProduct: undefined

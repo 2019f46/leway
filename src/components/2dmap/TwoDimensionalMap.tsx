@@ -5,7 +5,6 @@ import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import pathfinder from "pathfinding";
 import { connect } from "react-redux";
-import { getSelectedProduct, getProductList } from "../../redux/map/mapActions";
 
 /**
  * Properties recived by the Product Component.
@@ -29,12 +28,21 @@ export interface ITwoDimensionalMapState {
   selectedProduct?: IProduct;
 }
 
-export interface reduxProps {
-  getSelectedProduct: any;
-  getProductList: any;
+/**
+ * This interface defines the props provided by the redux store.
+ */
+export interface IReduxProps {
+  /**
+   * This property is retrieved from the redux store, and is passed down when it is set.
+   */
+  productData: { products: IProduct[], selectedPropducts: IProduct }
 }
 
-type props = ITwoDimensionalMapProps & reduxProps;
+/**
+ * This is required by typescript. This interface allows up to separate properties owned by the component and properties passed by redux and use them similarity
+ */
+type props = ITwoDimensionalMapProps & IReduxProps;
+
 /**
  * This Component is responsible for taking in a object with polygon points and trasforming it into a interactable 2D map
  */
@@ -70,9 +78,8 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     this.generateMap();
   }
 
-  public componentWillReceiveProps(nextprops: any) {
-    // let data = this.props.getSelectedProduct();
-    console.log(nextprops.ggwp());
+  public componentWillReceiveProps(nextprops: props) {
+    console.log(nextprops.productData);
   }
 
   /**
@@ -296,24 +303,6 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
 
     return { x: lx, y: ly };
   }
-
-  /**
-   * When the component mounts, a listener will be listening to the prodsStateChange event which is emited by the product search store.
-   * This event will enable this component to know the current searchresults without being coupled with the productSearch component.
-   */
-  public componentWillMount() {
-    // ProductSearchStore.on("prodsStateChange", this.onSelectedChange);
-  }
-
-  // This is the method which runs when the event prodsStateChange is emited.
-  private onSelectedChange = () => {
-    // let selected = ProductSearchStore.getSelectedProduct();
-    // let prods = ProductSearchStore.getProductsState();
-    // this.setState({ selectedProduct: selected, products: prods });
-    // this.generateMap(selected, prods);
-  }
 }
 
-// export default connect(null, { getSelectedProduct, getProductList })(TwoDimensionalMap);
-
-export default connect(null, { getSelectedProduct, getProductList })(TwoDimensionalMap);
+export default connect((state: ITwoDimensionalMapState) => state)(TwoDimensionalMap);
