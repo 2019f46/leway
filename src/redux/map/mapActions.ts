@@ -18,4 +18,3 @@ export function setProductList(list: IProduct[]) {
         });
     }
 }
-

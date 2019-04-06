@@ -24,8 +24,6 @@ export interface ITwoDimensionalMapProps {
 export interface ITwoDimensionalMapState {
   mapData: IMapModel;
   mapSize: ICoord;
-  products?: IProduct[];
-  selectedProduct?: IProduct;
 }
 
 /**
@@ -35,7 +33,7 @@ export interface IReduxProps {
   /**
    * This property is retrieved from the redux store, and is passed down when it is set.
    */
-  productData: { products: IProduct[], selectedPropducts: IProduct }
+  productData: { products: IProduct[], selectedProduct: IProduct }
 }
 
 /**
@@ -75,18 +73,20 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
   public componentDidMount() {
-    this.generateMap();
+    const { selectedProduct, products } = this.props.productData;
+    this.generateMap(selectedProduct, products);
   }
 
   public componentWillReceiveProps(nextprops: props) {
-    console.log(nextprops.productData);
+    const { selectedProduct, products } = nextprops.productData;
+    this.generateMap(selectedProduct, products);
   }
 
   /**
    * This method renders the map using the snapsvg framework.
    * An outer polygon is rendered aswell as the inner polygons.
    */
-  private generateMap = (selectedProduct: IProduct | undefined = undefined, products: IProduct[] | undefined = this.state.products) => {
+  private generateMap = (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
     let snap: Snap.Paper = Snap("#svg");
     if (!snap) {
       return;
@@ -102,12 +102,10 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     /**
      * POLYGONS
      */
-    if (
-      !this.state.mapData.outerPolygon.points.length ||
-      this.state.mapData.outerPolygon.points.length < 1
-    ) {
+    if (!this.state.mapData.outerPolygon.points.length || this.state.mapData.outerPolygon.points.length < 1) {
       return;
     }
+
     // Process outer polygon
     let polygon: string = "";
     this.state.mapData.outerPolygon.points.forEach(coord => {
@@ -141,21 +139,13 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
      * DOTS
      */
     if (this.props.boothLocation) {
-      let bloc = snap.circle(
-        this.props.boothLocation.x,
-        this.props.boothLocation.y,
-        1
-      );
+      let bloc = snap.circle(this.props.boothLocation.x, this.props.boothLocation.y, 1);
       bloc.addClass(styles.booth);
     }
 
     // Target red dot
     if (selectedProduct && selectedProduct.location) {
-      let redCircle = snap.circle(
-        selectedProduct.location.x,
-        selectedProduct.location.y,
-        1
-      );
+      let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 1);
       redCircle.addClass(styles.target);
     }
 
@@ -183,11 +173,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
      * Should NOT be rendered if there is no booth location
      */
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
-      this.calculatePath(
-        snap,
-        selectedProduct.location.x,
-        selectedProduct.location.y
-      );
+      this.calculatePath(snap, selectedProduct.location.x, selectedProduct.location.y);
     }
   }
 
@@ -214,7 +200,6 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
 
     // Smooth out the path
     let smoothPath = pathfinder.Util.smoothenPath(emptyGrid, rawPath);
-
     // Render & animate the path
     snap.path("M" + smoothPath).addClass(styles.elPath);
   }

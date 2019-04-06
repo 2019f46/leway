@@ -7,7 +7,6 @@ import { IProduct } from "../../models/ProductModel";
 import Product from "../product/Product";
 import { connect } from "react-redux";
 import { setSelectedProduct, setProductList } from "../../redux/map/mapActions";
-import { element } from "prop-types";
 
 /**
  * Properties recived by the product Search Component
@@ -19,9 +18,21 @@ export interface IProductSearchProps {
     fakeData?: boolean;
 }
 
+/**
+ * This interface defines the props provided by the redux store.
+ */
 interface IReduxProps {
+    /**
+     * Set the product list in the redux store.
+     */
     setProductList: (products: IProduct[]) => void;
+    /**
+     * Set the selected product in the redux store
+     */
     setSelectedProduct: (product: IProduct | undefined) => void;
+    /**
+     * State of the redux store
+     */
     productData: { products: IProduct[], selectedProduct: IProduct }
 }
 
@@ -112,6 +123,7 @@ class ProductSearch extends React.Component<props, {}> {
         if (this.timeout) {
             window.clearTimeout(this.timeout);
         }
+
         this.timeout = window.setTimeout(() => {
             this.executeProductSearch(value);
         }, this.SEARCH_DELAY);
