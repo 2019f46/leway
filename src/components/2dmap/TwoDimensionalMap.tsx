@@ -5,6 +5,7 @@ import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import pathfinder from "pathfinding";
 import { connect } from "react-redux";
+import DimensionHelper from "../../helpers/DimensionHelper";
 
 /**
  * Properties recived by the Product Component.
@@ -49,7 +50,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     super(props);
     this.state = {
       mapData: this.props.polygonData,
-      mapSize: this.findDimensions(this.props.polygonData.outerPolygon)
+      mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon)
     };
   }
 
@@ -92,6 +93,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
       return;
     }
 
+    // Clear the entire svg map
     let container = document.getElementById("svg");
     if (container) {
       while (container.firstChild) {
@@ -99,10 +101,9 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
       }
     }
 
-    /**
-     * POLYGONS
-     */
-    if (!this.state.mapData.outerPolygon.points.length || this.state.mapData.outerPolygon.points.length < 1) {
+
+    // If there are no polygons to render, then dont do anything else.
+    if (!this.state.mapData.outerPolygon.points || this.state.mapData.outerPolygon.points.length < 1) {
       return;
     }
 
@@ -136,41 +137,31 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     });
 
     /**
-     * DOTS
+     * Set the booth Location
      */
     if (this.props.boothLocation) {
       let bloc = snap.circle(this.props.boothLocation.x, this.props.boothLocation.y, 1);
       bloc.addClass(styles.booth);
     }
 
-    // Target red dot
+    // Set the selected product location
     if (selectedProduct && selectedProduct.location) {
       let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 1);
       redCircle.addClass(styles.target);
     }
 
     // products blue dots
-    if (products && products.length > 0) {
-      let filter = products.filter(prod => {
-        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
-          return prod;
-        }
-      });
-      filter.forEach(product => {
+    if (products && products.length > 0 && !selectedProduct) {
+      products.forEach(product => {
         if (product.location) {
-          let bluecircle = snap.circle(
-            product.location.x,
-            product.location.y,
-            1
-          );
+          let bluecircle = snap.circle(product.location.x, product.location.y, 1);
           bluecircle.addClass(styles.products);
         }
       });
     }
 
     /**
-     * PATH
-     * Should NOT be rendered if there is no booth location
+     * PATH Should NOT be rendered if there is no booth location
      */
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
       this.calculatePath(snap, selectedProduct.location.x, selectedProduct.location.y);
@@ -263,30 +254,6 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
         y0 += sy;
       }
     }
-  }
-
-  /**
-   * Finds the dimensions of a polygon
-   * from 0,0 to the largest x and y
-   * @param polygon the outer polygon
-   * @returns A coordinate object, that contains the length and height of the polygon
-   */
-  public findDimensions(polygon: IPolygon): ICoord {
-    if (!polygon) { return { x: 0, y: 0 }; }
-
-    let lx: number = 0;
-    let ly: number = 0;
-
-    polygon.points.forEach(coord => {
-      if (coord.x > lx) {
-        lx = coord.x;
-      }
-      if (coord.y > ly) {
-        ly = coord.y;
-      }
-    });
-
-    return { x: lx, y: ly };
   }
 }
 

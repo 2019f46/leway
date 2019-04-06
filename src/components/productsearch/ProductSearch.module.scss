@@ -4,10 +4,25 @@
     display: block;
     position: absolute;
     padding-top: 25px;
-    min-width: 20%;
-    max-width: 40%;
+    width: 30%;
+
     .searchBoxContainer {
         display: block;
+
+        div[class*="ms-SearchBox"] {
+            div[class*="ms-SearchBox-iconContainer"] {
+                i {
+                    font-weight: 900;
+                }
+
+                i:hover {
+                    cursor: pointer;
+                    padding: 5px;
+                    background-color: antiquewhite;
+                    font-size: 20px;
+                }
+            }
+        }
     }
 }
 

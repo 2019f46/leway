@@ -68,7 +68,7 @@ class ProductSearch extends React.Component<props, {}> {
 
         return (
             <div className={styles.productSearchContainer} >
-                <div className={styles.searchBoxContainer}>
+                <div className={selectedProduct ? styles.searchBoxContainer : undefined}>
                     <SearchBox
                         iconProps={{ iconName: selectedProduct ? "ReturnToSession" : "Search", onClick: this.onBackIconClick }}
                         placeholder="Search for products"
