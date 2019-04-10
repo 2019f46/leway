@@ -7,10 +7,9 @@ import { configure } from "enzyme";
 import PageNotFound from "../components/pagenotfound/PageNotFound";
 import { MemoryRouter } from "react-router";
 import SettingsPage from "../components/settingspage/SettingsPage";
+configure({ adapter: new Adapter() });
 
 describe("Routing", () => {
-  configure({ adapter: new Adapter() });
-
   it("Routing - /home should redirect to home", () => {
     let wrapper = mount(
       <MemoryRouter initialEntries={["/home"]}>

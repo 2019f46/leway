@@ -3,48 +3,53 @@
     height: 100%;
     width: 90%;
     padding-top: 15px;
+
     .svgMap {
         fill: transparent;
         stroke-width: 0.3px;
         stroke: black;
+
         .polygonObject {
             fill: #f1f1f1;
             stroke-width: 0.3px;
         }
+
         .polygonObject:hover {
             fill: beige;
+        }
+
+        .target {
+            fill: red;
+        }
+
+        .products {
+            fill: blue;
+        }
+
+        .booth {
+            fill: burlywood;
+        }
+
+        .elPath {
+            fill: none;
+            stroke-width: 1px;
+            opacity: 0.5;
+            stroke-linecap: round;
+            stroke: #bada55;
+            animation: animateDash ease-in 1;
+            animation-fill-mode: forwards;
+            animation-duration: 2s;
         }
     }
 }
 
-.target {
-    fill: red;
-}
-
-.products {
-    fill: blue;
-}
-
-.booth {
-    fill: burlywood;
-}
-
-.elPath {
-    fill: none;
-    stroke-width: 1px;
-    opacity: 0.5;
-    stroke-linecap: round;
-    stroke: #bada55;
-    animation: animateDash ease-in 1;
-    animation-fill-mode: forwards;
-    animation-duration: 2s;
-}
 
 @keyframes animateDash {
     from {
         opacity: 0.5;
-        stroke-dasharray: 50%;
+        stroke-dasharray: 10%;
     }
+
     to {
         opacity: 1;
         stroke-dasharray: 110%;

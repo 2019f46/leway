@@ -5,43 +5,50 @@ import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/fakes/FakeSearchService";
 import { IProduct } from "../../models/ProductModel";
 import Product from "../product/Product";
-import ProductSearchStore from "../../flux/ProductSearchStore";
-import ProductSearchActions from "../../flux/ProductSearchActions";
+import { connect } from "react-redux";
+import { setSelectedProduct, setProductList } from "../../redux/map/mapActions";
 
 /**
- * Properties recived by the product Search Component.
- * @param fakeData Optional prop, determines whether or not the component uses the real or fake search service.
+ * Properties recived by the product Search Component
  */
 export interface IProductSearchProps {
+    /**
+     * fakeData Optional prop, determines whether or not the component uses the real or fake search service.
+     */
     fakeData?: boolean;
 }
 
 /**
- * States managed by ProductSearchComponent
- * @param products Required prop, List of products to show
- * @param selectedProduct Optional prop, is set when a product is selected. 
+ * This interface defines the props provided by the redux store.
  */
-export interface IProductSearchState {
-    products: IProduct[];
-    selectedProduct?: IProduct;
+interface IReduxProps {
+    /**
+     * Set the product list in the redux store.
+     */
+    setProductList: (products: IProduct[]) => void;
+    /**
+     * Set the selected product in the redux store
+     */
+    setSelectedProduct: (product: IProduct | undefined) => void;
+    /**
+     * State of the redux store
+     */
+    productData: { products: IProduct[], selectedProduct: IProduct }
 }
+
+type props = IProductSearchProps & IReduxProps;
 
 /**
  * This component is responsible for handling the search functionality of the application. 
  * This component is self contained which means that the component contains all the logic search logic. 
  * From the rendering of the Searchbox (subcomponent) to managing the logic of how the search results are handled and shown.
  */
-export default class ProductSearch extends React.Component<IProductSearchProps, IProductSearchState> {
+class ProductSearch extends React.Component<props, {}> {
     private searchService: ISearchService;
     private timeout: any;
     private SEARCH_DELAY = 1000;
     constructor(props: any) {
         super(props);
-        this.state = {
-            products: ProductSearchStore.getProductsState(),
-            selectedProduct: ProductSearchStore.getSelectedProduct(),
-
-        };
         this.searchService = this.props.fakeData ? new FakeSearchService() : new SearchService();
     }
 
@@ -50,22 +57,25 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      */
     public render(): JSX.Element {
         let searchResults: JSX.Element[] = [];
-        if (!this.state.selectedProduct) {
-            this.state.products.forEach(element => {
+
+        const { selectedProduct, products } = this.props.productData;
+
+        if (!selectedProduct && products && products.length > 0) {
+            products.forEach(element => {
                 searchResults.push(<Product product={element} onProductClick={this.onProductClick} key={element.id} />);
             });
         }
 
         return (
             <div className={styles.productSearchContainer} >
-                <div className={styles.searchBoxContainer}>
+                <div className={selectedProduct ? styles.searchBoxContainer : undefined}>
                     <SearchBox
-                        iconProps={{ iconName: this.state.selectedProduct ? "ReturnToSession" : "Search", onClick: this.onBackIconClick }}
+                        iconProps={{ iconName: selectedProduct ? "ReturnToSession" : "Search", onClick: this.onBackIconClick }}
                         placeholder="Search for products"
                         onClear={this.clearSearch}
                         onChange={value => this.onProductSearch(value)} />
                 </div>
-                {this.state.selectedProduct ? <Product product={this.state.selectedProduct} /> : searchResults}
+                {selectedProduct ? <Product product={selectedProduct} /> : searchResults}
             </div>
         );
     }
@@ -75,8 +85,9 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * This method handles the transition from a single product item to showing the rpevios list of products. 
      */
     private onBackIconClick = () => {
-        if (this.state.selectedProduct) {
-            ProductSearchActions.setSelectedProduct(undefined);
+        const { selectedProduct } = this.props.productData;
+        if (selectedProduct) {
+            this.props.setSelectedProduct(undefined);
         }
     }
 
@@ -86,15 +97,15 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      * @param product The selected product
      */
     private onProductClick = (product: IProduct) => {
-        ProductSearchActions.setSelectedProduct(product);
+        this.props.setSelectedProduct(product);
     }
 
     /**
      * When clearing the searchbox, any earlier search results are removed from the component state, and the selected product is removed
      */
     private clearSearch = () => {
-        ProductSearchActions.setProducts([]);
-        this.onBackIconClick();
+        this.props.setProductList([]);
+        this.props.setSelectedProduct(undefined);
     }
 
     /**
@@ -112,6 +123,7 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
         if (this.timeout) {
             window.clearTimeout(this.timeout);
         }
+
         this.timeout = window.setTimeout(() => {
             this.executeProductSearch(value);
         }, this.SEARCH_DELAY);
@@ -123,27 +135,8 @@ export default class ProductSearch extends React.Component<IProductSearchProps, 
      */
     private executeProductSearch = async (value: string): Promise<void> => {
         let products = await this.searchService.getProduct(value);
-        ProductSearchActions.setProducts(products);
-        this.onBackIconClick();
-    }
-
-    /**
-     * When the component mounts, a listener will begin to listen for product changes and selected product changes.
-     * Component will mount is a lifecycle method, therefore by setting the listeners here, they are ensure to work throught the licecycle of the component.
-     */
-    public componentDidMount() {
-        ProductSearchStore.on("productsChange", () => {
-            this.setState({ products: ProductSearchStore.getProductsState() });
-        });
-        ProductSearchStore.on("selectedProductChange", () => {
-            this.setState({ selectedProduct: ProductSearchStore.getSelectedProduct() });
-        });
-    }
-
-    /**
-     * When the component unmounts, it is important to remove the listeners
-     */
-    public componentWillUnmount() {
-        ProductSearchStore.removeAllListeners();
+        this.props.setProductList(products);
     }
 }
+
+export default connect((state) => state, { setProductList, setSelectedProduct })(ProductSearch);

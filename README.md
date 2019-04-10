@@ -24,7 +24,7 @@ Ejects the pack, allows free modification of all configs (Don't do unless necesa
 3. Visual Studio Code
 
 ### `Required Development tools`
-1. Chrome Extension: React
+1. Chrome Extension: React + redux dev tool
 2. Extension: Beautify css/sass/scss/less in visual code
 3. Extension: CSS Modules in visual code
 4. Extension: IntelliSence for CSS, SCSS, class names in HTML slim and SCSS in visual code

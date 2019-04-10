@@ -3,9 +3,9 @@ import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
 import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
-import ProductSearchStore from "../../flux/ProductSearchStore";
 import pathfinder from "pathfinding";
-import MapService from "../../services/MapService";
+import { connect } from "react-redux";
+import DimensionHelper from "../../helpers/DimensionHelper";
 
 /**
  * Properties recived by the Product Component.
@@ -25,19 +25,32 @@ export interface ITwoDimensionalMapProps {
 export interface ITwoDimensionalMapState {
   mapData: IMapModel;
   mapSize: ICoord;
-  products?: IProduct[];
-  selectedProduct?: IProduct;
 }
+
+/**
+ * This interface defines the props provided by the redux store.
+ */
+export interface IReduxProps {
+  /**
+   * This property is retrieved from the redux store, and is passed down when it is set.
+   */
+  productData: { products: IProduct[], selectedProduct: IProduct }
+}
+
+/**
+ * This is required by typescript. This interface allows up to separate properties owned by the component and properties passed by redux and use them similarity
+ */
+type props = ITwoDimensionalMapProps & IReduxProps;
 
 /**
  * This Component is responsible for taking in a object with polygon points and trasforming it into a interactable 2D map
  */
-export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMapProps, ITwoDimensionalMapState> {
+class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> {
   constructor(props: any) {
     super(props);
     this.state = {
       mapData: this.props.polygonData,
-      mapSize: this.findDimensions(this.props.polygonData.outerPolygon)
+      mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon)
     };
   }
 
@@ -61,19 +74,26 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
   public componentDidMount() {
-    this.generateMap();
+    const { selectedProduct, products } = this.props.productData;
+    this.generateMap(selectedProduct, products);
+  }
+
+  public componentWillReceiveProps(nextprops: props) {
+    const { selectedProduct, products } = nextprops.productData;
+    this.generateMap(selectedProduct, products);
   }
 
   /**
    * This method renders the map using the snapsvg framework.
    * An outer polygon is rendered aswell as the inner polygons.
    */
-  private generateMap = (selectedProduct: IProduct | undefined = undefined, products: IProduct[] | undefined = this.state.products) => {
+  private generateMap = (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
     let snap: Snap.Paper = Snap("#svg");
     if (!snap) {
       return;
     }
 
+    // Clear the entire svg map
     let container = document.getElementById("svg");
     if (container) {
       while (container.firstChild) {
@@ -81,15 +101,12 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       }
     }
 
-    /**
-     * POLYGONS
-     */
-    if (
-      !this.state.mapData.outerPolygon.points.length ||
-      this.state.mapData.outerPolygon.points.length < 1
-    ) {
+
+    // If there are no polygons to render, then dont do anything else.
+    if (!this.state.mapData.outerPolygon.points || this.state.mapData.outerPolygon.points.length < 1) {
       return;
     }
+
     // Process outer polygon
     let polygon: string = "";
     this.state.mapData.outerPolygon.points.forEach(coord => {
@@ -120,56 +137,34 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     });
 
     /**
-     * DOTS
+     * Set the booth Location
      */
-    if(this.props.boothLocation){
-      let bloc = snap.circle(
-        this.props.boothLocation.x,
-        this.props.boothLocation.y,
-        1
-      );
+    if (this.props.boothLocation) {
+      let bloc = snap.circle(this.props.boothLocation.x, this.props.boothLocation.y, 1);
       bloc.addClass(styles.booth);
     }
 
-    // Target red dot
+    // Set the selected product location
     if (selectedProduct && selectedProduct.location) {
-      let redCircle = snap.circle(
-        selectedProduct.location.x,
-        selectedProduct.location.y,
-        1
-      );
+      let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 1);
       redCircle.addClass(styles.target);
     }
 
     // products blue dots
-    if (products && products.length > 0) {
-      let filter = products.filter(prod => {
-        if (JSON.stringify(prod) !== JSON.stringify(selectedProduct)) {
-          return prod;
-        }
-      });
-      filter.forEach(product => {
+    if (products && products.length > 0 && !selectedProduct) {
+      products.forEach(product => {
         if (product.location) {
-          let bluecircle = snap.circle(
-            product.location.x,
-            product.location.y,
-            1
-          );
+          let bluecircle = snap.circle(product.location.x, product.location.y, 1);
           bluecircle.addClass(styles.products);
         }
       });
     }
 
     /**
-     * PATH
-     * Should NOT be rendered if there is no booth location
+     * PATH Should NOT be rendered if there is no booth location
      */
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
-      this.calculatePath(
-        snap,
-        selectedProduct.location.x,
-        selectedProduct.location.y
-      );
+      this.calculatePath(snap, selectedProduct.location.x, selectedProduct.location.y);
     }
   }
 
@@ -191,12 +186,11 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
     this.setUnwalkable(emptyGrid);
 
     // Calculate the path to take
-    let bloc = this.props.boothLocation ? this.props.boothLocation : {x:0,y:0};
+    let bloc = this.props.boothLocation ? this.props.boothLocation : { x: 0, y: 0 };
     let rawPath = finder.findPath(bloc.x, bloc.y, x1, y1, emptyGrid);
 
     // Smooth out the path
     let smoothPath = pathfinder.Util.smoothenPath(emptyGrid, rawPath);
-
     // Render & animate the path
     snap.path("M" + smoothPath).addClass(styles.elPath);
   }
@@ -261,44 +255,6 @@ export default class TwoDimensionalMap extends React.Component<ITwoDimensionalMa
       }
     }
   }
-
-  /**
-   * Finds the dimensions of a polygon
-   * from 0,0 to the largest x and y
-   * @param polygon the outer polygon
-   * @returns A coordinate object, that contains the length and height of the polygon
-   */
-  public findDimensions(polygon: IPolygon): ICoord {
-    if(!polygon){return {x:0,y:0};}
-    
-    let lx: number = 0;
-    let ly: number = 0;
-    
-    polygon.points.forEach(coord => {
-      if (coord.x > lx) {
-        lx = coord.x;
-      }
-      if (coord.y > ly) {
-        ly = coord.y;
-      }
-    });
-
-    return { x: lx, y: ly };
-  }
-
-  /**
-   * When the component mounts, a listener will be listening to the prodsStateChange event which is emited by the product search store.
-   * This event will enable this component to know the current searchresults without being coupled with the productSearch component.
-   */
-  public componentWillMount() {
-    ProductSearchStore.on("prodsStateChange", this.onSelectedChange);
-  }
-
-  // This is the method which runs when the event prodsStateChange is emited.
-  private onSelectedChange = () => {
-    let selected = ProductSearchStore.getSelectedProduct();
-    let prods = ProductSearchStore.getProductsState();
-    this.setState({ selectedProduct: selected, products: prods });
-    this.generateMap(selected, prods);
-  }
 }
+
+export default connect((state: ITwoDimensionalMapState) => state)(TwoDimensionalMap);

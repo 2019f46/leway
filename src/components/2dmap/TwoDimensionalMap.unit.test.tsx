@@ -7,26 +7,35 @@ import FakeMapService from "../../services/fakes/FakeMapService";
 import { IMapService } from "../../services/MapService";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
-
-// automatically unmount and cleanup DOM after the test is finished.
+import configureMockStore from "redux-mock-store";
+import { Provider } from "react-redux";
+import { ISearchService } from "../../services/SearchService";
+import FakeSearchService from "../../services/fakes/FakeSearchService";
 configure({ adapter: new Adapter() });
 
 describe("TwoDimensionalMap", () => {
-  it("TwoDimensionalMap - Initial mapData is equal to received prop", async () => {
-    let fakeService: IMapService = new FakeMapService();
+  let fakeService: IMapService = new FakeMapService();
+  let service: ISearchService = new FakeSearchService();
+
+  it("TwoDimensionalMap - Initial data prop is equal to received sent data", async () => {
     let data = await fakeService.getMapData();
+    let products = await service.getProduct("");
+    let mockStore = configureMockStore();
+    let store = mockStore({ productData: { products: products, selectedProduct: undefined } });
 
-    const wrapper = shallow(<TwoDimensionalMap polygonData={data} />);
+    const wrapper = mount(<Provider store={store}><TwoDimensionalMap polygonData={data} /></Provider>);
 
-    expect(wrapper.state("mapData")).toEqual(data);
+    expect(wrapper.find(TwoDimensionalMap).prop("polygonData")).toEqual(data);
     wrapper.unmount();
   });
 
   it("TwoDimensionalMap - Renders svg element", async () => {
-    let fakeService: IMapService = new FakeMapService();
     let data = await fakeService.getMapData();
+    let products = await service.getProduct("");
+    let mockStore = configureMockStore();
+    let store = mockStore({ productData: { products: products, selectedProduct: undefined } });
 
-    const wrapper = mount(<TwoDimensionalMap polygonData={data} />);
+    const wrapper = mount(<Provider store={store}><TwoDimensionalMap polygonData={data} /></Provider>);
 
     expect(
       wrapper.contains(
@@ -59,26 +68,5 @@ describe("TwoDimensionalMap", () => {
 
     let result = `<polygon points=\"10, 30 20, 40 30, 50 \"/>`;
     expect(expected).toEqual(result);
-  });
-});
-
-describe("FindDimensions", () => {
-  it("should return the largest x and y of the polygon", () => {
-    let tdmap = new TwoDimensionalMap({ polygonData: [] });
-
-    let result = tdmap.findDimensions({
-      points: [
-        { x: 0, y: 0 },
-        { x: 28, y: 10 },
-        { x: 1, y: 98 },
-        { x: 32, y: 10 },
-        { x: 25, y: 11 },
-        { x: 58, y: 12 },
-        { x: 21, y: 13 },
-        { x: 0, y: 14 }
-      ]
-    });
-
-    expect(result).toEqual({ x: 58, y: 98 });
   });
 });
