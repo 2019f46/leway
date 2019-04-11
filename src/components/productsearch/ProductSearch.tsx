@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SearchBox } from "office-ui-fabric-react";
+import { SearchBox, Spinner } from "office-ui-fabric-react";
 import styles from "./ProductSearch.module.scss";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/fakes/FakeSearchService";
@@ -42,12 +42,16 @@ interface IReduxProps {
 
 type props = IProductSearchProps & IReduxProps;
 
+interface IProductSearchState{
+    spinpls: boolean;
+}
+
 /**
  * This component is responsible for handling the search functionality of the application.
  * This component is self contained which means that the component contains all the logic search logic.
  * From the rendering of the Searchbox (subcomponent) to managing the logic of how the search results are handled and shown.
  */
-class ProductSearch extends React.Component<props, {}> {
+class ProductSearch extends React.Component<props, IProductSearchState> {
   private searchService: ISearchService;
   private timeout: any;
   private SEARCH_DELAY = 1000;
@@ -56,6 +60,7 @@ class ProductSearch extends React.Component<props, {}> {
     this.searchService = this.props.fakeData
       ? new FakeSearchService()
       : new SearchService();
+      this.state = {spinpls: false};
   }
 
   /**
@@ -99,6 +104,7 @@ class ProductSearch extends React.Component<props, {}> {
         ) : (
           searchResults
         )}
+        {this.state.spinpls ? <Spinner style={{marginTop: "5px"}}/> : undefined}
       </div>
     );
   }
@@ -144,7 +150,7 @@ class ProductSearch extends React.Component<props, {}> {
       return;
     }
 
-    this.setState({ searchValue: value });
+    this.setState({spinpls: true});
     this.props.setSearchValue(value);
 
     if (this.timeout) {
@@ -163,6 +169,7 @@ class ProductSearch extends React.Component<props, {}> {
   private executeProductSearch = async (): Promise<void> => {
     let products = await this.searchService.getProduct(this.props.productData.searchValue);
     this.props.setProductList(products);
+    this.setState({spinpls: false});
   };
 }
 
