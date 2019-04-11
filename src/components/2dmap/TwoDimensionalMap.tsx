@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./TwoDimensionalMap.module.scss";
 import Snap from "snapsvg-cjs";
-import { IMapModel, ICoord, IPolygon } from "../../models/MapModel";
+import { IMapModel, ICoord } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import pathfinder from "pathfinding";
 import { connect } from "react-redux";
 import DimensionHelper from "../../helpers/DimensionHelper";
-
+const icon = require("../../assets/exit.svg");
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -34,7 +34,7 @@ export interface IReduxProps {
   /**
    * This property is retrieved from the redux store, and is passed down when it is set.
    */
-  productData: { products: IProduct[], selectedProduct: IProduct }
+  productData: { products: IProduct[], selectedProduct: IProduct };
 }
 
 /**
@@ -83,6 +83,14 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     this.generateMap(selectedProduct, products);
   }
 
+  private addCustomSvg = (svg: any, snap: Snap.Paper, x: number, y: number) => {
+    Snap.load(svg, customSvg => {
+      snap.append(customSvg as any);
+      let element = snap.select("svg#doorIcon").addClass(styles.customIcon);
+      element.attr({ x: x, y: y });
+    });
+  }
+
   /**
    * This method renders the map using the snapsvg framework.
    * An outer polygon is rendered aswell as the inner polygons.
@@ -92,6 +100,12 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     if (!snap) {
       return;
     }
+
+    // Hardcoded - TBD Get Icons from somewhere with an id
+    // SHould icons be the same size? if so an offset is required
+    // If icons are not the same size, then they require a function
+    // to offset it so the center of the image is the location and not the topleft corner
+    this.addCustomSvg(icon, snap, 58, 32);
 
     // Clear the entire svg map
     let container = document.getElementById("svg");
