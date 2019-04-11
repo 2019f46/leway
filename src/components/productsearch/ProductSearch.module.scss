@@ -26,3 +26,16 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.products{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+@media only screen and (orientation:portrait) {
+    .products{
+        flex-direction: row;
+        align-content: space-around;
+    }
+}

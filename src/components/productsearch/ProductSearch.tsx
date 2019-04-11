@@ -99,11 +99,14 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
             value={searchValue}
           />
         </div>
-        {selectedProduct ? (
-          <Product product={selectedProduct} chosen={true}/>
-        ) : (
-          searchResults
-        )}
+        <div className={styles.products}>
+            {selectedProduct ? (
+            <Product product={selectedProduct} chosen={true}/>
+            ) : (
+            searchResults
+            )}
+        </div>
+
         {this.state.spinpls ? <Spinner style={{marginTop: "5px"}}/> : undefined}
       </div>
     );

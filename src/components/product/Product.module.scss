@@ -37,3 +37,13 @@
     cursor: pointer;
 }
 
+@media only screen and (orientation:portrait) {
+    .resultContainer{
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 5px;
+        height: 230px;
+        width: 300px;
+    }
+}
+

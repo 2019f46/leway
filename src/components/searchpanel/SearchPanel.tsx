@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Panel, PanelType, Icon, IconButton } from "office-ui-fabric-react";
+import { Panel, PanelType, Icon, IconButton, updateA } from "office-ui-fabric-react";
 import styles from "./SearchPanel.module.scss";
 import ProductSearch from "../productsearch/ProductSearch";
 
@@ -17,9 +17,21 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
     };
   }
 
+  public componentDidMount(){
+    window.addEventListener("resize", this.update, false); 
+  }
+
+  public componentWillUnmount(){
+    window.removeEventListener("resize", this.update);
+  }
+
+  private update = () => {
+    this.forceUpdate();
+  };
+
   public render() {
     const { isOpen } = this.state;
-    let iconString = isOpen ? "Back" : "Search";
+    let iconString = isOpen ? window.orientation === 0 ? "Up" : "Back" : "Search";
 
     let icon: JSX.Element = (
       <div
@@ -38,6 +50,7 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
         type={PanelType.smallFixedNear}
         className={styles.panel}
         hasCloseButton={false}
+
       >
         <ProductSearch />
       </Panel>
