@@ -4,6 +4,8 @@
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+    background-color: white;
+    margin-top: 5px;
     .left {
         display: block;
         padding: 10px;
@@ -19,10 +21,11 @@
     cursor: pointer;
 }
 
-.resultsContainer:nth-child(odd) {
-    background-color: antiquewhite;
-}
 
-.resultsContainer:nth-child(even) {
-    background-color: azure;
-}
+// .resultsContainer:nth-child(odd) {
+//     background-color: white;
+// }
+
+// .resultsContainer:nth-child(even) {
+//     background-color: white;
+// }
