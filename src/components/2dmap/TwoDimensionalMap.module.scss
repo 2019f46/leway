@@ -16,11 +16,11 @@
         }
 
         .target {
-            fill: red;
+            fill: #5780f9;
         }
 
         .products {
-            fill: blue;
+            fill: #5780f9;
         }
 
         .booth {
@@ -30,12 +30,12 @@
         .elPath {
             fill: none;
             stroke-width: 1px;
-            opacity: 0.5;
+            opacity: 0;
             stroke-linecap: round;
-            stroke: #bada55;
+            stroke: #5780f9;
             animation: animateDash ease-in 1;
             animation-fill-mode: forwards;
-            animation-duration: 2s;
+            animation-duration: 1s;
         }
     }
 }
@@ -43,8 +43,8 @@
 
 @keyframes animateDash {
     from {
-        opacity: 0.5;
-        stroke-dasharray: 10%;
+        opacity: 0;
+        stroke-dasharray: 0%;
     }
 
     to {
