@@ -100,7 +100,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
           />
         </div>
         {selectedProduct ? (
-          <Product product={selectedProduct} />
+          <Product product={selectedProduct} chosen={true}/>
         ) : (
           searchResults
         )}

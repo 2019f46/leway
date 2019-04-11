@@ -6,7 +6,7 @@
 
     .svgMap {
         fill: transparent;
-        stroke-width: 0.3px;
+        stroke-width: 0.5px;
         stroke: black;
         fill: #d9d9d9;
 
@@ -17,14 +17,17 @@
 
         .target {
             fill: #5780f9;
+            stroke-width: 0.3px;
         }
 
         .products {
             fill: #5780f9;
+            stroke-width: 0.3px;
         }
 
         .booth {
             fill: burlywood;
+            stroke-width: 0.3px;
         }
 
         .elPath {

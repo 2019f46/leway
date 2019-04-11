@@ -13,7 +13,7 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
   constructor(props: SearchPanelProps) {
     super(props);
     this.state = {
-      isOpen: true
+      isOpen: false
     };
   }
 
