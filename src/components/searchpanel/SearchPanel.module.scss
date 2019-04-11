@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.panel {
+    width: 30%;
+
+    div[class*="ms-Panel-main"] {
+        width: 100%;
+
+        div[class*="ms-Panel-contentInner"] {
+            div[class*="ms-Panel-scrollableContent"] {
+                div[class*="ms-Panel-content"] {
+                    padding-left: 10px !important;
+                    padding-right: 10px !important;
+                }
+            }
+        }
+    }
+}
+
+.icon {
+    margin-top: 10px;
+    font-size: 10px;
+    background-color: white;
+    filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
+}
+
+.isOpen {
+    @extend .icon;
+    padding-left: 30%;
+}
+
+.isClosed {
+    @extend .icon;
+    padding-left: 6px;
+}

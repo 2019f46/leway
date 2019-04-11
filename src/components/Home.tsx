@@ -19,8 +19,8 @@ export default class Home extends React.Component {
         let panel: JSX.Element = <SearchPanel/>;
         return (<div className={styles.homeContainer}>
             {/* {prodSearch} */}
-            {selector}
             {panel}
+            {selector}
         </div>);
     }
 }
