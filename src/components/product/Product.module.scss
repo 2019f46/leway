@@ -1,17 +1,35 @@
-.resultsContainer {
+.resultContainer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
+    background-color: white;
+    margin-top: 5px;
+
     .left {
         display: block;
         padding: 10px;
     }
+    
     .right {
         display: block;
         padding: 10px;
     }
+}
+
+.resultsEllipsis {
+    @extend .resultContainer;
+    height: 150px;
+
+    .left {
+        overflow: hidden;
+        text-overflow:ellipsis;
+        background: -webkit-linear-gradient(black 90px, transparent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
 }
 
 .resultsContainer:hover {
@@ -19,10 +37,13 @@
     cursor: pointer;
 }
 
-.resultsContainer:nth-child(odd) {
-    background-color: antiquewhite;
+@media only screen and (orientation:portrait) {
+    .resultContainer{
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 5px;
+        height: 230px;
+        width: 300px;
+    }
 }
 
-.resultsContainer:nth-child(even) {
-    background-color: azure;
-}

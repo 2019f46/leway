@@ -1,5 +1,5 @@
 import { IProduct } from "../../models/ProductModel";
-import { SET_SELECTED_PRODUCT, SET_PRODUCT_LIST } from "../types";
+import { SET_SELECTED_PRODUCT, SET_PRODUCT_LIST, SET_SEARCH_VALUE } from "../types";
 
 export function setSelectedProduct(selectedProduct: IProduct) {
     return function (dispatch: any) {
@@ -15,6 +15,15 @@ export function setProductList(list: IProduct[]) {
         dispatch({
             type: SET_PRODUCT_LIST,
             data: list
+        });
+    }
+}
+
+export function setSearchValue(value: string){
+    return function(dispatch:any){
+        dispatch({
+            type: SET_SEARCH_VALUE,
+            data: value
         });
     }
 }

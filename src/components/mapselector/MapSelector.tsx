@@ -1,11 +1,11 @@
 import React from "react";
 import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
 import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle, Spinner, autobind } from "office-ui-fabric-react";
+import { Toggle, Spinner } from "office-ui-fabric-react";
 import styles from "./MapSelector.module.scss";
 import MapService, { IMapService } from "../../services/MapService";
 import FakeMapService from "../../services/fakes/FakeMapService";
-import { IMapModel, ICoord } from "../../models/MapModel";
+import { IMapModel } from "../../models/MapModel";
 import BoothError from "../bootherror/BoothError";
 import { IBoothService } from "../../services/BoothService";
 import FakeBoothService from "../../services/fakes/FakeBoothService";
@@ -99,7 +99,7 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
     /**
      * Method to pass on to a child component as a callback, this method is triggered when something happens in the child component. 
      */
-    private onEditMap = (data: IMapModel) => {
+    private onEditMap = () => {
         console.log("Map has been edited");
     }
 

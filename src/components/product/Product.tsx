@@ -11,6 +11,8 @@ import styles from "./Product.module.scss";
 export interface IProductProps {
     product: IProduct;
     onProductClick?: (prod: IProduct) => void;
+    /** If this product has been chosen in the list */
+    chosen?: boolean;
 }
 
 /**
@@ -37,7 +39,10 @@ export default class Product extends React.Component<IProductProps, IProductStat
     public render(): JSX.Element {
 
         let searchResults: JSX.Element = (
-            <div className={styles.resultsContainer} onClick={() => this.props.onProductClick ? this.props.onProductClick(this.props.product) : undefined}>
+            <div 
+                className={this.props.chosen ? styles.resultContainer : styles.resultsEllipsis} 
+                onClick={() => this.props.onProductClick ? this.props.onProductClick(this.props.product) : undefined}
+            >
                 <div className={styles.left}>
                     <h3>{this.state.currentProduct.name}</h3>
                     <span>{this.props.product.description}</span>

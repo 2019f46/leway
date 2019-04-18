@@ -2,6 +2,7 @@ import React from "react";
 import MapSelector from "./mapselector/MapSelector";
 import ProductSearch from "./productsearch/ProductSearch";
 import styles from "./Home.module.scss";
+import SearchPanel from "./searchpanel/SearchPanel";
 
 /**
  * This is one of the component at the top of the component tree. 
@@ -15,8 +16,10 @@ export default class Home extends React.Component {
     public render() {
         let selector: JSX.Element = <MapSelector />;
         let prodSearch: JSX.Element = <ProductSearch />;
+        let panel: JSX.Element = <SearchPanel/>;
         return (<div className={styles.homeContainer}>
-            {prodSearch}
+            {/* {prodSearch} */}
+            {panel}
             {selector}
         </div>);
     }
