@@ -1,30 +1,31 @@
 import pathfinder from "pathfinding";
 import { ICoord, IPolygon } from "../models/MapModel";
+import { ILocation } from "../models/ProductModel";
 
 /**
- * This interface defined the methods used by the fake and real map service classes.
- * @param getmapData This method is implemented in the real and fake map service. The method is responsible for getting map information
+ * This interface defines the methods used by the pathingservice.
  */
 export interface IPathingService {
-    calculatePath: (x1: number, y1: number, mapsizeX: number, mapsyzeY: number, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => void;
+    /**
+     * This method will calculate the shortest path fron your current location to the selected item.
+     * @param targetLocation x and y coordinates of route target location.
+     * @param mapsize Height and width of the map.
+     * @param boothLocation The location of the booth which is the start point of the route.
+     * @param innerPolygon The polygons which the map contains. These are the obstacles the this pathing service must avoid.
+     */
+    calculatePath: (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]) => void;
 }
 
 /**
- * Real mapservice. Implements method defined in the IMapService interface and is responsible for getting map data from the backend.
+ * Pathing service Implements method defined in the IPathingService interface and is responsible for calculating paths
  */
 export default class PathingService implements IPathingService {
-    /**
-     * This method will calculate the shortest path fron your current location to the selected item.
-     * @param snap Snap is the snap svg object which populates the entire svg
-     * @param x1 Target location x coord
-     * @param y1 Target location y coord
-     */
-    public calculatePath = (x1: number, y1: number, mapsizeX: number, mapsyzeY: number, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
+    public calculatePath = (targetLocation: ILocation, mapsize: ICoord, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
         let emptyGrid = new pathfinder.Grid(
-            mapsizeX + 1,
-            mapsyzeY + 1
+            mapsize.x + 1,
+            mapsize.y + 1
         );
 
         // Define where you cant move
@@ -32,7 +33,7 @@ export default class PathingService implements IPathingService {
 
         // Calculate the path to take
         let bloc = boothLocatiob ? boothLocatiob : { x: 0, y: 0 };
-        let rawPath = finder.findPath(bloc.x, bloc.y, x1, y1, emptyGrid);
+        let rawPath = finder.findPath(bloc.x, bloc.y, targetLocation.x, targetLocation.y, emptyGrid);
 
         // Smooth out the path
         return pathfinder.Util.smoothenPath(emptyGrid, rawPath);
@@ -43,6 +44,7 @@ export default class PathingService implements IPathingService {
     /**
      * The purpose of this method is to set the grid coordinates which are unavailable for pathfinding
      * @param grid The invisible grid which controls areas where you can move and areas where you cant
+     * @param innerPolygon The polygons which the map contains. These are the obstacles the this pathing service must avoid.
      */
     private setUnwalkable = (grid: pathfinder.Grid, innerPolygon: IPolygon[]) => {
         // Iterate each polygon set
