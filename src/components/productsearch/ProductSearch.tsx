@@ -3,8 +3,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IProduct } from "../../models/ProductModel";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
-import FakeSearchService from "../../services/fakes/FakeSearchService";
-import SearchService, { ISearchService } from "../../services/SearchService";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";
 
@@ -25,7 +23,7 @@ interface IReduxProps {
   /**
    * Set the product list in the redux store.
    */
-  setProductList: (products: IProduct[]) => void;
+  setProductList: (query?: string, fake?: boolean) => void;
   /**
    * Set the selected product in the redux store
    */
@@ -42,8 +40,8 @@ interface IReduxProps {
 
 type props = IProductSearchProps & IReduxProps;
 
-interface IProductSearchState{
-    spinpls: boolean;
+interface IProductSearchState {
+  spinpls: boolean;
 }
 
 /**
@@ -52,15 +50,11 @@ interface IProductSearchState{
  * From the rendering of the Searchbox (subcomponent) to managing the logic of how the search results are handled and shown.
  */
 class ProductSearch extends React.Component<props, IProductSearchState> {
-  private searchService: ISearchService;
   private timeout: any;
   private SEARCH_DELAY = 1000;
   constructor(props: any) {
     super(props);
-    this.searchService = this.props.fakeData
-      ? new FakeSearchService()
-      : new SearchService();
-      this.state = {spinpls: false};
+    this.state = { spinpls: false };
   }
 
   /**
@@ -77,7 +71,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
           <Product
             product={element}
             onProductClick={this.onProductClick}
-            key={element.id + Math.random()*100}
+            key={element.id + Math.random() * 100}
           />
         );
       });
@@ -100,14 +94,14 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
           />
         </div>
         <div className={styles.products}>
-            {selectedProduct ? (
-            <Product product={selectedProduct} chosen={true}/>
-            ) : (
-            searchResults
+          {selectedProduct ? (
+            <Product product={selectedProduct} chosen={true} />
+          ) : (
+              searchResults
             )}
         </div>
 
-        {this.state.spinpls ? <Spinner style={{marginTop: "5px"}}/> : undefined}
+        {this.state.spinpls ? <Spinner style={{ marginTop: "5px" }} /> : undefined}
       </div>
     );
   }
@@ -136,7 +130,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
    * When clearing the searchbox, any earlier search results are removed from the component state, and the selected product is removed
    */
   private clearSearch = () => {
-    this.props.setProductList([]);
+    this.props.setProductList();
     this.props.setSelectedProduct(undefined);
     this.props.setSearchValue("");
   };
@@ -153,7 +147,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
       return;
     }
 
-    this.setState({spinpls: true});
+    this.setState({ spinpls: true });
     this.props.setSearchValue(value);
 
     if (this.timeout) {
@@ -161,7 +155,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
     }
 
     this.timeout = window.setTimeout(() => {
-      this.executeProductSearch();
+      this.executeProductSearch(value);
     }, this.SEARCH_DELAY);
   };
 
@@ -169,10 +163,10 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
    * This function is managed by the onProduct search and is responsible for contacting the search service which then performs a product search.
    * @param value Input value typed by end user
    */
-  private executeProductSearch = async (): Promise<void> => {
-    let products = await this.searchService.getProduct(this.props.productData.searchValue);
-    this.props.setProductList(products);
-    this.setState({spinpls: false});
+  private executeProductSearch = async (value: string): Promise<void> => {
+    // let products = await this.searchService.getProduct(this.props.productData.searchValue);
+    this.props.setProductList(value, this.props.fakeData);
+    this.setState({ spinpls: false });
   };
 }
 
