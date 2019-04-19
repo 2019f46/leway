@@ -1,5 +1,5 @@
+import { Image } from "office-ui-fabric-react";
 import * as React from "react";
-import { Image, Icon, Link } from "office-ui-fabric-react";
 import { IProduct } from "../../models/ProductModel";
 import styles from "./Product.module.scss";
 

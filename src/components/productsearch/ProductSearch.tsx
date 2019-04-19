@@ -1,12 +1,12 @@
-import * as React from "react";
 import { SearchBox, Spinner } from "office-ui-fabric-react";
-import styles from "./ProductSearch.module.scss";
-import SearchService, { ISearchService } from "../../services/SearchService";
-import FakeSearchService from "../../services/fakes/FakeSearchService";
-import { IProduct } from "../../models/ProductModel";
-import Product from "../product/Product";
+import * as React from "react";
 import { connect } from "react-redux";
-import { setSelectedProduct, setProductList, setSearchValue } from "../../redux/map/mapActions";
+import { IProduct } from "../../models/ProductModel";
+import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
+import FakeSearchService from "../../services/fakes/FakeSearchService";
+import SearchService, { ISearchService } from "../../services/SearchService";
+import Product from "../product/Product";
+import styles from "./ProductSearch.module.scss";
 
 /**
  * Properties recived by the product Search Component
