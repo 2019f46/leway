@@ -7,8 +7,6 @@ import { ICoord, IPolygon } from "../models/MapModel";
  */
 export interface IPathingService {
     calculatePath: (x1: number, y1: number, mapsizeX: number, mapsyzeY: number, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => void;
-    // setUnwalkable: (grid: pathfinder.Grid) => void;
-    // setUnpathableZones: (coord: ICoord, coord1: ICoord, grid: pathfinder.Grid) => void;
 }
 
 /**
