@@ -147,29 +147,25 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
      * Set the booth Location
      */
     if (boothLocation) {
-      let bloc = snap.circle(boothLocation.x, boothLocation.y, 1);
-      bloc.addClass(styles.booth);
+      snap.circle(boothLocation.x, boothLocation.y, 1).addClass(styles.booth);
     }
 
     // Set the selected product location
     if (selectedProduct && selectedProduct.location) {
-      let redCircle = snap.circle(selectedProduct.location.x, selectedProduct.location.y, 1);
-      redCircle.addClass(styles.target);
+      snap.circle(selectedProduct.location.x, selectedProduct.location.y, 1).addClass(styles.target);
     }
 
     // products blue dots
     if (products && products.length > 0 && !selectedProduct) {
       products.forEach(product => {
         if (product.location) {
-          let bluecircle = snap.circle(product.location.x, product.location.y, 1);
-          bluecircle.addClass(styles.products);
+          snap.circle(product.location.x, product.location.y, 1).addClass(styles.products);
         }
       });
     }
 
-    /**
-     * PATH Should NOT be rendered if there is no booth location
-     */
+
+    // PATH Should NOT be rendered if there is no booth location or product location
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
       let path = this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
       snap.path("M" + path).addClass(styles.elPath);
