@@ -10,6 +10,9 @@ import BoothError from "../bootherror/BoothError";
 import { IBoothService } from "../../services/BoothService";
 import FakeBoothService from "../../services/fakes/FakeBoothService";
 import { IBooth } from "../../models/IBooth";
+import * as L from "leaflet";
+import {Map, TileLayer, GridLayer, ImageOverlay} from "react-leaflet";
+import { imageOverlay } from "leaflet";
 
 /**
  * Properties recived by the MapSelector Component.
@@ -74,7 +77,18 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
             <div className={styles.mapSelectorContainer}>
                 {blocation || this.state.disableBoothError ? null : bError }
                 {toggle}
+                {/* <Map center={[51.505, -0.09]} zoom={13}> */}
+                {/* <TileLayer
+                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                /> */}
+                    {/* <GridLayer>
+                        {this.state.dataReady ? map : <Spinner />}
+                    </GridLayer> */}
+                    {/* {this.state.dataReady ? map : <Spinner />} */}
+                {/* </Map> */}
                 {this.state.dataReady ? map : <Spinner />}
+
             </div>
         );
     }

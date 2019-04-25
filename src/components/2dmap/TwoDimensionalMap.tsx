@@ -6,6 +6,7 @@ import { ICoord, IMapModel } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
+import * as L from "leaflet";
 
 
 /**
@@ -62,12 +63,14 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
    */
   public render(): JSX.Element {
     let map = (
-      <div className={styles.twoDimensionalMapContainer}>
-        <svg
-          id="svg"
-          className={styles.svgMap}
-          viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-        />
+      <div className={styles.twoDimensionalMapContainer} id="map">
+        <object id="leafwrap">
+          <svg
+            id="svg"
+            className={styles.svgMap}
+            viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
+          />
+        </object>
       </div>
     );
     return map;
@@ -79,6 +82,15 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
   public componentDidMount() {
     const { selectedProduct, products } = this.props.productData;
     this.generateMap(selectedProduct, products);
+
+    var leafletmap = L.map('map', {
+      crs: L.CRS.Simple
+    });
+
+    var bounds : L.LatLngBoundsExpression = [[0,0], [1000,1000]];
+    var svg = document.getElementById("leafwrap");
+    var image = L.imageOverlay(svg, bounds).addTo(leafletmap);
+    leafletmap.fitBounds(bounds);
   }
 
   public componentWillReceiveProps(nextprops: props) {
