@@ -33,7 +33,7 @@ interface IReduxProps {
   /**
    * State of the redux store
    */
-  productData: { products: IProduct[]; selectedProduct: IProduct; searchValue: string; };
+  productData?: { products: IProduct[]; selectedProduct: IProduct; searchValue: string; };
   /** The value that is searched */
 
 }
@@ -62,8 +62,13 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
    */
   public render(): JSX.Element {
     let searchResults: JSX.Element[] = [];
+    let selectedProduct, products, searchValue;
 
-    const { selectedProduct, products, searchValue } = this.props.productData;
+    if (this.props.productData) {
+      selectedProduct = this.props.productData.selectedProduct;
+      products = this.props.productData.products;
+      searchValue = this.props.productData.searchValue;
+    }
 
     if (!selectedProduct && products && products.length > 0) {
       products.forEach(element => {
@@ -111,8 +116,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
    * This method handles the transition from a single product item to showing the rpevios list of products.
    */
   private onBackIconClick = () => {
-    const { selectedProduct } = this.props.productData;
-    if (selectedProduct) {
+    if (this.props.productData && this.props.productData.selectedProduct) {
       this.props.setSelectedProduct(undefined);
     }
   };
