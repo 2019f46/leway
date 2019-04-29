@@ -6,7 +6,7 @@ import { ICoord, IMapModel } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
-var Hammer = require('react-hammerjs');
+import * as Hammer from "hammerjs";
 
 
 /**
@@ -51,20 +51,30 @@ type props = ITwoDimensionalMapProps & IReduxProps;
  */
 class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> {
   private pathingService: IPathingService;
+
+  // For panning
+  private panStartCoords = {x: 0, y: 0};
+
   constructor(props: any) {
     super(props);
     this.state = {
       mapData: this.props.polygonData,
       mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon),
-      mapScale: {x: 0, y: 0},
+      mapScale: {x: 1, y: 1},
       mapTranslate: {x: 0, y: 0}
     };
+
     this.pathingService = new PathingService();
   }
 
   private onPan = (e : HammerInput) => {
-    let newX = this.state.mapTranslate.x + e.deltaX;
-    let newY = this.state.mapTranslate.y + e.deltaY;
+    
+    if(e.type == "panstart"){
+      this.panStartCoords = {x: this.state.mapTranslate.x, y: this.state.mapTranslate.y}
+    }
+
+    let newX = this.panStartCoords.x + e.deltaX;
+    let newY = this.panStartCoords.y + e.deltaY;
 
     this.setState({mapTranslate: {x: newX, y: newY}});
   };
@@ -85,21 +95,27 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
         pan: { direction: Hammer.DIRECTION_ALL }
       }
     }
+
+    let hammerStyle : any = {
+      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px)`
+    };
+
+    //scale(${mapScale.x}px, ${mapScale.y}px) 
     
     let map = (
-      <div className={styles.twoDimensionalMapContainer}>
+      <div id="TwoDContainer" className={styles.twoDimensionalMapContainer}>
         
-        <Hammer onPan={this.onPan} onPinch={this.onPinch} options={hammerOptions}>
-          <div style={{transform: `scale(${mapScale.x}px, ${mapScale.y}px) translate(${mapTranslate.x}px, ${mapTranslate.y}px)`}}>Panny mcNanny</div>
-        </Hammer>
+        {/* <div style={hammerStyle} > Drag me </div> */}
+          {/* <div style={{transform: `scale(${mapScale.x}px, ${mapScale.y}px) translate(${mapTranslate.x}px, ${mapTranslate.y}px)`}}>Panny mcNanny</div> */}
 
         {/* <img src="https://news.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.jpg" /> */}
-{/*         
+        
         <svg
           id="svg"
           className={styles.svgMap}
           viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-        /> */}
+          style={hammerStyle}
+        /> 
       </div>
     );
     return map;
@@ -113,6 +129,14 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
       const { selectedProduct, products } = this.props.productData;
       this.generateMap(selectedProduct, products);
     }
+
+    // ADD HAMMER
+    var container : any = document.getElementById("TwoDContainer");
+    var mc = new Hammer.Manager(container);
+    mc.add(new Hammer.Pinch());
+    mc.add(new Hammer.Pan());
+    mc.on('pinch', this.onPinch);
+    mc.on('pan', this.onPan);
   }
 
   public componentWillReceiveProps(nextprops: props) {
