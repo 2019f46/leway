@@ -1,42 +1,41 @@
 {
-  "name": "wayfinder",
-  "version": "1.0.0",
+  "name": "leway",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
-    "@turf/boolean-point-in-polygon": "^6.0.1",
-    "@types/enzyme": "^3.1.17",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.10",
-    "@types/node": "10.12.18",
+    "@types/enzyme": "^3.9.1",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "24.0.12",
+    "@types/node": "11.13.8",
     "@types/pathfinding": "0.0.2",
-    "@types/react": "16.7.17",
-    "@types/react-dom": "16.0.11",
-    "@types/react-redux": "^7.0.6",
-    "@types/react-router": "^4.4.3",
-    "@types/react-router-dom": "^4.3.1",
+    "@types/react": "16.8.14",
+    "@types/react-dom": "16.8.4",
+    "@types/react-redux": "^7.0.8",
+    "@types/react-router": "^4.4.5",
+    "@types/react-router-dom": "^4.3.2",
     "@types/redux-mock-store": "^1.0.0",
-    "@types/sinon": "^7.0.10",
+    "@types/sinon": "^7.0.11",
     "axios": "^0.18.0",
-    "axios-mock-adapter": "^1.16.0",
-    "dotenv": "^6.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
     "guid-typescript": "^1.0.9",
-    "jest": "^23.6.0",
-    "node-sass": "^4.11.0",
-    "office-ui-fabric-react": "^6.116.2",
+    "node-sass": "^4.12.0",
+    "office-ui-fabric-react": "^6.172.0",
     "pathfinding": "^0.4.18",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-redux": "^6.0.1",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.8",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.3",
     "redux-thunk": "^2.3.0",
-    "sinon": "^7.2.7",
+    "sinon": "^7.3.2",
     "snapsvg-cjs": "0.0.6",
-    "typescript": "3.2.2"
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
   },
   "scripts": {
     "doc": "typedoc --out doc src --exclude *.test.tsx --tsconfig tsconfig.json --mode file",
@@ -50,16 +49,16 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.9.1",
-    "tslint": "^5.12.1",
-    "typedoc": "^0.14.2"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

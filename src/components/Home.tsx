@@ -1,7 +1,6 @@
 import React from "react";
-import MapSelector from "./mapselector/MapSelector";
-import ProductSearch from "./productsearch/ProductSearch";
 import styles from "./Home.module.scss";
+import MapSelector from "./mapselector/MapSelector";
 import SearchPanel from "./searchpanel/SearchPanel";
 
 /**
@@ -15,10 +14,8 @@ export default class Home extends React.Component {
      */
     public render() {
         let selector: JSX.Element = <MapSelector />;
-        let prodSearch: JSX.Element = <ProductSearch />;
         let panel: JSX.Element = <SearchPanel/>;
         return (<div className={styles.homeContainer}>
-            {/* {prodSearch} */}
             {panel}
             {selector}
         </div>);

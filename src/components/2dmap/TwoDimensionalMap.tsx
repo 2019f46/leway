@@ -35,7 +35,7 @@ export interface IReduxProps {
   /**
    * This property is retrieved from the redux store, and is passed down when it is set.
    */
-  productData: { products: IProduct[], selectedProduct: IProduct }
+  productData?: { products: IProduct[], selectedProduct: IProduct }
 }
 
 /**
@@ -77,13 +77,17 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
   public componentDidMount() {
-    const { selectedProduct, products } = this.props.productData;
-    this.generateMap(selectedProduct, products);
+    if (this.props.productData) {
+      const { selectedProduct, products } = this.props.productData;
+      this.generateMap(selectedProduct, products);
+    }
   }
 
   public componentWillReceiveProps(nextprops: props) {
-    const { selectedProduct, products } = nextprops.productData;
-    this.generateMap(selectedProduct, products);
+    if (nextprops.productData) {
+      const { selectedProduct, products } = nextprops.productData;
+      this.generateMap(selectedProduct, products);
+    }
   }
 
   /**
