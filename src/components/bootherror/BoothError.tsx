@@ -1,5 +1,5 @@
+import { DefaultButton, Dialog, DialogFooter, PrimaryButton } from "office-ui-fabric-react";
 import React from "react";
-import { Dialog, DialogFooter, PrimaryButton, DefaultButton } from "office-ui-fabric-react";
 import styles from "./BoothError.module.scss";
 /**
  * Properties recived by the BoothError Component.
@@ -9,17 +9,10 @@ export interface BoothErrorProps {
     acknowledge: () => void;
 }
 
-export interface BoothErrorState {
-}
-
 /**
  * This Component is rendered when there is no booth setup, and is responsible for guiding the user on what to do.
  */
-export default class BoothError extends React.Component<BoothErrorProps, BoothErrorState>{
-    constructor(props: any) {
-        super(props);
-    }
-
+export default class BoothError extends React.Component<BoothErrorProps, {}>{
     /**
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */

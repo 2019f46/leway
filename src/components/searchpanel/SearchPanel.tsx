@@ -1,9 +1,9 @@
+import { IconButton, Panel, PanelType } from "office-ui-fabric-react";
 import * as React from "react";
-import { Panel, PanelType, Icon, IconButton, updateA } from "office-ui-fabric-react";
-import styles from "./SearchPanel.module.scss";
 import ProductSearch from "../productsearch/ProductSearch";
+import styles from "./SearchPanel.module.scss";
 
-export interface SearchPanelProps {}
+export interface SearchPanelProps { }
 
 export interface SearchPanelState {
   isOpen: boolean;
@@ -17,11 +17,11 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
     };
   }
 
-  public componentDidMount(){
-    window.addEventListener("resize", this.update, false); 
+  public componentDidMount() {
+    window.addEventListener("resize", this.update, false);
   }
 
-  public componentWillUnmount(){
+  public componentWillUnmount() {
     window.removeEventListener("resize", this.update);
   }
 
@@ -49,9 +49,7 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
         onDismiss={this.onDismiss}
         type={PanelType.smallFixedNear}
         className={styles.panel}
-        hasCloseButton={false}
-
-      >
+        hasCloseButton={false}>
         <ProductSearch />
       </Panel>
     );
