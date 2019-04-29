@@ -6,8 +6,6 @@ import { ICoord, IMapModel } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
-
-
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
