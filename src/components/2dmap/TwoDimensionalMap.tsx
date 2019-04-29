@@ -6,6 +6,7 @@ import { ICoord, IMapModel } from "../../models/MapModel";
 import { IProduct } from "../../models/ProductModel";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
+var Hammer = require('react-hammerjs');
 
 
 /**
@@ -26,6 +27,8 @@ export interface ITwoDimensionalMapProps {
 export interface ITwoDimensionalMapState {
   mapData: IMapModel;
   mapSize: ICoord;
+  mapScale: {x: number, y: number};
+  mapTranslate: {x: number, y: number};
 }
 
 /**
@@ -52,22 +55,51 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     super(props);
     this.state = {
       mapData: this.props.polygonData,
-      mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon)
+      mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon),
+      mapScale: {x: 0, y: 0},
+      mapTranslate: {x: 0, y: 0}
     };
     this.pathingService = new PathingService();
   }
+
+  private onPan = (e : HammerInput) => {
+    let newX = this.state.mapTranslate.x + e.deltaX;
+    let newY = this.state.mapTranslate.y + e.deltaY;
+
+    this.setState({mapTranslate: {x: newX, y: newY}});
+  };
+
+  private onPinch = (e : HammerInput) => {
+    this.setState({mapScale: {x: e.scale, y: e.scale}});
+  };
 
   /**
    * Standard function in all react components. This function activates the react render engine and renders the desired content.
    */
   public render(): JSX.Element {
+    let {mapTranslate, mapScale} = this.state;
+
+    let hammerOptions : any = {
+      recognizers: {
+        pinch: { enable: true},
+        pan: { direction: Hammer.DIRECTION_ALL }
+      }
+    }
+    
     let map = (
       <div className={styles.twoDimensionalMapContainer}>
+        
+        <Hammer onPan={this.onPan} onPinch={this.onPinch} options={hammerOptions}>
+          <div style={{transform: `scale(${mapScale.x}px, ${mapScale.y}px) translate(${mapTranslate.x}px, ${mapTranslate.y}px)`}}>Panny mcNanny</div>
+        </Hammer>
+
+        {/* <img src="https://news.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.jpg" /> */}
+{/*         
         <svg
           id="svg"
           className={styles.svgMap}
           viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-        />
+        /> */}
       </div>
     );
     return map;
