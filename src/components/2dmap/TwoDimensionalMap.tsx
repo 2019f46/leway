@@ -68,8 +68,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
   }
 
   private onPan = (e : HammerInput) => {
-    
-    if(e.type == "panstart"){
+    if(e.type === "panstart"){
       this.panStartCoords = {x: this.state.mapTranslate.x, y: this.state.mapTranslate.y}
     }
 
@@ -137,6 +136,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     mc.add(new Hammer.Pan());
     mc.on('pinch', this.onPinch);
     mc.on('pan', this.onPan);
+    mc.on('panstart', this.onPan);
   }
 
   public componentWillReceiveProps(nextprops: props) {
