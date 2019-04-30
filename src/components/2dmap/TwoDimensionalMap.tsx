@@ -33,18 +33,18 @@ export interface IReduxProps {
   /**
    * This property is retrieved from the redux store, and is passed down when it is set.
    */
-  productData?: { products: IProduct[], selectedProduct: IProduct }
+  productData?: { products: IProduct[], selectedProduct: IProduct };
 }
 
 /**
  * This is required by typescript. This interface allows up to separate properties owned by the component and properties passed by redux and use them similarity
  */
-type props = ITwoDimensionalMapProps & IReduxProps;
+type combinedProps = ITwoDimensionalMapProps & IReduxProps;
 
 /**
  * This Component is responsible for taking in a object with polygon points and trasforming it into a interactable 2D map
  */
-class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> {
+class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMapState> {
   private pathingService: IPathingService;
   constructor(props: any) {
     super(props);
@@ -81,7 +81,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     }
   }
 
-  public componentWillReceiveProps(nextprops: props) {
+  public componentWillReceiveProps(nextprops: combinedProps) {
     if (nextprops.productData) {
       const { selectedProduct, products } = nextprops.productData;
       this.generateMap(selectedProduct, products);
