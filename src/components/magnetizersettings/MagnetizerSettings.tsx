@@ -29,7 +29,7 @@ export default class MagnetizerSettings extends React.Component<MagnetizerSettin
         let view: JSX.Element = this.state.spinner ? <Spinner size={SpinnerSize.large} /> : <span />;
 
         if (allProducts && allProducts.length > 0) {
-            view = <MagnetizedProducts products={allProducts} />
+            view = <MagnetizedProducts products={allProducts} fakeData={this.props.fakeData} />
         }
 
         return (

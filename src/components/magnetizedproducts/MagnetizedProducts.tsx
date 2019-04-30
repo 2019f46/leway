@@ -1,3 +1,4 @@
+import Axios from "axios";
 import { Checkbox, DetailsList, IColumn, Image } from "office-ui-fabric-react";
 import React from "react";
 import { IProduct } from "../../models/ProductModel";
@@ -5,17 +6,19 @@ import styles from "./MagnetizedProducts.module.scss";
 
 export interface MagnetizedProductsProps {
     products: IProduct[];
+    fakeData?: boolean;
 }
 
 export interface MagnetizedProductsState {
     columns: IColumn[] | undefined;
-    allProducts: IProduct[]
+    allProducts: IProduct[];
+    magnetizedProducts: { ProductId: string, guid: string, Name: string, isMagnetized: string }[];
 }
 
 class MagnetizedProducts extends React.Component<MagnetizedProductsProps, MagnetizedProductsState> {
     constructor(props: MagnetizedProductsProps) {
         super(props);
-        this.state = { columns: undefined, allProducts: this.props.products };
+        this.state = { columns: undefined, allProducts: this.props.products, magnetizedProducts: [] };
     }
     render() {
         return (
@@ -27,8 +30,37 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
         );
     }
 
-    public componentDidMount() {
+    public async componentDidMount() {
         this.setListColumns();
+        await this.fetchProduct();
+    }
+
+    private fetchProduct = async () => {
+        let result = await Axios.get("https://magnetizer20190429034033.azurewebsites.net/api/products");
+        let magnets: [{ ProductId: string, guid: string, Name: string, isMagnetized: string }] = await result.data;
+
+        magnets.forEach(element => {
+            this.addIfNotExist(element);
+        });
+
+        this.setState({ magnetizedProducts: magnets });
+    }
+
+    private addIfNotExist = async (item: { ProductId: string, guid: string, Name: string, isMagnetized: string }) => {
+        if (item && this.state.magnetizedProducts && this.state.allProducts.length > 0) {
+            let contains = this.state.magnetizedProducts.filter(product => {
+                if (product.guid === item.guid) {
+                    return product;
+                }
+            });
+
+            console.log(contains);
+
+            // if (!contains || contains.length === 0) {
+            //     await Axios.post("https://magnetizer20190429034033.azurewebsites.net/api/products", { Guid: item.id, Name: item.name, IsMagnetized: false });
+            // }
+        }
+
     }
 
     private setListColumns = () => {
@@ -48,6 +80,7 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
                 maxWidth: 120,
                 onRender: (item: IProduct) => {
                     return <Checkbox defaultChecked={false} style={{ paddingTop: "5px" }} />;
+
                 }
             },
             {
