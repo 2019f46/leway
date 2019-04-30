@@ -4,7 +4,7 @@ import MagnetizerSettings from '../magnetizersettings/MagnetizerSettings';
 import styles from "./SettingsPage.module.scss";
 
 const SettingsPage = () => {
-  const [selectedTab, setSelectedTab] = useState("loc");
+  const [selectedTab, setSelectedTab] = useState<string|undefined>("loc");
 
   let selectedView: JSX.Element = <span />;
   switch (selectedTab) {
@@ -19,7 +19,7 @@ const SettingsPage = () => {
 
   function handleClick(item: PivotItem | undefined) {
     if (item) {
-      setSelectedTab(item.props.itemKey as any);
+      setSelectedTab(item.props.itemKey);
     }
   };
 
