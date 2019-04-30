@@ -27,14 +27,14 @@
     justify-content: space-between;
 }
 
-.products{
+.products {
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 @media only screen and (orientation:portrait) {
-    .products{
+    .products {
         flex-direction: row;
         align-content: space-around;
     }
