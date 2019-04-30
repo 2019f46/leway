@@ -5,6 +5,7 @@ import { IProduct } from "../../models/ProductModel";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";
+import { delay } from "q";
 
 /**
  * Properties recived by the product Search Component
@@ -150,7 +151,6 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
       return;
     }
 
-    this.setState({ spinner: true });
     this.props.setSearchValue(value);
 
     if (this.timeout) {
@@ -162,14 +162,19 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
     }, this.SEARCH_DELAY);
   }
 
+  public componentWillReceiveProps(props: combinedProps) {
+    if ((props.productData && props.productData.products) || (props.productData && props.productData.selectedProduct)) {
+      this.setState({ spinner: false });
+    }
+  }
+
   /**
    * This function is managed by the onProduct search and is responsible for contacting the search service which then performs a product search.
    * @param value Input value typed by end user
    */
   private executeProductSearch = async (value: string): Promise<void> => {
-    // let products = await this.searchService.getProduct(this.props.productData.searchValue);
+    this.setState({ spinner: true });
     this.props.setProductList(value, this.props.fakeData);
-    this.setState({ spinner: false });
   }
 }
 
