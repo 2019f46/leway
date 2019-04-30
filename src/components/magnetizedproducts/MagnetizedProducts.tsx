@@ -20,7 +20,7 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
         super(props);
         this.state = { columns: undefined, allProducts: this.props.products, magnetizedProducts: [] };
     }
-    render() {
+    public render() {
         return (
             <DetailsList
                 className={styles.magnetizedProductsContainer}
@@ -66,16 +66,16 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
     private setListColumns = () => {
         const columns: IColumn[] = [
             {
-                key: 'name',
-                name: 'Name',
-                fieldName: 'name',
+                key: "name",
+                name: "Name",
+                fieldName: "name",
                 minWidth: 50,
                 maxWidth: 300,
             },
             {
-                key: 'magnetized',
-                name: 'Magnetized',
-                fieldName: 'magnetized',
+                key: "magnetized",
+                name: "Magnetized",
+                fieldName: "magnetized",
                 minWidth: 30,
                 maxWidth: 120,
                 onRender: (item: IProduct) => {
@@ -84,9 +84,9 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
                 }
             },
             {
-                key: 'image',
-                name: 'Image',
-                fieldName: 'image',
+                key: "image",
+                name: "Image",
+                fieldName: "image",
                 minWidth: 30,
                 maxWidth: 100,
                 onRender: (item: IProduct) => {
@@ -94,27 +94,27 @@ class MagnetizedProducts extends React.Component<MagnetizedProductsProps, Magnet
                 }
             },
             {
-                key: 'quantity',
-                name: 'Remaining',
-                fieldName: 'quantity',
+                key: "quantity",
+                name: "Remaining",
+                fieldName: "quantity",
                 minWidth: 30,
                 maxWidth: 100,
             },
             {
-                key: 'location',
-                name: 'Location',
-                fieldName: 'location',
+                key: "location",
+                name: "Location",
+                fieldName: "location",
                 minWidth: 30,
                 maxWidth: 100,
                 onRender: (item: IProduct) => {
                     if (item && item.location) {
                         return <span>{`${item.location.x}, ${item.location.y}`}</span >;
                     } else {
-                        return <span>Location has not been set</span>
+                        return <span>Location has not been set</span>;
                     }
                 }
             }
-        ]
+        ];
         this.setState({ columns: columns });
     }
 }
