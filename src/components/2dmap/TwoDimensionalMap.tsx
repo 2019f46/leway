@@ -54,6 +54,8 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
 
   // For panning
   private panStartCoords = {x: 0, y: 0};
+  private pinchStart = {x: 1, y: 1};
+  private ticking = false;
 
   constructor(props: any) {
     super(props);
@@ -68,18 +70,28 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
   }
 
   private onPan = (e : HammerInput) => {
-    if(e.type === "panstart"){
-      this.panStartCoords = {x: this.state.mapTranslate.x, y: this.state.mapTranslate.y}
+    if(!this.ticking){
+      this.ticking = true;
+
+      if(e.type === "panstart"){
+        this.panStartCoords = {x: this.state.mapTranslate.x, y: this.state.mapTranslate.y}
+      }
+  
+      this.setState({mapTranslate: {x: this.panStartCoords.x + e.deltaX, y: this.panStartCoords.y + e.deltaY}});
     }
-
-    let newX = this.panStartCoords.x + e.deltaX;
-    let newY = this.panStartCoords.y + e.deltaY;
-
-    this.setState({mapTranslate: {x: newX, y: newY}});
   };
 
   private onPinch = (e : HammerInput) => {
-    this.setState({mapScale: {x: e.scale, y: e.scale}});
+    console.log("Pinching");
+    if(!this.ticking){
+      this.ticking = true;
+
+      if(e.type === "pinchstart"){
+        this.pinchStart = {x: this.state.mapScale.x, y: this.state.mapScale.y};
+      }
+      
+      this.setState({mapScale: {x: e.scale * this.pinchStart.x, y: e.scale * this.pinchStart.y}});
+    }
   };
 
   /**
@@ -88,35 +100,24 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
   public render(): JSX.Element {
     let {mapTranslate, mapScale} = this.state;
 
-    let hammerOptions : any = {
-      recognizers: {
-        pinch: { enable: true},
-        pan: { direction: Hammer.DIRECTION_ALL }
-      }
-    }
-
-    let hammerStyle : any = {
-      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px)`
+    let hammerStyle : React.CSSProperties = {
+      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px) scale(${mapScale.x}, ${mapScale.y})`
     };
 
-    //scale(${mapScale.x}px, ${mapScale.y}px) 
-    
     let map = (
       <div id="TwoDContainer" className={styles.twoDimensionalMapContainer}>
-        
-        {/* <div style={hammerStyle} > Drag me </div> */}
-          {/* <div style={{transform: `scale(${mapScale.x}px, ${mapScale.y}px) translate(${mapTranslate.x}px, ${mapTranslate.y}px)`}}>Panny mcNanny</div> */}
-
-        {/* <img src="https://news.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.jpg" /> */}
-        
+                
         <svg
           id="svg"
           className={styles.svgMap}
           viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
           style={hammerStyle}
         /> 
+
       </div>
     );
+
+    this.ticking = false;
     return map;
   }
 
@@ -132,11 +133,14 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     // ADD HAMMER
     var container : any = document.getElementById("TwoDContainer");
     var mc = new Hammer.Manager(container);
-    mc.add(new Hammer.Pinch());
-    mc.add(new Hammer.Pan());
-    mc.on('pinch', this.onPinch);
-    mc.on('pan', this.onPan);
-    mc.on('panstart', this.onPan);
+    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+    mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get('pan'));
+    mc.on('panstart panmove', this.onPan);
+    mc.on('pinchstart pinchmove', this.onPinch);
+    // mc.on('panstart', this.onPan);
+    // mc.on('pinchstart', this.onPinch);
+    // window.setTimeout(this.onPan, 1000 / 60);
+    // window.setTimeout(this.onPinch, 1000 / 60);
   }
 
   public componentWillReceiveProps(nextprops: props) {
