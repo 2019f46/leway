@@ -112,18 +112,24 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
     let {mapTranslate, mapScale} = this.state;
 
     let hammerStyle : React.CSSProperties = {
-      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px) scale(${mapScale.x}, ${mapScale.y})`
+      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px) scale(${mapScale.x}, ${mapScale.y})`,
+      height: "100%",
+      width: "100%",
+      overflow: "hidden"
     };
 
     let map = (
       <div id="TwoDContainer" className={styles.twoDimensionalMapContainer}>
-                
-        <svg
-          id="svg"
-          className={styles.svgMap}
-          viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-          style={hammerStyle}
-        /> 
+        <div style={hammerStyle}>
+
+          <svg
+            id="svg"
+            className={styles.svgMap}
+            viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
+            // style={hammerStyle}
+          />
+
+        </div> 
 
       </div>
     );
