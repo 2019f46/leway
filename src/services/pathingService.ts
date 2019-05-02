@@ -1,6 +1,6 @@
 import pathfinder from "pathfinding";
-import { ICoord, IPolygon } from "../models/MapModel";
-import { ILocation } from "../models/ProductModel";
+import { ICoord, IPolygon } from "../models/IMap";
+import { ILocation } from "../models/IProduct";
 
 /**
  * This interface defines the methods used by the pathingservice.

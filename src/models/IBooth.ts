@@ -1,4 +1,4 @@
-import { ICoord } from "./MapModel";
+import { ICoord } from "./IMap";
 
 export interface IBooth {
     boothId: string;

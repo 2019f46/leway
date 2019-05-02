@@ -1,7 +1,7 @@
 import { SearchBox, Spinner } from "office-ui-fabric-react";
 import * as React from "react";
 import { connect } from "react-redux";
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";

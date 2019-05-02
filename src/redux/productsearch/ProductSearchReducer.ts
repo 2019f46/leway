@@ -1,4 +1,4 @@
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import { SET_PRODUCT_LIST, SET_SEARCH_VALUE, SET_SELECTED_PRODUCT } from "../types";
 
 const initialState: { products: IProduct[]; selectedProduct?: IProduct | undefined; searchValue: string } = {

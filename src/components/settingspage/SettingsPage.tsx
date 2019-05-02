@@ -16,15 +16,15 @@ const SettingsPage = () => {
     default:
   }
 
-  function handleClick(item: PivotItem | undefined) {
-    if (item) {
-      setSelectedTab(item.props.itemKey);
+  function handleTabClick(clickedTab: PivotItem | undefined) {
+    if (clickedTab) {
+      setSelectedTab(clickedTab.props.itemKey);
     }
   }
 
   return (
     <div>
-      <Pivot className={styles.pivotContainer} onLinkClick={(item: PivotItem | undefined) => handleClick(item)}>
+      <Pivot className={styles.pivotContainer} onLinkClick={(item: PivotItem | undefined) => handleTabClick(item)}>
         <PivotItem headerText={"Location"} itemIcon={"Globe"} itemKey={"loc"} />
         <PivotItem headerText={"Magnetizer"} itemIcon={"BranchCompare"} itemKey={"mag"} />
         <PivotItem headerText={"Other"} itemIcon={"ChartSeries"} itemKey={"oth"} />

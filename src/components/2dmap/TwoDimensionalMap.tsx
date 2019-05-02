@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import Snap from "snapsvg-cjs";
 import DimensionHelper from "../../helpers/DimensionHelper";
-import { ICoord, IMapModel } from "../../models/MapModel";
-import { IProduct } from "../../models/ProductModel";
+import { ICoord, IMap } from "../../models/IMap";
+import { IProduct } from "../../models/IProduct";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
 /**
@@ -12,9 +12,9 @@ import styles from "./TwoDimensionalMap.module.scss";
  * @param onEditMap Optional prop, this prop triggers a callback in the parent component which is used when editing the map
  */
 export interface ITwoDimensionalMapProps {
-  polygonData: IMapModel;
+  polygonData: IMap;
   boothLocation?: ICoord | undefined;
-  onEditMap?: (data: IMapModel) => void;
+  onEditMap?: (data: IMap) => void;
 }
 
 /**
@@ -22,7 +22,7 @@ export interface ITwoDimensionalMapProps {
  * @param mapData: This state is the received props (polygonData). This state is used for interacting and editing the map.
  */
 export interface ITwoDimensionalMapState {
-  mapData: IMapModel;
+  mapData: IMap;
   mapSize: ICoord;
 }
 

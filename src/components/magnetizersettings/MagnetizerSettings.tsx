@@ -2,20 +2,20 @@ import Axios from "axios";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import MagnetizedProducts from "../magnetizedproducts/MagnetizedProducts";
 import styles from "./MagnetizerSettings.module.scss";
 
-export interface MagnetizerSettingsProps {
+export interface IMagnetizerSettingsProps {
 }
-export interface MagnetizerSettingsState {
+export interface IMagnetizerSettingsState {
     spinner: boolean;
     allProducts: IProduct[];
     magneticProducts: IMagnetProduct[]
 }
 
-export default class MagnetizerSettings extends React.Component<MagnetizerSettingsProps, MagnetizerSettingsState> {
+export default class MagnetizerSettings extends React.Component<IMagnetizerSettingsProps, IMagnetizerSettingsState> {
     private searchService: ISearchService = new SearchService();
     constructor(props: any) {
         super(props);

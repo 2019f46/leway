@@ -2,22 +2,22 @@ import Axios from "axios";
 import { Checkbox, DetailsList, IColumn, Image } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import styles from "./MagnetizedProducts.module.scss";
 
-export interface MagnetizedProductsProps {
+export interface IMagnetizedProductsProps {
     products: IProduct[];
     magneticProducts: IMagnetProduct[];
 }
 
-export interface MagnetizedProductsState {
+export interface IMagnetizedProductsState {
     columns: IColumn[] | undefined;
     allProducts: IProduct[];
     magneticProducts: IMagnetProduct[];
 }
 
-export default class MagnetizedProducts extends React.Component<MagnetizedProductsProps, MagnetizedProductsState> {
-    constructor(props: MagnetizedProductsProps) {
+export default class MagnetizedProducts extends React.Component<IMagnetizedProductsProps, IMagnetizedProductsState> {
+    constructor(props: IMagnetizedProductsProps) {
         super(props);
         this.state = {
             columns: undefined,
