@@ -5,6 +5,7 @@ import { IProduct } from "../../models/ProductModel";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";
+import { delay } from "q";
 
 /**
  * Properties recived by the product Search Component
@@ -38,10 +39,10 @@ interface IReduxProps {
 
 }
 
-type props = IProductSearchProps & IReduxProps;
+type combinedProps = IProductSearchProps & IReduxProps;
 
 interface IProductSearchState {
-  spinpls: boolean;
+  spinner: boolean;
 }
 
 /**
@@ -49,12 +50,12 @@ interface IProductSearchState {
  * This component is self contained which means that the component contains all the logic search logic.
  * From the rendering of the Searchbox (subcomponent) to managing the logic of how the search results are handled and shown.
  */
-class ProductSearch extends React.Component<props, IProductSearchState> {
+class ProductSearch extends React.Component<combinedProps, IProductSearchState> {
   private timeout: any;
   private SEARCH_DELAY = 1000;
   constructor(props: any) {
     super(props);
-    this.state = { spinpls: false };
+    this.state = { spinner: false };
   }
 
   /**
@@ -70,6 +71,19 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
       searchValue = this.props.productData.searchValue;
     }
 
+    let searchBox: JSX.Element = (<div className={selectedProduct ? styles.searchBoxContainer : undefined}        >
+      <SearchBox
+        iconProps={{
+          iconName: selectedProduct ? "ReturnToSession" : "Search",
+          onClick: this.onBackIconClick
+        }}
+        placeholder="Search for products"
+        onClear={this.clearSearch}
+        onChange={value => this.onProductSearch(value)}
+        value={searchValue}
+      />
+    </div>);
+
     if (!selectedProduct && products && products.length > 0) {
       products.forEach(element => {
         searchResults.push(
@@ -82,31 +96,17 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
       });
     }
 
+    if (selectedProduct) {
+      searchResults.push(<div className={styles.products}>
+        {selectedProduct ? (<Product product={selectedProduct} chosen={true} />) : (searchResults)}
+      </div>);
+    }
+
     return (
       <div className={styles.productSearchContainer}>
-        <div
-          className={selectedProduct ? styles.searchBoxContainer : undefined}
-        >
-          <SearchBox
-            iconProps={{
-              iconName: selectedProduct ? "ReturnToSession" : "Search",
-              onClick: this.onBackIconClick
-            }}
-            placeholder="Search for products"
-            onClear={this.clearSearch}
-            onChange={value => this.onProductSearch(value)}
-            value={searchValue}
-          />
-        </div>
-        <div className={styles.products}>
-          {selectedProduct ? (
-            <Product product={selectedProduct} chosen={true} />
-          ) : (
-              searchResults
-            )}
-        </div>
-
-        {this.state.spinpls ? <Spinner style={{ marginTop: "5px" }} /> : undefined}
+        {searchBox}
+        {searchResults}
+        {this.state.spinner ? <Spinner style={{ marginTop: "5px" }} /> : undefined}
       </div>
     );
   }
@@ -119,7 +119,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
     if (this.props.productData && this.props.productData.selectedProduct) {
       this.props.setSelectedProduct(undefined);
     }
-  };
+  }
 
   /**
    * This method is called when a list is products is rendered, and a product is selected by the end user.
@@ -128,7 +128,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
    */
   private onProductClick = (product: IProduct) => {
     this.props.setSelectedProduct(product);
-  };
+  }
 
   /**
    * When clearing the searchbox, any earlier search results are removed from the component state, and the selected product is removed
@@ -137,7 +137,7 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
     this.props.setProductList();
     this.props.setSelectedProduct(undefined);
     this.props.setSearchValue("");
-  };
+  }
 
   /**
    * This function handlers what happens when the end-user types into the search box.
@@ -151,7 +151,6 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
       return;
     }
 
-    this.setState({ spinpls: true });
     this.props.setSearchValue(value);
 
     if (this.timeout) {
@@ -161,20 +160,22 @@ class ProductSearch extends React.Component<props, IProductSearchState> {
     this.timeout = window.setTimeout(() => {
       this.executeProductSearch(value);
     }, this.SEARCH_DELAY);
-  };
+  }
+
+  public componentWillReceiveProps(props: combinedProps) {
+    if ((props.productData && props.productData.products) || (props.productData && props.productData.selectedProduct)) {
+      this.setState({ spinner: false });
+    }
+  }
 
   /**
    * This function is managed by the onProduct search and is responsible for contacting the search service which then performs a product search.
    * @param value Input value typed by end user
    */
   private executeProductSearch = async (value: string): Promise<void> => {
-    // let products = await this.searchService.getProduct(this.props.productData.searchValue);
+    this.setState({ spinner: true });
     this.props.setProductList(value, this.props.fakeData);
-    this.setState({ spinpls: false });
-  };
+  }
 }
 
-export default connect(
-  state => state,
-  { setProductList, setSelectedProduct, setSearchValue }
-)(ProductSearch);
+export default connect(state => state, { setProductList, setSelectedProduct, setSearchValue })(ProductSearch);
