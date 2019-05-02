@@ -45,16 +45,10 @@ export default class MagnetizerSettings extends React.Component<IMagnetizerSetti
     public async componentDidMount() {
         this.setState({
             allProducts: await this.searchService.getProduct("a"),
-        });
-        await this.syncDatabases();
-        await this.getMagneticProducts();
-    }
-
-    private getMagneticProducts = async () => {
-        this.setState({
             magneticProducts: await this.magnetService.getAllProducts(),
             spinner: false
         });
+        await this.syncDatabases();
     }
 
     private syncDatabases = async () => {
