@@ -59,7 +59,7 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                 name: 'Name',
                 fieldName: 'name',
                 minWidth: 50,
-                maxWidth: 300,
+                maxWidth: 200,
             },
             {
                 key: 'magnetized',
@@ -118,7 +118,7 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                 onRender: (item: IProduct) => {
                     let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
                     let value = product ? product.weight : 0;
-                    return <Slider min={0.5} max={3} step={0.1} value={value} disabled={value === 0 ? true : false} onChange={(number) => this.onWeightChange(number, product)} />
+                    return <Slider min={1} max={3} step={0.1} value={value} disabled={value === 0 ? true : false} onChange={(number) => this.onWeightChange(number, product)} />
                 }
             }
         ]
