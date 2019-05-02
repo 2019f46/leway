@@ -5,7 +5,6 @@ import { IProduct } from "../../models/ProductModel";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";
-import { delay } from "q";
 
 /**
  * Properties recived by the product Search Component
