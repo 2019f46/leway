@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { Checkbox, DetailsList, IColumn, Image } from "office-ui-fabric-react";
+import { Slider } from 'office-ui-fabric-react/';
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
@@ -19,6 +20,8 @@ export interface IMagnetizedProductsState {
 
 export default class MagnetizedProducts extends React.Component<IMagnetizedProductsProps, IMagnetizedProductsState> {
     private magnetService: IMagnetService = new MagnetService();
+    private timeout: any;
+    private SLIDER_DELAY = 1000;
     constructor(props: IMagnetizedProductsProps) {
         super(props);
         this.state = {
@@ -45,9 +48,7 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
         if (ev && checked !== undefined) {
             let selectedProduct = await this.magnetService.getProduct(item.id);
             selectedProduct.isMagnetized = checked;
-
             await Axios.put(`https://magnetizer20190429034033.azurewebsites.net/api/products/${selectedProduct.productId}`, selectedProduct)
-
         }
     }
 
@@ -69,13 +70,12 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                 onRender: (item: IProduct) => {
                     let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
                     let status = product ? product.isMagnetized : false;
-                    let disabled = true;
 
-                    if (!product || !product.Location) {
-                        disabled = false;
-                    }
-
-                    return <Checkbox defaultChecked={status} disabled={disabled} style={{ paddingTop: "5px" }} onChange={(ev, checked) => this.onMagnetizeClick(ev, checked, item)} />;
+                    return <Checkbox
+                        defaultChecked={status}
+                        disabled={!product ? true : false}
+                        style={{ paddingTop: "5px" }}
+                        onChange={(ev, checked) => this.onMagnetizeClick(ev, checked, item)} />;
                 }
             },
             {
@@ -99,8 +99,8 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                 key: 'location',
                 name: 'Location',
                 fieldName: 'location',
-                minWidth: 30,
-                maxWidth: 100,
+                minWidth: 50,
+                maxWidth: 150,
                 onRender: (item: IProduct) => {
                     if (item && item.location) {
                         return <span>{`${item.location.x}, ${item.location.y}`}</span >;
@@ -108,8 +108,40 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                         return <span>Location has not been set</span>
                     }
                 }
+            },
+            {
+                key: 'weight',
+                name: "Weight",
+                fieldName: "id",
+                minWidth: 50,
+                maxWidth: 100,
+                onRender: (item: IProduct) => {
+                    let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
+                    let value = product ? product.weight : 0;
+                    return <Slider min={0.5} max={3} step={0.1} value={value} disabled={value === 0 ? true : false} onChange={(number) => this.onWeightChange(number, product)} />
+                }
             }
         ]
         this.setState({ columns: columns });
+    }
+
+    private onWeightChange = async (weight: number, product: IMagnetProduct | undefined) => {
+        if (product && product.productId) {
+
+            if (this.timeout) {
+                window.clearTimeout(this.timeout);
+            }
+
+            product.weight = weight;
+            this.timeout = window.setTimeout(() => {
+                this.executeWeightChange(product);
+            }, this.SLIDER_DELAY);
+        }
+    }
+
+    private executeWeightChange = async (product: IMagnetProduct) => {
+        if (product && product.productId) {
+            await this.magnetService.updateProduct(product.productId, product);
+        }
     }
 }

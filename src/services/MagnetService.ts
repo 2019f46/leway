@@ -30,9 +30,7 @@ export default class MagnetService implements IMagnetService {
     }
 
     public addProduct = async (product: IMagnetProduct): Promise<void> => {
-        // await Axios.post(`https://magnetizer20190429034033.azurewebsites.net/api/products`, product);
-        await Axios.post(`http://localhost:61324/api/products`, product);
-
+        await Axios.post(`https://magnetizer20190429034033.azurewebsites.net/api/products`, product);
     }
 
     public deleteProduct = async (id: string): Promise<void> => {

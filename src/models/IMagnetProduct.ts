@@ -3,6 +3,6 @@ export interface IMagnetProduct {
     guid: string;
     Name: string;
     isMagnetized: boolean;
-    Weight: number;
+    weight: number;
     Location: { x: string, y: string }
 }
