@@ -89,14 +89,14 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
           <Product
             product={element}
             onProductClick={this.onProductClick}
-            key={element.id + Math.random() * 1000}
+            key={element.id}
           />
         );
       });
     }
 
     if (selectedProduct) {
-      searchResults.push(<div className={styles.products}>
+      searchResults.push(<div className={styles.products} key={selectedProduct.id}>
         {selectedProduct ? (<Product product={selectedProduct} chosen={true} />) : (searchResults)}
       </div>);
     }

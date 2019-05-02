@@ -14,7 +14,7 @@ export interface IPathingService {
      * @param boothLocation The location of the booth which is the start point of the route.
      * @param innerPolygon The polygons which the map contains. These are the obstacles the this pathing service must avoid.
      */
-    calculatePath: (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]) => void;
+    calculatePath: (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]) => Promise<number[][]>;
 }
 
 /**
@@ -23,7 +23,7 @@ export interface IPathingService {
 export default class PathingService implements IPathingService {
     private magnetService: IMagnetService = new MagnetService();
 
-    public calculatePath = (targetLocation: ILocation, mapsize: ICoord, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
+    public calculatePath = async (targetLocation: ILocation, mapsize: ICoord, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
         let emptyGrid = new pathfinder.Grid(
@@ -38,8 +38,11 @@ export default class PathingService implements IPathingService {
         let bloc = boothLocatiob ? boothLocatiob : { x: 0, y: 0 };
         let rawPath = finder.findPath(bloc.x, bloc.y, targetLocation.x, targetLocation.y, emptyGrid);
 
-        // Smooth out the path
         return pathfinder.Util.smoothenPath(emptyGrid, rawPath);
+    }
+
+    private calculatePathLength(start: ICoord, end: ICoord) {
+
     }
 
     /**

@@ -74,17 +74,17 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
   /**
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
-  public componentDidMount() {
+  public async componentDidMount() {
     if (this.props.productData) {
       const { selectedProduct, products } = this.props.productData;
-      this.generateMap(selectedProduct, products);
+      await this.generateMap(selectedProduct, products);
     }
   }
 
-  public componentWillReceiveProps(nextprops: combinedProps) {
+  public async componentWillReceiveProps(nextprops: combinedProps) {
     if (nextprops.productData) {
       const { selectedProduct, products } = nextprops.productData;
-      this.generateMap(selectedProduct, products);
+      await this.generateMap(selectedProduct, products);
     }
   }
 
@@ -92,7 +92,7 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
    * This method renders the map using the snapsvg framework.
    * An outer polygon is rendered aswell as the inner polygons.
    */
-  private generateMap = (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
+  private generateMap = async (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
     let snap: Snap.Paper = Snap("#svg");
     if (!snap) {
       return;
@@ -166,10 +166,9 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
       });
     }
 
-
     // PATH Should NOT be rendered if there is no booth location or product location
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
-      let path = this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
+      let path = await this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
       snap.path("M" + path).addClass(styles.elPath);
     }
   }
