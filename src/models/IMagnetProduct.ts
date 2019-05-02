@@ -3,4 +3,6 @@ export interface IMagnetProduct {
     guid: string;
     Name: string;
     isMagnetized: boolean;
+    PosX: string;
+    Posy: string;
 }

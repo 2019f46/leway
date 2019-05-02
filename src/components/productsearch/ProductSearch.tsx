@@ -89,7 +89,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
           <Product
             product={element}
             onProductClick={this.onProductClick}
-            key={element.id + Math.random() * 100}
+            key={element.id + Math.random() * 1000}
           />
         );
       });

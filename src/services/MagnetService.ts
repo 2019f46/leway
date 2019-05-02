@@ -2,6 +2,7 @@ import Axios from "axios";
 import { IMagnetProduct } from "../models/IMagnetProduct";
 
 export interface IMagnetService {
+    getMagneticProducts: () => Promise<IMagnetProduct[]>;
     getAllProducts: () => Promise<IMagnetProduct[]>;
     getProduct: (guid: string) => Promise<IMagnetProduct>;
     deleteProduct: (id: string) => Promise<void>;
@@ -10,6 +11,12 @@ export interface IMagnetService {
 }
 
 export default class MagnetService implements IMagnetService {
+    public getMagneticProducts = async (): Promise<IMagnetProduct[]> => {
+        let response = await Axios.get("https://magnetizer20190429034033.azurewebsites.net/magnetonly");
+        let result: IMagnetProduct[] = await response.data;
+        return result;
+    }
+
     public getAllProducts = async (): Promise<IMagnetProduct[]> => {
         let response = await Axios.get("https://magnetizer20190429034033.azurewebsites.net/api/products");
         let result: IMagnetProduct[] = await response.data;
@@ -23,7 +30,9 @@ export default class MagnetService implements IMagnetService {
     }
 
     public addProduct = async (product: IMagnetProduct): Promise<void> => {
-        await Axios.post(`https://magnetizer20190429034033.azurewebsites.net/api/products`, product);
+        // await Axios.post(`https://magnetizer20190429034033.azurewebsites.net/api/products`, product);
+        await Axios.post(`http://localhost:61324/api/products`, product);
+
     }
 
     public deleteProduct = async (id: string): Promise<void> => {

@@ -53,10 +53,13 @@ export default class MagnetizerSettings extends React.Component<{}, IMagnetizerS
         const { allProducts } = this.state;
 
         for (let i = 0; i < allProducts.length; i++) {
+            let product = allProducts[i];
             try {
-                await this.magnetService.getProduct(allProducts[i].id);
+                await this.magnetService.getProduct(product.id);
             } catch (e) {
-                await this.magnetService.addProduct({ guid: allProducts[i].id, Name: allProducts[i].name, isMagnetized: false });
+                if (product.location && product.location.x && product.location.y) {
+                    await this.magnetService.addProduct({ guid: product.id, Name: product.name, isMagnetized: false, PosX: product.location.x.toString(), Posy: product.location.y.toString() });
+                }
             }
         }
     }

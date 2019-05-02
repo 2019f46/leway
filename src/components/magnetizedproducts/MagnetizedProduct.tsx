@@ -67,8 +67,15 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                 minWidth: 30,
                 maxWidth: 120,
                 onRender: (item: IProduct) => {
-                    let checkedStatus = this.state.magneticProducts.find(prod => prod.guid === item.id);
-                    return <Checkbox defaultChecked={checkedStatus ? checkedStatus.isMagnetized : false} style={{ paddingTop: "5px" }} onChange={(ev, checked) => this.onMagnetizeClick(ev, checked, item)} />;
+                    let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
+                    let status = product ? product.isMagnetized : false;
+                    let disabled = true;
+
+                    if (product && !product.PosX) {
+                        disabled = false;
+                    }
+
+                    return <Checkbox defaultChecked={status} disabled={disabled} style={{ paddingTop: "5px" }} onChange={(ev, checked) => this.onMagnetizeClick(ev, checked, item)} />;
                 }
             },
             {

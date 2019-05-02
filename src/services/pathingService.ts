@@ -1,6 +1,7 @@
 import pathfinder from "pathfinding";
 import { ICoord, IPolygon } from "../models/IMap";
 import { ILocation } from "../models/IProduct";
+import MagnetService, { IMagnetService } from "./MagnetService";
 
 /**
  * This interface defines the methods used by the pathingservice.
@@ -20,6 +21,8 @@ export interface IPathingService {
  * Pathing service Implements method defined in the IPathingService interface and is responsible for calculating paths
  */
 export default class PathingService implements IPathingService {
+    private magnetService: IMagnetService = new MagnetService();
+
     public calculatePath = (targetLocation: ILocation, mapsize: ICoord, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
@@ -37,8 +40,6 @@ export default class PathingService implements IPathingService {
 
         // Smooth out the path
         return pathfinder.Util.smoothenPath(emptyGrid, rawPath);
-        // Render & animate the path
-
     }
 
     /**
