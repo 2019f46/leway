@@ -7,15 +7,13 @@ import SearchService, { ISearchService } from "../../services/SearchService";
 import MagnetizedProducts from "../magnetizedproducts/MagnetizedProduct";
 import styles from "./MagnetizerSettings.module.scss";
 
-export interface IMagnetizerSettingsProps {
-}
 export interface IMagnetizerSettingsState {
     spinner: boolean;
     allProducts: IProduct[];
     magneticProducts: IMagnetProduct[]
 }
 
-export default class MagnetizerSettings extends React.Component<IMagnetizerSettingsProps, IMagnetizerSettingsState> {
+export default class MagnetizerSettings extends React.Component<{}, IMagnetizerSettingsState> {
     private searchService: ISearchService = new SearchService();
     private magnetService: IMagnetService = new MagnetService();
     constructor(props: any) {
