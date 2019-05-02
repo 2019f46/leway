@@ -3,6 +3,7 @@ import { Checkbox, DetailsList, IColumn, Image } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
+import MagnetService, { IMagnetService } from "../../services/MagnetService";
 import styles from "./MagnetizedProducts.module.scss";
 
 export interface IMagnetizedProductsProps {
@@ -17,6 +18,7 @@ export interface IMagnetizedProductsState {
 }
 
 export default class MagnetizedProducts extends React.Component<IMagnetizedProductsProps, IMagnetizedProductsState> {
+    private magnetService: IMagnetService = new MagnetService();
     constructor(props: IMagnetizedProductsProps) {
         super(props);
         this.state = {
@@ -41,8 +43,7 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
 
     private onMagnetizeClick = async (ev: React.FormEvent<HTMLElement> | undefined, checked: boolean | undefined, item: IProduct) => {
         if (ev && checked !== undefined) {
-            let response = await Axios.get(`https://magnetizer20190429034033.azurewebsites.net/api/products/${item.id}`);
-            let selectedProduct: IMagnetProduct = await response.data;
+            let selectedProduct = await this.magnetService.getProduct(item.id);
             selectedProduct.isMagnetized = checked;
 
             await Axios.put(`https://magnetizer20190429034033.azurewebsites.net/api/products/${selectedProduct.productId}`, selectedProduct)

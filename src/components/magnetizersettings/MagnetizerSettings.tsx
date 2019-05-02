@@ -1,10 +1,10 @@
-import Axios from "axios";
 import { Spinner, SpinnerSize } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
+import MagnetService, { IMagnetService } from "../../services/MagnetService";
 import SearchService, { ISearchService } from "../../services/SearchService";
-import MagnetizedProducts from "../magnetizedproducts/MagnetizedProducts";
+import MagnetizedProducts from "../magnetizedproducts/MagnetizedProduct";
 import styles from "./MagnetizerSettings.module.scss";
 
 export interface IMagnetizerSettingsProps {
@@ -17,6 +17,7 @@ export interface IMagnetizerSettingsState {
 
 export default class MagnetizerSettings extends React.Component<IMagnetizerSettingsProps, IMagnetizerSettingsState> {
     private searchService: ISearchService = new SearchService();
+    private magnetService: IMagnetService = new MagnetService();
     constructor(props: any) {
         super(props);
         this.state = {
@@ -30,7 +31,7 @@ export default class MagnetizerSettings extends React.Component<IMagnetizerSetti
         const { allProducts, magneticProducts } = this.state;
         let view: JSX.Element = this.state.spinner ? <Spinner size={SpinnerSize.large} /> : <span />;
 
-        if (allProducts && allProducts.length > 0 && magneticProducts) {
+        if (allProducts && allProducts.length > 0 && magneticProducts && !this.state.spinner) {
             view = <MagnetizedProducts products={allProducts} magneticProducts={this.state.magneticProducts} />
         }
 
@@ -42,9 +43,18 @@ export default class MagnetizerSettings extends React.Component<IMagnetizerSetti
     }
 
     public async componentDidMount() {
-        await this.getAllMagneticPropducts();
-        this.setState({ allProducts: await this.searchService.getProduct("a"), spinner: false });
+        this.setState({
+            allProducts: await this.searchService.getProduct("a"),
+        });
         await this.syncDatabases();
+        await this.getMagneticProducts();
+    }
+
+    private getMagneticProducts = async () => {
+        this.setState({
+            magneticProducts: await this.magnetService.getAllProducts(),
+            spinner: false
+        });
     }
 
     private syncDatabases = async () => {
@@ -52,16 +62,10 @@ export default class MagnetizerSettings extends React.Component<IMagnetizerSetti
 
         for (let i = 0; i < allProducts.length; i++) {
             try {
-                await Axios.get(`https://magnetizer20190429034033.azurewebsites.net/api/products/${allProducts[i].id}`);
+                await this.magnetService.getProduct(allProducts[i].id);
             } catch (e) {
-                await Axios.post("https://magnetizer20190429034033.azurewebsites.net/api/products", { Guid: allProducts[i].id, Name: allProducts[i].name, IsMagnetized: false });
+                await this.magnetService.addProduct({ guid: allProducts[i].id, Name: allProducts[i].name, isMagnetized: false });
             }
         }
-    }
-
-    private getAllMagneticPropducts = async () => {
-        let response = await Axios.get("https://magnetizer20190429034033.azurewebsites.net/api/products");
-        let result = await response.data;
-        this.setState({ magneticProducts: result });
     }
 }
