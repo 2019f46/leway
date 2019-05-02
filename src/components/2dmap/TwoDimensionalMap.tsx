@@ -126,7 +126,6 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
             id="svg"
             className={styles.svgMap}
             viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-            // style={hammerStyle}
           />
 
         </div> 
