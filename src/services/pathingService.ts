@@ -1,4 +1,5 @@
 import pathfinder from "pathfinding";
+import { IMagnetProduct } from "../models/IMagnetProduct";
 import { ICoord, IPolygon } from "../models/IMap";
 import { ILocation } from "../models/IProduct";
 import MagnetService, { IMagnetService } from "./MagnetService";
@@ -14,7 +15,7 @@ export interface IPathingService {
      * @param boothLocation The location of the booth which is the start point of the route.
      * @param innerPolygon The polygons which the map contains. These are the obstacles the this pathing service must avoid.
      */
-    calculatePath: (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]) => Promise<number[][]>;
+    calculatePath: (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]) => Promise<Array<number[][]>>;
 }
 
 /**
@@ -23,7 +24,7 @@ export interface IPathingService {
 export default class PathingService implements IPathingService {
     private magnetService: IMagnetService = new MagnetService();
 
-    public calculatePath = async (targetLocation: ILocation, mapsize: ICoord, boothLocatiob: ICoord | undefined, innerPolygon: IPolygon[]) => {
+    public calculatePath = async (targetLocation: ILocation, mapsize: ICoord, boothLocation: ICoord | undefined, innerPolygon: IPolygon[]): Promise<Array<number[][]>> => {
         let finder = new pathfinder.AStarFinder({ diagonalMovement: 4 });
 
         let emptyGrid = new pathfinder.Grid(
@@ -35,14 +36,67 @@ export default class PathingService implements IPathingService {
         this.setUnwalkable(emptyGrid, innerPolygon);
 
         // Calculate the path to take
-        let bloc = boothLocatiob ? boothLocatiob : { x: 0, y: 0 };
-        let rawPath = finder.findPath(bloc.x, bloc.y, targetLocation.x, targetLocation.y, emptyGrid);
+        let bloc = boothLocation ? boothLocation : { x: 0, y: 0 };
 
-        return pathfinder.Util.smoothenPath(emptyGrid, rawPath);
+
+        let shortestLength = this.calculateLength(bloc, targetLocation);
+        let alternative = await this.selectPath(bloc, targetLocation);
+
+        let smoothedPath: any[] = [];
+
+        if (alternative && shortestLength * alternative.path.weight > alternative.length) {
+            let targetX = parseInt(alternative.path.location.x);
+            let targetY = parseInt(alternative.path.location.y);
+
+            finder.findPath(bloc.x, bloc.y, targetX, targetY, emptyGrid);
+            let rawPath = finder.findPath(targetX, targetY, targetLocation.x, targetLocation.y, emptyGrid);
+
+            smoothedPath.push(pathfinder.Util.smoothenPath(emptyGrid, rawPath));
+            return smoothedPath;
+        } else {
+            let rawPath = finder.findPath(bloc.x, bloc.y, targetLocation.x, targetLocation.y, emptyGrid);
+            smoothedPath.push(pathfinder.Util.smoothenPath(emptyGrid, rawPath));
+            return smoothedPath;
+        }
     }
 
-    private calculatePathLength = async (start: ICoord, end: ICoord) => {
+    private selectPath = async (start: ICoord, end: ICoord) => {
 
+        let magnetizedItems = await this.magnetService.getMagneticProducts();
+        let filteredItems = magnetizedItems.filter(item => {
+            if (item.weight > 1) {
+                return item;
+            }
+        });
+
+        let selectedPath: { path: IMagnetProduct, length: number } = undefined as any;
+
+        filteredItems.forEach(path => {
+            let firstHalf = this.calculateLength(start, { x: parseInt(path.location.x), y: parseInt(path.location.y) });
+            let secondHalf = this.calculateLength({ x: parseInt(path.location.x), y: parseInt(path.location.y) }, end);
+            let totalLength = firstHalf + secondHalf;
+
+            if (!selectedPath || totalLength < selectedPath.length) {
+                selectedPath = { length: totalLength, path: path }
+            }
+        });
+
+        return selectedPath;
+
+        // if (shortestLength * selectedPath.path.weight > selectedPath.length) {
+        //     let targetX = parseInt(selectedPath.path.location.x);
+        //     let targetY = parseInt(selectedPath.path.location.y);
+
+        //     let rawPath1 = finder.findPath(start.x, start.y, 99, 1, emptyGrid);
+        //     let rawPath2 = finder.findPath(targetX, targetY, end.x, end.y, emptyGrid);
+        //     return rawPath1;
+
+        //     // return pathfinder.Util.smoothenPath(emptyGrid, rawPath1 + rawPath2) + pathfinder;
+        // }
+    }
+
+    private calculateLength = (start: ICoord, end: ICoord) => {
+        return Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - end.x, 2));
     }
 
     /**

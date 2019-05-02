@@ -169,7 +169,9 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
     // PATH Should NOT be rendered if there is no booth location or product location
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
       let path = await this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
-      snap.path("M" + path).addClass(styles.elPath);
+      path.forEach(p => {
+        snap.path("M" + p).addClass(styles.elPath);
+      });
     }
   }
 }

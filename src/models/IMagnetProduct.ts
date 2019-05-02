@@ -4,5 +4,5 @@ export interface IMagnetProduct {
     Name: string;
     isMagnetized: boolean;
     weight: number;
-    Location: { x: string, y: string }
+    location: { x: string, y: string }
 }
