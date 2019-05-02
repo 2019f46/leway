@@ -41,7 +41,7 @@ export default class PathingService implements IPathingService {
         return pathfinder.Util.smoothenPath(emptyGrid, rawPath);
     }
 
-    private calculatePathLength(start: ICoord, end: ICoord) {
+    private calculatePathLength = async (start: ICoord, end: ICoord) => {
 
     }
 

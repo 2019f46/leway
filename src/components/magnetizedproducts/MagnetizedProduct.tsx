@@ -71,7 +71,7 @@ export default class MagnetizedProducts extends React.Component<IMagnetizedProdu
                     let status = product ? product.isMagnetized : false;
                     let disabled = true;
 
-                    if (product && !product.PosX) {
+                    if (!product || !product.Location) {
                         disabled = false;
                     }
 
