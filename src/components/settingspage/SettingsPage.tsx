@@ -18,6 +18,9 @@ const SettingsPage = () => {
 
   function handleTabClick(clickedTab: PivotItem | undefined) {
     if (clickedTab) {
+      if (clickedTab.props.itemKey === "Home") {
+        window.location.href = window.location.origin;
+      }
       setSelectedTab(clickedTab.props.itemKey);
     }
   }
@@ -28,6 +31,7 @@ const SettingsPage = () => {
         <PivotItem headerText={"Location"} itemIcon={"Globe"} itemKey={"loc"} />
         <PivotItem headerText={"Magnetizer"} itemIcon={"BranchCompare"} itemKey={"mag"} />
         <PivotItem headerText={"Other"} itemIcon={"ChartSeries"} itemKey={"oth"} />
+        <PivotItem headerText={"Return"} itemIcon={"Home"} itemKey={"Home"} />
       </Pivot>
       {selectedView}
     </div>
