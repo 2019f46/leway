@@ -59,8 +59,12 @@ export default class PathingService implements IPathingService {
         }
     }
 
+    /**
+     * This function is responsible for determing wether or not the magnetic path has priority or the standard path. 
+     * @param start The Start Coordinates
+     * @param end The End Coordinates
+     */
     private selectPath = async (start: ICoord, end: ICoord) => {
-
         let magnetizedItems = await this.magnetService.getMagneticProducts();
         let filteredItems = magnetizedItems.filter(item => {
             if (item.weight > 1) {
@@ -83,6 +87,11 @@ export default class PathingService implements IPathingService {
         return selectedPath;
     }
 
+    /**
+     * The method is used to calculate the length between two points.  
+     * @param start The Start Coordinates
+     * @param end The End Coordinates
+     */
     private calculateLength = (start: ICoord, end: ICoord) => {
         return Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - end.x, 2));
     }
