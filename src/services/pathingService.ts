@@ -38,7 +38,6 @@ export default class PathingService implements IPathingService {
         // Calculate the path to take
         let bloc = boothLocation ? boothLocation : { x: 0, y: 0 };
 
-
         let shortestLength = this.calculateLength(bloc, targetLocation);
         let alternative = await this.selectPath(bloc, targetLocation);
 
@@ -82,17 +81,6 @@ export default class PathingService implements IPathingService {
         });
 
         return selectedPath;
-
-        // if (shortestLength * selectedPath.path.weight > selectedPath.length) {
-        //     let targetX = parseInt(selectedPath.path.location.x);
-        //     let targetY = parseInt(selectedPath.path.location.y);
-
-        //     let rawPath1 = finder.findPath(start.x, start.y, 99, 1, emptyGrid);
-        //     let rawPath2 = finder.findPath(targetX, targetY, end.x, end.y, emptyGrid);
-        //     return rawPath1;
-
-        //     // return pathfinder.Util.smoothenPath(emptyGrid, rawPath1 + rawPath2) + pathfinder;
-        // }
     }
 
     private calculateLength = (start: ICoord, end: ICoord) => {
