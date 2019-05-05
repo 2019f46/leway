@@ -1,4 +1,6 @@
 import * as React from "react";
+import styles from "./GestureWrap.module.scss";
+import Hammer from "hammerjs";
 
 export interface IGestureWrapProps {}
 
@@ -26,14 +28,11 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
 
     let hammerTime: React.CSSProperties = {
       transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px) scale(${mapScale.x}, ${mapScale.y})`,
-      height: "100%",
-      width: "100%",
-      overflow: "hidden"
     };
 
     return (
-      <div id="GestureWrap">
-        <div style={hammerTime}> {this.props.children} </div>
+      <div id="GestureWrap" className={styles.gestureWrap}>
+        <div className={styles.hammerStyle} style={hammerTime}> {this.props.children} </div>
       </div>
     );
   }
