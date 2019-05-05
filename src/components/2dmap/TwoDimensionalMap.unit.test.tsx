@@ -13,6 +13,8 @@ import { ISearchService } from "../../services/SearchService";
 import FakeSearchService from "../../services/fakes/FakeSearchService";
 configure({ adapter: new Adapter() });
 
+jest.mock("../gestureWrap/GestureWrap", (props: any) => (props: any) => <div>{props.children}</div>);
+
 describe("TwoDimensionalMap", () => {
   let fakeService: IMapService = new FakeMapService();
   let service: ISearchService = new FakeSearchService();
@@ -39,13 +41,11 @@ describe("TwoDimensionalMap", () => {
 
     expect(
       wrapper.contains(
-        <div className={styles.twoDimensionalMapContainer}>
-          <svg
-            id="svg"
-            className={styles.svgMap}
-            viewBox={"0 0 800 650"}
-          />
-        </div>
+        <svg
+          id="svg"
+          className={styles.svgMap}
+          viewBox={"0 0 800 650"}
+        />
       )
     ).toEqual(true);
     wrapper.unmount();
