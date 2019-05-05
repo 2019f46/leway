@@ -41,13 +41,17 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
   public componentDidMount() {
+    let delay = 8;
     // ADD HAMMER
     var container: any = document.getElementById("GestureWrap");
     var mc = new Hammer.Manager(container);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get("pan"));
-    mc.on("panstart panmove", this.throttled(this.onPan, 8));
-    mc.on("pinchstart pinchmove", this.throttled(this.onPinch, 8));
+    mc.on("panstart panmove", this.throttled(this.onPan, delay));
+    mc.on("pinchstart pinchmove", this.throttled(this.onPinch, delay));
+    
+    // OTHER EVENT LISTENERS
+    window.addEventListener("wheel", this.throttled(this.onScroll, delay));
   }
 
   /**
@@ -81,6 +85,26 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: e.scale * this.pinchStart.y
       }
     });
+  };
+
+  private onScroll = (e: React.WheelEvent) => {
+    let { mapScale } = this.state;
+    
+    if(e.deltaY < 0){ // ZOOM IN
+      this.setState({
+        mapScale: {
+          x: mapScale.x * 1.2,
+          y: mapScale.y * 1.2
+        }
+      });
+    } else {          // ZOOM OUT
+      this.setState({
+        mapScale: {
+          x: mapScale.x * 0.8,
+          y: mapScale.y * 0.8
+        }
+      });
+    }
   };
 
   /**
