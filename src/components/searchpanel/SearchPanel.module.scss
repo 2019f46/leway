@@ -9,6 +9,7 @@
     flex-direction: row;
     justify-content: flex-start;
     position: absolute;
+    width: 100%;
 }
 
 .panel {
@@ -31,7 +32,6 @@
 }
 
 .icon {
-    // @include iconMixing();
     font-size: 10px;
     background-color: white;
     filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.3));
@@ -41,16 +41,12 @@
 }
 
 .isOpen {
-    // @include iconMixing();
     @extend .icon;
-    // margin-top: 10px;
     padding-left: 30%;
 }
 
 .isClosed {
-    // @include iconMixing();
     @extend .icon;
-    // margin-top: 10px;
     padding-left: 6px;
 }
 
