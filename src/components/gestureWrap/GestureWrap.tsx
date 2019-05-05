@@ -1,12 +1,14 @@
 import * as React from "react";
 import styles from "./GestureWrap.module.scss";
 import Hammer from "hammerjs";
+//import Math from "math"
 
 export interface IGestureWrapProps {}
 
 export interface IGestureWrapState {
   mapScale: { x: number; y: number };
   mapTranslate: { x: number; y: number };
+  corner: { x: number, y: number };
 }
 
 export default class GestureWrap extends React.Component<IGestureWrapProps, IGestureWrapState> {
@@ -19,7 +21,8 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
 
     this.state = {
       mapScale: { x: 1, y: 1 },
-      mapTranslate: { x: 0, y: 0 }
+      mapTranslate: { x: 0, y: 0 },
+      corner: {x: 0, y: 0}
     };
   }
 
@@ -47,8 +50,10 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     var mc = new Hammer.Manager(container);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get("pan"));
+    mc.add(new Hammer.Tap({ event:'doubletap', taps: 2}));
     mc.on("panstart panmove", this.throttled(this.onPan, delay));
     mc.on("pinchstart pinchmove", this.throttled(this.onPinch, delay));
+    mc.on("doubletap", this.throttled(this.onDoubleTap, delay));
     
     // OTHER EVENT LISTENERS
     window.addEventListener("wheel", this.throttled(this.onScroll, delay));
@@ -72,6 +77,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: this.panStartCoords.y + e.deltaY
       }
     });
+    console.log("onPan");
   };
 
   private onPinch = (e: HammerInput) => {
@@ -85,27 +91,67 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: e.scale * this.pinchStart.y
       }
     });
+    console.log("onPinch");
   };
 
   private onScroll = (e: React.WheelEvent) => {
-    let { mapScale } = this.state;
-    
     if(e.deltaY < 0){ // ZOOM IN
-      this.setState({
-        mapScale: {
-          x: mapScale.x * 1.2,
-          y: mapScale.y * 1.2
-        }
-      });
+      this.zoomRelative(1.2, {x: e.clientX, y: e.clientY});
     } else {          // ZOOM OUT
-      this.setState({
-        mapScale: {
-          x: mapScale.x * 0.8,
-          y: mapScale.y * 0.8
-        }
-      });
+      this.zoomRelative(0.8, {x: e.clientX, y: e.clientY});
     }
   };
+
+  private onDoubleTap = (e: HammerInput) => {
+    this.zoomRelative(1.2, e.center);
+  }
+
+  private zoomRelative(scale: number, pointer: {x: number, y: number}){
+    // Figure out where the anchor is
+    // Calc the difference between pointer and anchor
+    // Adjust according to scale
+
+    let { mapScale, mapTranslate, corner } = this.state;
+    let newScale = mapScale.x * scale;
+
+    // Find anchor
+    // Middle of screen, offset by translate
+    let anchor = {
+      x: (window.innerWidth / 2) + mapTranslate.x,
+      y: (window.innerHeight / 2) + mapTranslate.y
+    };
+
+    // Find distance between pointer and anchor
+    let distance = {
+      x: anchor.x - pointer.x,
+      y: anchor.y - pointer.y
+    };
+
+    // Find distance after scaling
+    let scaledDistance = {
+      x: distance.x * scale,
+      y: distance.y * scale
+    };
+
+    // Find the different in distance
+    let distanceDifference = {
+      x: scaledDistance.x - distance.x,
+      y: scaledDistance.y - distance.y
+    };
+
+    // Set scale and add difference to transaltion
+    this.setState({
+      mapScale: {
+        x: newScale,
+        y: newScale
+      },
+      mapTranslate: {
+        x: mapTranslate.x + distanceDifference.x,
+        y: mapTranslate.y + distanceDifference.y
+      }
+    })
+
+  }
 
   /**
    * Function for throtteling the eventhandlers for gestures on the map
