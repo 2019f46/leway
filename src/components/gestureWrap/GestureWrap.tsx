@@ -1,19 +1,20 @@
 import * as React from "react";
 import styles from "./GestureWrap.module.scss";
 import Hammer from "hammerjs";
-//import Math from "math"
 
 export interface IGestureWrapProps {}
 
 export interface IGestureWrapState {
+  /** Scale of the map, used for transforming the wrapper */
   mapScale: { x: number; y: number };
+  /** Translate of the map, used for transforming the wrapper */
   mapTranslate: { x: number; y: number };
-  corner: { x: number, y: number };
 }
 
 export default class GestureWrap extends React.Component<IGestureWrapProps, IGestureWrapState> {
-  // For panning
+  /** Coordinates for where the pan was started */
   private panStartCoords = { x: 0, y: 0 };
+  /** Scale for when the pinch was started */
   private pinchStart = { x: 1, y: 1 };
 
   constructor(props: IGestureWrapProps) {
@@ -21,8 +22,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
 
     this.state = {
       mapScale: { x: 1, y: 1 },
-      mapTranslate: { x: 0, y: 0 },
-      corner: {x: 0, y: 0}
+      mapTranslate: { x: 0, y: 0 }
     };
   }
 
@@ -42,6 +42,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
 
   /**
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
+   * This is where all the eventhandlers are connected.
    */
   public componentDidMount() {
     let delay = 8;
@@ -63,6 +64,11 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
    * Touch gestures
    */
 
+  /**
+   * Eventhandler for panning
+   * Either by mouse or touch
+   * @param e Event that triggered the handler
+   */
   private onPan = (e: HammerInput) => {
     if (e.type === "panstart") {
       this.panStartCoords = {
@@ -77,9 +83,12 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: this.panStartCoords.y + e.deltaY
       }
     });
-    console.log("onPan");
   };
 
+  /**
+   * Eventhandler for pinch zooming
+   * @param e Event that triggered the handler
+   */
   private onPinch = (e: HammerInput) => {
     if (e.type === "pinchstart") {
       this.pinchStart = { x: this.state.mapScale.x, y: this.state.mapScale.y };
@@ -91,9 +100,16 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: e.scale * this.pinchStart.y
       }
     });
-    console.log("onPinch");
   };
 
+  /**
+   * OTHER HANDLERS
+   */
+
+  /**
+   * Evenhandler for scroll zoom
+   * @param e Event that triggered the handler
+   */
   private onScroll = (e: React.WheelEvent) => {
     if(e.deltaY < 0){ // ZOOM IN
       this.zoomRelative(1.2, {x: e.clientX, y: e.clientY});
@@ -102,16 +118,34 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     }
   };
 
+  /**
+   * Eventhandler for doubletapping to zoom
+   * @param e Event that triggered the handler
+   */
   private onDoubleTap = (e: HammerInput) => {
     this.zoomRelative(1.2, e.center);
   }
 
+  /** 
+   * HELPERS
+   */
+
+  /**
+   * Will perform a zoom relative to the pointer.
+   * Will first find the real anchor of the zoom, which is
+   * in the middle of the container.
+   * Will then find the distance between the pointer and
+   * the anchor.
+   * Will then calculate the new anchor position after zoom.
+   * @param scale Scale factor. 0-1 for zooming out, 1+ for zooming in.
+   * @param pointer Point that should stay anchored during zoom
+   */
   private zoomRelative(scale: number, pointer: {x: number, y: number}){
     // Figure out where the anchor is
     // Calc the difference between pointer and anchor
     // Adjust according to scale
 
-    let { mapScale, mapTranslate, corner } = this.state;
+    let { mapScale, mapTranslate } = this.state;
     let newScale = mapScale.x * scale;
 
     // Find anchor
