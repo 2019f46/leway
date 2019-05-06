@@ -1,6 +1,6 @@
 import { Pivot, PivotItem } from "office-ui-fabric-react";
 import React, { useState } from "react";
-import MagnetizerSettings from "../magnetizerloader/MagnetizerLoader";
+import MagnetizerLoader from "../magnetizerloader/MagnetizerLoader";
 import styles from "./SettingsPage.module.scss";
 
 const SettingsPage = () => {
@@ -11,7 +11,7 @@ const SettingsPage = () => {
     case "loc":
       break;
     case "mag":
-      selectedView = <MagnetizerSettings />;
+      selectedView = <MagnetizerLoader />;
       break;
     default:
   }
@@ -28,9 +28,9 @@ const SettingsPage = () => {
   return (
     <div>
       <Pivot className={styles.pivotContainer} onLinkClick={(item: PivotItem | undefined) => handleTabClick(item)}>
-        <PivotItem headerText={"Location"} itemIcon={"Globe"} itemKey={"loc"} />
         <PivotItem headerText={"Magnetizer"} itemIcon={"BranchCompare"} itemKey={"mag"} />
-        <PivotItem headerText={"Other"} itemIcon={"ChartSeries"} itemKey={"oth"} />
+        <PivotItem headerText={"Location"} itemIcon={"Globe"} itemKey={"loc"} headerButtonProps={{ disabled: true }} />
+        <PivotItem headerText={"Other"} itemIcon={"ChartSeries"} itemKey={"oth"} headerButtonProps={{ disabled: true }} />
         <PivotItem headerText={"Home"} itemIcon={"Home"} itemKey={"Home"} />
       </Pivot>
       {selectedView}

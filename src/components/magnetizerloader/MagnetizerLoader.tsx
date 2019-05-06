@@ -7,13 +7,13 @@ import SearchService, { ISearchService } from "../../services/SearchService";
 import MagnetizedProducts from "../magnetizedproducts/MagnetizedProduct";
 import styles from "./MagnetizerLoader.module.scss";
 
-export interface IMagnetizerSettingsState {
+export interface IMagnetizerLoaderState {
     spinner: boolean;
     allProducts: IProduct[];
     magneticProducts: IMagnetProduct[]
 }
 
-export default class MagnetizerSettings extends React.Component<{}, IMagnetizerSettingsState> {
+export default class MagnetizerLoader extends React.Component<{}, IMagnetizerLoaderState> {
     private searchService: ISearchService = new SearchService();
     private magnetService: IMagnetService = new MagnetService();
     constructor(props: any) {
@@ -34,7 +34,7 @@ export default class MagnetizerSettings extends React.Component<{}, IMagnetizerS
         }
 
         return (
-            <div className={styles.magnetizerSettingsContainer}>
+            <div className={styles.magnetizerLoaderContainer}>
                 {view}
             </div>
         );
