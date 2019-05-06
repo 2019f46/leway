@@ -31,7 +31,7 @@ class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
 
   public render() {
     const { isOpen } = this.state;
-    let iconString = isOpen ? window.orientation === 0 ? "Up" : "Back" : "Search";
+    let iconString = isOpen ? ( window.innerWidth < window.innerHeight ? "Up" : "Back") : "Search";
 
     let icon: JSX.Element = (
       <div
