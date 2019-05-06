@@ -1,11 +1,10 @@
 import Axios from "axios";
-import { Checkbox, DetailsList, IColumn, Image } from "office-ui-fabric-react";
-import { Slider } from 'office-ui-fabric-react/';
+import { Checkbox, DetailsList, IColumn, Image, Slider } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
-import styles from "./MagnetizedProducts.module.scss";
+import styles from "./MagnetizedProduct.module.scss";
 
 export interface IMagnetizedProductsProps {
     products: IProduct[];

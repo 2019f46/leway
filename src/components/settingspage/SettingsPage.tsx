@@ -1,10 +1,10 @@
 import { Pivot, PivotItem } from "office-ui-fabric-react";
 import React, { useState } from "react";
-import MagnetizerSettings from "../magnetizersettings/MagnetizerSettings";
+import MagnetizerSettings from "../magnetizerloader/MagnetizerLoader";
 import styles from "./SettingsPage.module.scss";
 
 const SettingsPage = () => {
-  const [selectedTab, setSelectedTab] = useState<string | undefined>("loc");
+  const [selectedTab, setSelectedTab] = useState<string | undefined>("mag");
 
   let selectedView: JSX.Element = <span />;
   switch (selectedTab) {
@@ -31,7 +31,7 @@ const SettingsPage = () => {
         <PivotItem headerText={"Location"} itemIcon={"Globe"} itemKey={"loc"} />
         <PivotItem headerText={"Magnetizer"} itemIcon={"BranchCompare"} itemKey={"mag"} />
         <PivotItem headerText={"Other"} itemIcon={"ChartSeries"} itemKey={"oth"} />
-        <PivotItem headerText={"Return"} itemIcon={"Home"} itemKey={"Home"} />
+        <PivotItem headerText={"Home"} itemIcon={"Home"} itemKey={"Home"} />
       </Pivot>
       {selectedView}
     </div>
