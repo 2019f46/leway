@@ -15,13 +15,13 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   /** Coordinates for where the pan was started */
   private panStartCoords = { x: 0, y: 0 };
   /** Scale for when the pinch was started */
-  private pinchStart = { x: 1, y: 1 };
+  private pinchStart = { x: 0.9, y: 0.9 };
 
   constructor(props: IGestureWrapProps) {
     super(props);
 
     this.state = {
-      mapScale: { x: 1, y: 1 },
+      mapScale: { x: 0.9, y: 0.9 },
       mapTranslate: { x: 0, y: 0 }
     };
   }
