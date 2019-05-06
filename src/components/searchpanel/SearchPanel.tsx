@@ -3,14 +3,14 @@ import * as React from "react";
 import ProductSearch from "../productsearch/ProductSearch";
 import styles from "./SearchPanel.module.scss";
 
-export interface SearchPanelProps { }
+export interface ISearchPanelProps { }
 
-export interface SearchPanelState {
+export interface ISearchPanelState {
   isOpen: boolean;
 }
 
-class SearchPanel extends React.Component<SearchPanelProps, SearchPanelState> {
-  constructor(props: SearchPanelProps) {
+class SearchPanel extends React.Component<ISearchPanelProps, ISearchPanelState> {
+  constructor(props: ISearchPanelProps) {
     super(props);
     this.state = {
       isOpen: false

@@ -1,5 +1,5 @@
+import { IProduct } from "../../models/IProduct";
 import { ISearchService } from "../SearchService";
-import { IProduct } from "../../models/ProductModel";
 
 /**
  * This service class is responsible for rendered a fake product search.

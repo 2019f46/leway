@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IProduct } from "../models/ProductModel";
+import { IProduct } from "../models/IProduct";
 
 /**
  * This interface defined the methods used by the fake and real map service classes.

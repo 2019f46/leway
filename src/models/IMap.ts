@@ -1,7 +1,7 @@
 /**
  * Interface model which defines the object model of the map.
  */
-export interface IMapModel {
+export interface IMap {
     outerPolygon: IPolygon;
     innerPolygon: IPolygon[];
 }

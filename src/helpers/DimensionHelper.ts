@@ -1,4 +1,4 @@
-import { IPolygon, ICoord } from "../models/MapModel";
+import { ICoord, IPolygon } from "../models/IMap";
 
 export default class DimensionHelper {
 

@@ -1,10 +1,8 @@
-import MapService, { IMapService } from "../services/MapService";
-import FakeMapService from "../services/fakes/FakeMapService";
-import Axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { IMapModel } from "../models/MapModel";
-import Adapter from "enzyme-adapter-react-16";
 import { configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
+import { IMap } from "../models/IMap";
+import FakeMapService from "../services/fakes/FakeMapService";
+import { IMapService } from "../services/MapService";
 
 configure({ adapter: new Adapter() });
 
@@ -15,7 +13,7 @@ describe("MapService", () => {
         service = new FakeMapService();
 
         let expected = await service.getMapData();
-        let result: IMapModel = {
+        let result: IMap = {
             outerPolygon: { points: [{ x: 0, y: 0 }, { x: 0, y: 650 }, { x: 800, y: 650 }, { x: 800, y: 0 }] },
             innerPolygon: [
                 {

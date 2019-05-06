@@ -1,11 +1,10 @@
 import { SearchBox, Spinner } from "office-ui-fabric-react";
 import * as React from "react";
 import { connect } from "react-redux";
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import { setProductList, setSearchValue, setSelectedProduct } from "../../redux/productsearch/ProductSearchActions";
 import Product from "../product/Product";
 import styles from "./ProductSearch.module.scss";
-import { delay } from "q";
 
 /**
  * Properties recived by the product Search Component
@@ -90,14 +89,14 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
           <Product
             product={element}
             onProductClick={this.onProductClick}
-            key={element.id + Math.random() * 100}
+            key={element.id}
           />
         );
       });
     }
 
     if (selectedProduct) {
-      searchResults.push(<div className={styles.products}>
+      searchResults.push(<div className={styles.products} key={selectedProduct.id}>
         {selectedProduct ? (<Product product={selectedProduct} chosen={true} />) : (searchResults)}
       </div>);
     }

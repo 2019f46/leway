@@ -6,7 +6,6 @@
     overflow: hidden;
 
     .svgMap {
-        fill: transparent;
         stroke-width: 0.5px;
         stroke: black;
         fill: #d9d9d9;
@@ -14,7 +13,7 @@
 
         .polygonObject {
             fill: #c7b09b;
-            stroke-width: 0.3px;
+            stroke-width: 0.01px;
         }
 
         .target {
@@ -54,6 +53,6 @@
 
     to {
         opacity: 1;
-        stroke-dasharray: 110%;
+        stroke-dasharray: 200%;
     }
 }

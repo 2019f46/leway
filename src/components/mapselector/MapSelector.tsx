@@ -1,15 +1,15 @@
+import { Spinner, Toggle } from "office-ui-fabric-react";
 import React from "react";
-import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
-import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
-import { Toggle, Spinner } from "office-ui-fabric-react";
-import styles from "./MapSelector.module.scss";
-import MapService, { IMapService } from "../../services/MapService";
-import FakeMapService from "../../services/fakes/FakeMapService";
-import { IMapModel } from "../../models/MapModel";
-import BoothError from "../bootherror/BoothError";
+import { IBooth } from "../../models/IBooth";
+import { IMap } from "../../models/IMap";
 import { IBoothService } from "../../services/BoothService";
 import FakeBoothService from "../../services/fakes/FakeBoothService";
-import { IBooth } from "../../models/IBooth";
+import FakeMapService from "../../services/fakes/FakeMapService";
+import MapService, { IMapService } from "../../services/MapService";
+import TwoDimensionalMap from "../2dmap/TwoDimensionalMap";
+import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
+import BoothError from "../bootherror/BoothError";
+import styles from "./MapSelector.module.scss";
 
 /**
  * Properties recived by the MapSelector Component.
@@ -27,7 +27,7 @@ export interface IMapSelectorProps {
  */
 export interface IMapSelectorState {
     twoDimensions: boolean;
-    mapData: IMapModel;
+    mapData: IMap;
     dataReady: boolean;
     disableBoothError: boolean;
 }

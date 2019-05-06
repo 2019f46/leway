@@ -1,14 +1,14 @@
-import { IMapService } from "../MapService";
-import { IMapModel } from "../../models/MapModel";
 import { delay } from "q";
+import { IMap } from "../../models/IMap";
+import { IMapService } from "../MapService";
 
 /**
  * This service class is responsible for rendered a fake model of a map.
  * The implemented metjods are defined in the IMapService Interface. 
  */
 export default class FakeMapService implements IMapService {
-    public getMapData = async (): Promise<IMapModel> => {
-        let fakeData: IMapModel = {
+    public getMapData = async (): Promise<IMap> => {
+        let fakeData: IMap = {
             outerPolygon: { points: [{ x: 0, y: 0 }, { x: 0, y: 650 }, { x: 800, y: 650 }, { x: 800, y: 0 }] },
             innerPolygon: [
                 {

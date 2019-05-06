@@ -2,12 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import Snap from "snapsvg-cjs";
 import DimensionHelper from "../../helpers/DimensionHelper";
-import { ICoord, IMapModel } from "../../models/MapModel";
-import { IProduct } from "../../models/ProductModel";
+import { ICoord, IMap } from "../../models/IMap";
+import { IProduct } from "../../models/IProduct";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
 import GestureWrap from "../gestureWrap/GestureWrap";
-
 
 /**
  * Properties recived by the Product Component.
@@ -15,9 +14,9 @@ import GestureWrap from "../gestureWrap/GestureWrap";
  * @param onEditMap Optional prop, this prop triggers a callback in the parent component which is used when editing the map
  */
 export interface ITwoDimensionalMapProps {
-  polygonData: IMapModel;
+  polygonData: IMap;
   boothLocation?: ICoord | undefined;
-  onEditMap?: (data: IMapModel) => void;
+  onEditMap?: (data: IMap) => void;
 }
 
 /**
@@ -25,7 +24,7 @@ export interface ITwoDimensionalMapProps {
  * @param mapData: This state is the received props (polygonData). This state is used for interacting and editing the map.
  */
 export interface ITwoDimensionalMapState {
-  mapData: IMapModel;
+  mapData: IMap;
   mapSize: ICoord;
 }
 
@@ -36,18 +35,18 @@ export interface IReduxProps {
   /**
    * This property is retrieved from the redux store, and is passed down when it is set.
    */
-  productData?: { products: IProduct[], selectedProduct: IProduct }
+  productData?: { products: IProduct[], selectedProduct: IProduct };
 }
 
 /**
  * This is required by typescript. This interface allows up to separate properties owned by the component and properties passed by redux and use them similarity
  */
-type props = ITwoDimensionalMapProps & IReduxProps;
+type combinedProps = ITwoDimensionalMapProps & IReduxProps;
 
 /**
  * This Component is responsible for taking in a object with polygon points and trasforming it into a interactable 2D map
  */
-class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> {
+class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMapState> {
   private pathingService: IPathingService;
 
   constructor(props: any) {
@@ -82,17 +81,17 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
   /**
    * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
    */
-  public componentDidMount() {
+  public async componentDidMount() {
     if (this.props.productData) {
       const { selectedProduct, products } = this.props.productData;
-      this.generateMap(selectedProduct, products);
+      await this.generateMap(selectedProduct, products);
     }
   }
 
-  public componentWillReceiveProps(nextprops: props) {
+  public async componentWillReceiveProps(nextprops: combinedProps) {
     if (nextprops.productData) {
       const { selectedProduct, products } = nextprops.productData;
-      this.generateMap(selectedProduct, products);
+      await this.generateMap(selectedProduct, products);
     }
   }
 
@@ -100,7 +99,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
    * This method renders the map using the snapsvg framework.
    * An outer polygon is rendered aswell as the inner polygons.
    */
-  private generateMap = (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
+  private generateMap = async (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
     let snap: Snap.Paper = Snap("#svg");
     if (!snap) {
       return;
@@ -174,11 +173,12 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
       });
     }
 
-
     // PATH Should NOT be rendered if there is no booth location or product location
     if (this.props.boothLocation && selectedProduct && selectedProduct.location) {
-      let path = this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
-      snap.path("M" + path).addClass(styles.elPath);
+      let path = await this.pathingService.calculatePath(selectedProduct.location, mapSize, boothLocation, innerPolygon);
+      path.forEach(p => {
+        snap.path("M" + p).addClass(styles.elPath);
+      });
     }
   }
 }

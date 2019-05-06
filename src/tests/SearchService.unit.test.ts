@@ -1,11 +1,9 @@
-import Axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import SearchService, { ISearchService } from "../services/SearchService";
-import FakeSearchService from "../services/fakes/FakeSearchService";
 import { configure } from "enzyme";
 // import { ISearchModel } from "../models/ProductModel";
 import Adapter from "enzyme-adapter-react-16";
-import { IProduct } from "../models/ProductModel";
+import { IProduct } from "../models/IProduct";
+import FakeSearchService from "../services/fakes/FakeSearchService";
+import { ISearchService } from "../services/SearchService";
 
 configure({ adapter: new Adapter() });
 

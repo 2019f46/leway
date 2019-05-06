@@ -1,4 +1,4 @@
-import { IProduct } from "../../models/ProductModel";
+import { IProduct } from "../../models/IProduct";
 import FakeSearchService from "../../services/fakes/FakeSearchService";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import { SET_PRODUCT_LIST, SET_SEARCH_VALUE, SET_SELECTED_PRODUCT } from "../types";
