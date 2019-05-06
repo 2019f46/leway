@@ -6,6 +6,8 @@ import { ICoord, IMap } from "../../models/IMap";
 import { IProduct } from "../../models/IProduct";
 import PathingService, { IPathingService } from "../../services/pathingService";
 import styles from "./TwoDimensionalMap.module.scss";
+import GestureWrap from "../gestureWrap/GestureWrap";
+
 /**
  * Properties recived by the Product Component.
  * @param polygonData Required prop, this is the map object which is rendered
@@ -46,12 +48,14 @@ type combinedProps = ITwoDimensionalMapProps & IReduxProps;
  */
 class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMapState> {
   private pathingService: IPathingService;
+
   constructor(props: any) {
     super(props);
     this.state = {
       mapData: this.props.polygonData,
       mapSize: DimensionHelper.findDimensions(this.props.polygonData.outerPolygon)
     };
+
     this.pathingService = new PathingService();
   }
 
@@ -61,13 +65,16 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
   public render(): JSX.Element {
     let map = (
       <div className={styles.twoDimensionalMapContainer}>
-        <svg
-          id="svg"
-          className={styles.svgMap}
-          viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
-        />
+        <GestureWrap>
+          <svg
+            id="svg"
+            className={styles.svgMap}
+            viewBox={`0 0 ${this.state.mapSize.x} ${this.state.mapSize.y}`}
+          />
+        </GestureWrap>
       </div>
     );
+
     return map;
   }
 
