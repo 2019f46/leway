@@ -30,7 +30,7 @@
 .products {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
 }
 
 @media only screen and (orientation:portrait) {

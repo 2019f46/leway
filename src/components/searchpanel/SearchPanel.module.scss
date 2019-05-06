@@ -16,6 +16,8 @@
 
         div[class*="ms-Panel-contentInner"] {
             div[class*="ms-Panel-scrollableContent"] {
+                overflow: auto;
+                
                 div[class*="ms-Panel-content"] {
                     padding-left: 10px !important;
                     padding-right: 10px !important;
@@ -52,6 +54,14 @@
     .panel {
         width: 100%;
         height: 300px;
+
+        div[class*="ms-Panel-main"] {
+            div[class*="ms-Panel-contentInner"] {
+                div[class*="ms-Panel-scrollableContent"] {
+                    overflow: hidden;
+                }
+            }
+        }
     }
 
     .icon {
