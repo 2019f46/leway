@@ -65,7 +65,7 @@ class TwoDimensionalMap extends React.Component<props, ITwoDimensionalMapState> 
    */
   public render(): JSX.Element {
     let map = (
-      <div id="TwoDContainer" className={styles.twoDimensionalMapContainer}>
+      <div className={styles.twoDimensionalMapContainer}>
         <GestureWrap>
           <svg
             id="svg"
