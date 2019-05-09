@@ -96,7 +96,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
     }
 
     if (selectedProduct) {
-      searchResults.push(<div className={styles.products} key={selectedProduct.id}>
+      searchResults.push(<div key={selectedProduct.id}>
         {selectedProduct ? (<Product product={selectedProduct} chosen={true} />) : (searchResults)}
       </div>);
     }
@@ -104,7 +104,10 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
     return (
       <div className={styles.productSearchContainer}>
         {searchBox}
-        {searchResults}
+        <div className={styles.products}>
+          {searchResults}
+        </div>
+        
         {this.state.spinner ? <Spinner style={{ marginTop: "5px" }} /> : undefined}
       </div>
     );
@@ -146,8 +149,20 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
    * @param value Input value typed by end user
    */
   private onProductSearch = async (value: string): Promise<void> => {
+    
+    // If string is empty
+    // Clear the search and cancel the timeout
+    // Might be because user deleted search query
     if (!value) {
+      this.clearSearch();
+      window.clearTimeout(this.timeout);
       return;
+    }
+
+    // If a product has been chosen, but user starts to type again
+    // deselct the chosen item
+    if(this.props.productData && this.props.productData.selectedProduct != undefined){
+      this.props.setSelectedProduct(undefined);
     }
 
     this.props.setSearchValue(value);
