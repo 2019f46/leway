@@ -161,7 +161,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
 
     // If a product has been chosen, but user starts to type again
     // deselct the chosen item
-    if(this.props.productData && this.props.productData.selectedProduct != undefined){
+    if(this.props.productData && this.props.productData.selectedProduct !== undefined){
       this.props.setSelectedProduct(undefined);
     }
 
