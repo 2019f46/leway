@@ -45,12 +45,16 @@
 }
 
 @media only screen and (orientation:portrait) {
-    .resultContainer{
+    .resultsEllipsis{
         margin-top: auto;
         margin-bottom: auto;
         margin-right: 5px;
         height: 230px;
         width: 300px;
+    }
+
+    .resultContainer{
+        width: 50%;
     }
 }
 
