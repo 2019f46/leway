@@ -15,6 +15,13 @@
     .right {
         display: block;
         padding: 10px;
+        
+        div[class*="ms-Image"]{
+            img[class*="ms-Image-image"]{
+                width: auto;
+                margin: auto;
+            }
+        }
     }
 }
 
