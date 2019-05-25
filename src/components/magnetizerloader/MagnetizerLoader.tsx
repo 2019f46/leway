@@ -4,7 +4,7 @@ import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
 import SearchService, { ISearchService } from "../../services/SearchService";
-import MagnetizedProducts from "../magnetizedproducts/MagnetizedProduct";
+import MagnetProductSettings from "../magnetizedproductsettings/MagnetProductSettings";
 import styles from "./MagnetizerLoader.module.scss";
 
 export interface IMagnetizerLoaderState {
@@ -30,7 +30,7 @@ export default class MagnetizerLoader extends React.Component<{}, IMagnetizerLoa
         let view: JSX.Element = this.state.spinner ? <Spinner size={SpinnerSize.large} /> : <span />;
 
         if (allProducts && allProducts.length > 0 && magneticProducts && !this.state.spinner) {
-            view = <MagnetizedProducts products={allProducts} magneticProducts={this.state.magneticProducts} />
+            view = <MagnetProductSettings products={allProducts} magneticProducts={this.state.magneticProducts} />
         }
 
         return (

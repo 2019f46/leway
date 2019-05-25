@@ -11,13 +11,13 @@ export interface IMagnetizedProductsProps {
     magneticProducts: IMagnetProduct[];
 }
 
-export interface IMagnetizedProductsState {
+export interface IMagnetProductSettingsState {
     columns: IColumn[] | undefined;
     allProducts: IProduct[];
     magneticProducts: IMagnetProduct[];
 }
 
-export default class MagnetizedProducts extends React.Component<IMagnetizedProductsProps, IMagnetizedProductsState> {
+export default class MagnetProductSettings extends React.Component<IMagnetizedProductsProps, IMagnetProductSettingsState> {
     private magnetService: IMagnetService = new MagnetService();
     private timeout: any;
     private SLIDER_DELAY = 1000;
