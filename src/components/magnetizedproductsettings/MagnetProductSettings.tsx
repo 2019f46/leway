@@ -4,7 +4,7 @@ import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
-import styles from "./MagnetizedProduct.module.scss";
+import styles from "./MagnetProductSettings.module.scss";
 
 export interface IMagnetizedProductsProps {
     products: IProduct[];
