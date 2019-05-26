@@ -7,12 +7,19 @@ import SearchService, { ISearchService } from "../../services/SearchService";
 import MagnetProductSettings from "../magnetizedproductsettings/MagnetProductSettings";
 import styles from "./MagnetizerLoader.module.scss";
 
+/** Interface which defines the states of MagnetizerLoader */
 export interface IMagnetizerLoaderState {
+    /** State which decides whether a spinner should be showed. */
     spinner: boolean;
+
+    /** All products */
     allProducts: IProduct[];
+
+    /** All magnetic products */
     magneticProducts: IMagnetProduct[]
 }
 
+/** This class is responsible for synchronising the magnetizer database with the product database */
 export default class MagnetizerLoader extends React.Component<{}, IMagnetizerLoaderState> {
     private searchService: ISearchService = new SearchService();
     private magnetService: IMagnetService = new MagnetService();
@@ -40,6 +47,7 @@ export default class MagnetizerLoader extends React.Component<{}, IMagnetizerLoa
         );
     }
 
+    /** Lifecycle method, triggered when the component is initially loaded into the DOM */
     public async componentDidMount() {
         this.setState({
             allProducts: await this.searchService.getProduct("a"),
@@ -49,6 +57,7 @@ export default class MagnetizerLoader extends React.Component<{}, IMagnetizerLoa
         await this.syncDatabases();
     }
 
+    /** Method which initites the synchronization process. */
     private syncDatabases = async () => {
         const { allProducts } = this.state;
 

@@ -5,36 +5,29 @@ import DimensionHelper from "../../helpers/DimensionHelper";
 import { ICoord, IMap } from "../../models/IMap";
 import { IProduct } from "../../models/IProduct";
 import PathingService, { IPathingService } from "../../services/pathingService";
-import styles from "./TwoDimensionalMap.module.scss";
 import GestureWrap from "../gestureWrap/GestureWrap";
+import styles from "./TwoDimensionalMap.module.scss";
 
-/**
- * Properties recived by the Product Component.
- * @param polygonData Required prop, this is the map object which is rendered
- * @param onEditMap Optional prop, this prop triggers a callback in the parent component which is used when editing the map
- */
+/** Interface which defines the properties of TwoDimensionalMap */
 export interface ITwoDimensionalMapProps {
+  /** @param polygonData Required prop, this is the map object which is rendered*/
   polygonData: IMap;
+  /** @param polygonData Optional prop, this is the location of the booth. If this prop is not set the wayfinding wont initiate.*/
   boothLocation?: ICoord | undefined;
+  /** @param onEditMap Optional prop, this prop triggers a callback in the parent component which is used when editing the map*/
   onEditMap?: (data: IMap) => void;
 }
 
-/**
- * States managed by ProductSearchComponent
- * @param mapData: This state is the received props (polygonData). This state is used for interacting and editing the map.
- */
+/** Interface which defines the states of TwoDimensionalMap */
 export interface ITwoDimensionalMapState {
+  /** This state is the received props (polygonData). This state is used for interacting and editing the map.*/
   mapData: IMap;
+  /** This state, when set is equals to the size of the map.*/
   mapSize: ICoord;
 }
 
-/**
- * This interface defines the props provided by the redux store.
- */
 export interface IReduxProps {
-  /**
-   * This property is retrieved from the redux store, and is passed down when it is set.
-   */
+  /** This property is retrieved from the redux store, and is passed down when it is set.*/
   productData?: { products: IProduct[], selectedProduct: IProduct };
 }
 
@@ -63,7 +56,7 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
    * Standard function in all react components. This function activates the react render engine and renders the desired content.
    */
   public render(): JSX.Element {
-    let map = (
+    return (
       <div className={styles.twoDimensionalMapContainer}>
         <GestureWrap>
           <svg
@@ -74,12 +67,10 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
         </GestureWrap>
       </div>
     );
-
-    return map;
   }
 
   /**
-   * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
+   * Lifecycle react method. This method is triggered when the react component is initially loaded into the DOM.
    */
   public async componentDidMount() {
     if (this.props.productData) {
@@ -88,6 +79,9 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
     }
   }
 
+  /**
+   * Lifecycle react method. This method is triggered when the react component receives new properties.
+   * @param nextprops Nextprops is the value of the new properties*/
   public async componentWillReceiveProps(nextprops: combinedProps) {
     if (nextprops.productData) {
       const { selectedProduct, products } = nextprops.productData;
@@ -96,8 +90,10 @@ class TwoDimensionalMap extends React.Component<combinedProps, ITwoDimensionalMa
   }
 
   /**
-   * This method renders the map using the snapsvg framework.
-   * An outer polygon is rendered aswell as the inner polygons.
+   * This method is reponsible for rendering the map, path and any other objects placed on the map.
+   * If selected propduct is set it will render the selected product rather then the products.
+   * @param selectedProduct This property has a value when a product is selected.
+   * @param products This property has a value when a search has been performed and results are returned.
    */
   private generateMap = async (selectedProduct: IProduct | undefined, products: IProduct[] | undefined) => {
     let snap: Snap.Paper = Snap("#svg");

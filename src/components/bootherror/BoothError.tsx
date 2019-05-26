@@ -1,11 +1,10 @@
 import { DefaultButton, Dialog, DialogFooter, PrimaryButton } from "office-ui-fabric-react";
 import React from "react";
 import styles from "./BoothError.module.scss";
-/**
- * Properties recived by the BoothError Component.
- * @param acknowledge Optional prop, prop which the parent uses to ackowledge no location.
- */
+
+/** Interface which defines the properties of BoothError */
 export interface BoothErrorProps {
+    /** Optional callback function prop, which the parent uses to ackowledge no location. */
     acknowledge: () => void;
 }
 
@@ -17,7 +16,7 @@ export default class BoothError extends React.Component<BoothErrorProps, {}>{
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
-        let dialog: JSX.Element = (
+        return (
             <Dialog hidden={false} onDismiss={this.acknowledge} modalProps={{ isDarkOverlay: true }} className={styles.dialogContainer}>
                 <h3>Booth is not configured.</h3>
                 <DialogFooter>
@@ -25,9 +24,6 @@ export default class BoothError extends React.Component<BoothErrorProps, {}>{
                     <PrimaryButton text={"OK"} onClick={this.acknowledge} />
                 </DialogFooter>
             </Dialog>
-        );
-        return (
-            dialog
         );
     }
 

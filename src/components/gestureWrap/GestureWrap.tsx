@@ -1,9 +1,8 @@
+import Hammer from "hammerjs";
 import * as React from "react";
 import styles from "./GestureWrap.module.scss";
-import Hammer from "hammerjs";
 
-export interface IGestureWrapProps {}
-
+/** Interface which defines the states of GestureWrap */
 export interface IGestureWrapState {
   /** Scale of the map, used for transforming the wrapper */
   mapScale: { x: number; y: number };
@@ -11,13 +10,16 @@ export interface IGestureWrapState {
   mapTranslate: { x: number; y: number };
 }
 
-export default class GestureWrap extends React.Component<IGestureWrapProps, IGestureWrapState> {
+/**
+ * Contents wrapped inside this component will contain gestures.
+ */
+export default class GestureWrap extends React.Component<{}, IGestureWrapState> {
   /** Coordinates for where the pan was started */
   private panStartCoords = { x: 0, y: 0 };
   /** Scale for when the pinch was started */
   private pinchStart = { x: 0.9, y: 0.9 };
 
-  constructor(props: IGestureWrapProps) {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -41,7 +43,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   }
 
   /**
-   * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
+   * Lifecycle react method. This method is triggered when the react component is initially loaded into the dom.
    * This is where all the eventhandlers are connected.
    */
   public componentDidMount() {
@@ -51,18 +53,14 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     var mc = new Hammer.Manager(container);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get("pan"));
-    mc.add(new Hammer.Tap({ event:'doubletap', taps: 2}));
+    mc.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
     mc.on("panstart panmove", this.throttled(this.onPan, delay));
     mc.on("pinchstart pinchmove", this.throttled(this.onPinch, delay));
     mc.on("doubletap", this.throttled(this.onDoubleTap, delay));
-    
+
     // OTHER EVENT LISTENERS
     window.addEventListener("wheel", this.throttled(this.onScroll, delay));
   }
-
-  /**
-   * Touch gestures
-   */
 
   /**
    * Eventhandler for panning
@@ -103,18 +101,14 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   };
 
   /**
-   * OTHER HANDLERS
-   */
-
-  /**
    * Evenhandler for scroll zoom
    * @param e Event that triggered the handler
    */
   private onScroll = (e: React.WheelEvent) => {
-    if(e.deltaY < 0){ // ZOOM IN
-      this.zoomRelative(1.2, {x: e.clientX, y: e.clientY});
+    if (e.deltaY < 0) { // ZOOM IN
+      this.zoomRelative(1.2, { x: e.clientX, y: e.clientY });
     } else {          // ZOOM OUT
-      this.zoomRelative(0.8, {x: e.clientX, y: e.clientY});
+      this.zoomRelative(0.8, { x: e.clientX, y: e.clientY });
     }
   };
 
@@ -126,10 +120,6 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     this.zoomRelative(1.2, e.center);
   }
 
-  /** 
-   * HELPERS
-   */
-
   /**
    * Will perform a zoom relative to the pointer.
    * Will first find the real anchor of the zoom, which is
@@ -140,7 +130,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
    * @param scale Scale factor. 0-1 for zooming out, 1+ for zooming in.
    * @param pointer Point that should stay anchored during zoom
    */
-  private zoomRelative(scale: number, pointer: {x: number, y: number}){
+  private zoomRelative(scale: number, pointer: { x: number, y: number }) {
     // Figure out where the anchor is
     // Calc the difference between pointer and anchor
     // Adjust according to scale
@@ -197,11 +187,11 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   private throttled(fn: Function, delay: number) {
     let canCall = true;
 
-    return function(...args: any) {
+    return function (...args: any) {
       if (canCall) {
         canCall = false;
         fn(...args);
-        setTimeout(function() {
+        setTimeout(function () {
           canCall = true;
         }, delay);
       }

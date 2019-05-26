@@ -3,9 +3,9 @@ import { IProduct } from "../models/IProduct";
 
 /**
  * This interface defined the methods used by the fake and real map service classes.
- * @param getProduct This method is implemented in the real and fake search service. The method is responsible for getting and returning search information.
  */
 export interface ISearchService {
+    /** This method is implemented in the real and fake search service. The method is responsible for getting and returning search information. */
     getProduct: (value: string) => Promise<IProduct[]>;
 }
 

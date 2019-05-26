@@ -11,24 +11,24 @@ import ThreeDimensionalMap from "../3dmap/ThreeDimensionalMap";
 import BoothError from "../bootherror/BoothError";
 import styles from "./MapSelector.module.scss";
 
-/**
- * Properties recived by the MapSelector Component.
- * @param fakeData Optional prop, determines whether or not the map data is produced by the real or fake service.
- */
+/** Interface which defines the props of MapSelector */
 export interface IMapSelectorProps {
+    /** Optional prop, determines whether or not the map data is produced by the real or fake service. */
     fakeData?: boolean;
 }
 
-/**
- * States managed by the MapSelector Component
- * @param twoDimensions: This state is by default set to true, when false a 3D map is rendered instead of 2D. 
- * @param mapData: This state is the object to render.
- * @param dataReady: This state is by default set to false, and is set to true when the component has received mapdata from the mapservice.
- */
+/** Interface which defines the states of the MapSelector component */
 export interface IMapSelectorState {
+    /**This state is by default set to true, when false a 3D map is rendered instead of 2D */
     twoDimensions: boolean;
+
+    /** This state is the object to render. It is not rendered here, but passed as properties to the 2d map component */
     mapData: IMap;
+
+    /** This state is by default set to false, and is set to true when the component has received mapdata from the mapservice */
     dataReady: boolean;
+
+    /** State to determine wether a booth error is disabled */
     disableBoothError: boolean;
 }
 
@@ -62,17 +62,17 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
         let blocation: IBooth | undefined = this.boothService.getBooth();
 
         let map: JSX.Element = this.state.twoDimensions ?
-            <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} boothLocation={blocation ? blocation.coordinates : undefined}/> :
+            <TwoDimensionalMap polygonData={this.state.mapData} onEditMap={this.onEditMap} boothLocation={blocation ? blocation.coordinates : undefined} /> :
             <ThreeDimensionalMap />;
         let toggle: JSX.Element = <Toggle onText={"3D Map"}
             offText={"2D Map"} disabled={false}
             className={styles.toggleSwitch}
             onClick={this.onToggleClick} />;
-        let bError: JSX.Element = <BoothError acknowledge={this.ackMissingConfiguration}/>;
+        let bError: JSX.Element = <BoothError acknowledge={this.ackMissingConfiguration} />;
 
         return (
             <div className={styles.mapSelectorContainer}>
-                {blocation || this.state.disableBoothError ? null : bError }
+                {blocation || this.state.disableBoothError ? null : bError}
                 {toggle}
                 {this.state.dataReady ? map : <Spinner />}
             </div>
@@ -107,6 +107,6 @@ export default class MapSelector extends React.Component<IMapSelectorProps, IMap
      * Method to disable the rendering of the booth error, if the error is acknowledged
      */
     private ackMissingConfiguration = () => {
-        this.setState({disableBoothError: true});
+        this.setState({ disableBoothError: true });
     }
 }
