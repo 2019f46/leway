@@ -6,22 +6,36 @@ import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
 import styles from "./MagnetProductSettings.module.scss";
 
-export interface IMagnetizedProductsProps {
+/** Interface which defines the properties of MagnetProductSettings */
+export interface IMagnetProductSettingsProps {
+    /** List of all products */
     products: IProduct[];
+
+    /** List of all magnetized products */
     magneticProducts: IMagnetProduct[];
 }
 
+/** Interface which defines the states of MagnetProductSettings */
 export interface IMagnetProductSettingsState {
+    /** Table columns used for the list */
     columns: IColumn[] | undefined;
+
+    /** All products */
     allProducts: IProduct[];
+
+    /** All magnetic products */
     magneticProducts: IMagnetProduct[];
 }
 
-export default class MagnetProductSettings extends React.Component<IMagnetizedProductsProps, IMagnetProductSettingsState> {
+/**
+ * This component will render a list of all products. Products in this list will be able to be magnetized / demagnetized.
+ * Product weights will also be adjustable. 
+ */
+export default class MagnetProductSettings extends React.Component<IMagnetProductSettingsProps, IMagnetProductSettingsState> {
     private magnetService: IMagnetService = new MagnetService();
     private timeout: any;
     private SLIDER_DELAY = 1000;
-    constructor(props: IMagnetizedProductsProps) {
+    constructor(props: IMagnetProductSettingsProps) {
         super(props);
         this.state = {
             columns: undefined,
@@ -39,10 +53,19 @@ export default class MagnetProductSettings extends React.Component<IMagnetizedPr
         );
     }
 
+    /**
+     * Life cycle method, triggered when the component is initially loaded into the dom.
+     */
     public componentDidMount() {
         this.setListColumns();
     }
 
+    /**
+     * This method is triggered when the magnetizer checkbox is clicked
+     * @param ev Click event
+     * @param checked Value of the checkbox (checked/unchecked)
+     * @param item Product clicked
+     */
     private onMagnetizeClick = async (ev: React.FormEvent<HTMLElement> | undefined, checked: boolean | undefined, item: IProduct) => {
         if (ev && checked !== undefined) {
             let selectedProduct = await this.magnetService.getProduct(item.id);
@@ -51,6 +74,7 @@ export default class MagnetProductSettings extends React.Component<IMagnetizedPr
         }
     }
 
+    /** This method generated the list columns */
     private setListColumns = () => {
         const columns: IColumn[] = [
             {
@@ -124,6 +148,11 @@ export default class MagnetProductSettings extends React.Component<IMagnetizedPr
         this.setState({ columns: columns });
     }
 
+    /**
+     * Method is triggered when the weight of a product is altered. Method is ONLY triggered if more than 1 second has passed since the weight was altered.
+     * @param weight New product weight
+     * @param product Product having its weight changed
+     */
     private onWeightChange = async (weight: number, product: IMagnetProduct | undefined) => {
         if (product && product.productId) {
 
@@ -138,6 +167,10 @@ export default class MagnetProductSettings extends React.Component<IMagnetizedPr
         }
     }
 
+    /**
+    * Execute weight change - Method is ONLY triggered if more than 1 second has passed since the weight was altered.
+    * @param product Product having its weight changed
+    */
     private executeWeightChange = async (product: IMagnetProduct) => {
         if (product && product.productId) {
             await this.magnetService.updateProduct(product.productId, product);

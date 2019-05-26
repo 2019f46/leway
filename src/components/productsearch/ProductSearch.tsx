@@ -24,20 +24,15 @@ interface IReduxProps {
    * Set the product list in the redux store.
    */
   setProductList: (query?: string, fake?: boolean) => void;
-  /**
-   * Set the selected product in the redux store
-   */
+  /** Set the selected product in the redux store */
   setSelectedProduct: (product: IProduct | undefined) => void;
   /** Set the searched value */
   setSearchValue: (value: string) => void;
-  /**
-   * State of the redux store
-   */
+  /** State of the redux store */
   productData?: { products: IProduct[]; selectedProduct: IProduct; searchValue: string; };
-  /** The value that is searched */
-
 }
 
+/** Combined redux and ProductSearch properties */
 type combinedProps = IProductSearchProps & IReduxProps;
 
 interface IProductSearchState {
@@ -107,7 +102,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
         <div className={styles.products}>
           {searchResults}
         </div>
-        
+
         {this.state.spinner ? <Spinner style={{ marginTop: "5px" }} /> : undefined}
       </div>
     );
@@ -149,7 +144,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
    * @param value Input value typed by end user
    */
   private onProductSearch = async (value: string): Promise<void> => {
-    
+
     // If string is empty
     // Clear the search and cancel the timeout
     // Might be because user deleted search query
@@ -161,7 +156,7 @@ class ProductSearch extends React.Component<combinedProps, IProductSearchState> 
 
     // If a product has been chosen, but user starts to type again
     // deselct the chosen item
-    if(this.props.productData && this.props.productData.selectedProduct !== undefined){
+    if (this.props.productData && this.props.productData.selectedProduct !== undefined) {
       this.props.setSelectedProduct(undefined);
     }
 

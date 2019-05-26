@@ -3,9 +3,9 @@ import { IMap } from "../models/IMap";
 
 /**
  * This interface defined the methods used by the fake and real map service classes.
- * @param getmapData This method is implemented in the real and fake map service. The method is responsible for getting map information
  */
 export interface IMapService {
+    /** This method is implemented in the real and fake map service. The method is responsible for getting map information from the backend*/
     getMapData: () => Promise<IMap>;
 }
 
