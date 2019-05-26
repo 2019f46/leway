@@ -40,7 +40,7 @@
     "typescript": "^3.4.5"
   },
   "scripts": {
-    "doc": "typedoc --out doc src --exclude *.test.tsx --tsconfig tsconfig.json --mode file",
+    "doc": "typedoc --out .doc src --exclude *.test.tsx --tsconfig tsconfig.json --mode file",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
