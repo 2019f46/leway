@@ -9,31 +9,35 @@ export interface IGestureWrapState {
   mapScale: { x: number; y: number };
   /** Translate of the map, used for transforming the wrapper */
   mapTranslate: { x: number; y: number };
+  panOffset: {x: number; y: number };
+  zoomOffset: {x: number; y: number };
 }
 
 export default class GestureWrap extends React.Component<IGestureWrapProps, IGestureWrapState> {
   /** Coordinates for where the pan was started */
   private panStartCoords = { x: 0, y: 0 };
-  private pinchPanOffset = {x: 0, y: 0};
-  private pinching = false;
   /** Scale for when the pinch was started */
   private pinchStart = { x: 0.9, y: 0.9 };
+  private translation = {x: 0, y: 0};
 
   constructor(props: IGestureWrapProps) {
     super(props);
 
     this.state = {
       mapScale: { x: 0.9, y: 0.9 },
-      mapTranslate: { x: 0, y: 0 }
+      mapTranslate: { x: 0, y: 0 },
+      panOffset: {x: 0, y:0},
+      zoomOffset: {x: 0, y:0}
     };
   }
 
   public render() {
-    let { mapTranslate, mapScale } = this.state;
+    let { mapTranslate, mapScale, panOffset, zoomOffset } = this.state;
     //console.log(mapTranslate);
+    this.translation = {x: panOffset.x + zoomOffset.x, y: panOffset.y + zoomOffset.y}
 
     let hammerTime: React.CSSProperties = {
-      transform: `translate(${mapTranslate.x}px, ${mapTranslate.y}px) scale(${mapScale.x}, ${mapScale.y})`,
+      transform: `translate(${this.translation.x}px, ${this.translation.y}px) scale(${mapScale.x}, ${mapScale.y})`,
     };
 
     return (
@@ -75,27 +79,17 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   private onPan = (e: HammerInput) => {
     if (e.type === "panstart") {
       this.panStartCoords = {
-        x: this.state.mapTranslate.x,
-        y: this.state.mapTranslate.y
+        x: this.state.panOffset.x,
+        y: this.state.panOffset.y
       };
     }
 
-    
-    this.pinchPanOffset = {
-      x: this.panStartCoords.x + e.deltaX,
-      y: this.panStartCoords.y + e.deltaY
-    }
-
-    if(!this.pinching) {
-      this.setState({
-        mapTranslate: {
-          x: this.panStartCoords.x + e.deltaX,
-          y: this.panStartCoords.y + e.deltaY
-        }
-      });
-    }
-    
-    this.pinching = false;
+    this.setState({
+      panOffset: {
+        x: this.panStartCoords.x + e.deltaX,
+        y: this.panStartCoords.y + e.deltaY
+      }
+    });
   };
 
   /**
@@ -107,7 +101,9 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
       this.pinchStart = { x: this.state.mapScale.x, y: this.state.mapScale.y };
     } 
 
-    this.pinching = true;
+    // TODO: Second argument might be wrong.
+    // Should maybe calculate the difference between the pinchstart hammer event scale.
+    // Or maybe not.
     this.zoomRelative(e.scale, this.pinchStart.x, {x: e.center.x, y: e.center.y});
 
     // this.setState({
@@ -161,14 +157,14 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     // Calc the difference between pointer and anchor
     // Adjust according to scale
 
-    let { mapTranslate } = this.state;
+    let { mapTranslate, zoomOffset } = this.state;
     let newScale = referenceScale * scale;
 
     // Find anchor
     // Middle of screen, offset by translate
     let anchor = {
-      x: (window.innerWidth / 2) + mapTranslate.x,
-      y: (window.innerHeight / 2) + mapTranslate.y
+      x: (window.innerWidth / 2) + this.translation.x,
+      y: (window.innerHeight / 2) + this.translation.y
     };
 
     // Find distance between pointer and anchor
@@ -190,18 +186,18 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     };
 
     // Behaviour is different from normal zoom and pinch zoom
-    let translate: {x: number, y: number};
-    if(this.pinching){
-      translate = {
-        x: this.pinchPanOffset.x + distanceDifference.x,
-        y: this.pinchPanOffset.y + distanceDifference.y
-      }
-    } else {
-      translate = {
-        x: mapTranslate.x + distanceDifference.x,
-        y: mapTranslate.y + distanceDifference.y
-      };
-    }
+    // let translate: {x: number, y: number};
+    // if(this.pinching){
+    //   translate = {
+    //     x: this.pinchPanOffset.x + distanceDifference.x,
+    //     y: this.pinchPanOffset.y + distanceDifference.y
+    //   }
+    // } else {
+    //   translate = {
+    //     x: mapTranslate.x + distanceDifference.x,
+    //     y: mapTranslate.y + distanceDifference.y
+    //   };
+    // }
 
     // Set scale and add difference to transaltion
     this.setState({
@@ -209,7 +205,10 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         x: newScale,
         y: newScale
       },
-      mapTranslate: translate
+      zoomOffset: {
+        x: zoomOffset.x - distanceDifference.x,
+        y: zoomOffset.y - distanceDifference.y
+      }
     })
 
   }
