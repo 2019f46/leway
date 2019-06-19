@@ -58,6 +58,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     var mc = new Hammer.Manager(container);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get("pan"));
+    //mc.add(new Hammer.Pinch({ threshold: 0 }));
     mc.add(new Hammer.Tap({ event:'doubletap', taps: 2}));
     mc.on("panstart panmove", this.throttled(this.onPan, delay));
     mc.on("pinchstart pinchmove pinchend pinchcancel", this.throttled(this.onPinch, delay));
@@ -100,7 +101,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     if (e.type === "pinchstart") {
       this.pinchStart = { x: this.state.mapScale.x, y: this.state.mapScale.y };
     } 
-
+    console.log(e.center);
     // TODO: Second argument might be wrong.
     // Should maybe calculate the difference between the pinchstart hammer event scale.
     // Or maybe not.
@@ -206,8 +207,8 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
         y: newScale
       },
       zoomOffset: {
-        x: zoomOffset.x - distanceDifference.x,
-        y: zoomOffset.y - distanceDifference.y
+        x: distanceDifference.x,
+        y: distanceDifference.y
       }
     })
 
