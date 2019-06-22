@@ -78,9 +78,9 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
     public componentDidMount = async () => {
         this.setListColumns();
         await this.setInitialStates();
-
     }
 
+    
     public setInitialStates = async () => {
         this.setState({
             standardProducts: await this.searchService.getProduct("a"),
