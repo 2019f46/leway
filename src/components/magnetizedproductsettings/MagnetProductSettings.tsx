@@ -1,4 +1,5 @@
-import { Checkbox, DetailsList, IColumn, Image, Slider, Spinner, SpinnerSize } from "office-ui-fabric-react";
+import Axios from "axios";
+import { Checkbox, DetailsList, IColumn, Image, PrimaryButton, Slider, Spinner, SpinnerSize } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
@@ -39,15 +40,36 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
         };
     }
     public render() {
-        let view = this.state.spinner ?
+        let partialView = this.state.spinner ?
             <Spinner style={{ paddingTop: "25px" }} size={SpinnerSize.large} /> :
             <DetailsList
                 className={styles.magnetizedProductsContainer}
                 columns={this.state.columns}
                 items={this.state.allProducts}
             />;
-        return (view);
 
+        let updater: JSX.Element = <PrimaryButton text={"Sync Database"} onClick={this.onClickSync} />;
+
+        return (
+            <div>
+                <div style={{ textAlign: "right" }} hidden={this.state.spinner ? true : false}>
+                    {updater}
+                </div>
+                {partialView}
+            </div>
+        );
+    }
+
+    private onClickSync = async () => {
+        this.setState({ spinner: true });
+        try {
+            let result = await Axios.get(this.UPDATE_URL);
+            if (result.status === 200 && result.data === "Success") {
+                await this.setInitialStates();
+            }
+        } catch (e) {
+            alert("Failed to sync the database");
+        }
     }
 
     /**
@@ -55,6 +77,11 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
      */
     public componentDidMount = async () => {
         this.setListColumns();
+        await this.setInitialStates();
+
+    }
+
+    public setInitialStates = async () => {
         this.setState({
             standardProducts: await this.searchService.getProduct("a"),
             allProducts: await this.magnetService.getAllProducts(),
