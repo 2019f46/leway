@@ -39,11 +39,13 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
         };
     }
     public render() {
-        let view = this.state.spinner ? <Spinner style={{ paddingTop: "25px" }} size={SpinnerSize.large} /> : <DetailsList
-            className={styles.magnetizedProductsContainer}
-            columns={this.state.columns}
-            items={this.state.allProducts}
-        />;
+        let view = this.state.spinner ?
+            <Spinner style={{ paddingTop: "25px" }} size={SpinnerSize.large} /> :
+            <DetailsList
+                className={styles.magnetizedProductsContainer}
+                columns={this.state.columns}
+                items={this.state.allProducts}
+            />;
         return (view);
 
     }
@@ -80,15 +82,15 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 key: 'name',
                 name: 'Name',
                 fieldName: 'name',
-                minWidth: 50,
-                maxWidth: 200,
+                minWidth: 70,
+                maxWidth: 150,
             },
             {
                 key: 'magnetized',
                 name: 'Magnetized',
                 fieldName: 'magnetized',
-                minWidth: 30,
-                maxWidth: 120,
+                minWidth: 70,
+                maxWidth: 100,
                 onRender: (item: IMagnetProduct) => {
                     return <Checkbox
                         defaultChecked={item.isMagnetized}
@@ -101,7 +103,7 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 key: 'image',
                 name: 'Image',
                 fieldName: 'image',
-                minWidth: 30,
+                minWidth: 50,
                 maxWidth: 100,
                 onRender: (item: IMagnetProduct) => {
                     let imgProd = this.state.standardProducts.find(p => p.id === item.guid);
@@ -114,18 +116,24 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 fieldName: 'quantity',
                 minWidth: 30,
                 maxWidth: 100,
+                className: styles.hideOnMobile,
+                onRender: (item: IMagnetProduct) => {
+                    let prod = this.state.standardProducts.find(p => p.id === item.guid);
+                    return <span className={styles.hideOnMobile}>{prod ? prod.quantity : undefined}</span>
+                }
             },
             {
                 key: 'location',
                 name: 'Location',
                 fieldName: 'location',
-                minWidth: 50,
-                maxWidth: 150,
+                minWidth: 30,
+                maxWidth: 100,
+                className: styles.hideOnMobile,
                 onRender: (item: IProduct) => {
                     if (item && item.location) {
-                        return <span>{`${item.location.x}, ${item.location.y}`}</span >;
+                        return <span className={styles.hideOnMobile}>{`${item.location.x}, ${item.location.y}`}</span >;
                     } else {
-                        return <span>Location has not been set</span>
+                        return <span className={styles.hideOnMobile}>Location has not been set</span>
                     }
                 }
             },
@@ -133,10 +141,18 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 key: 'weight',
                 name: "Weight",
                 fieldName: "id",
-                minWidth: 50,
-                maxWidth: 100,
+                minWidth: 120,
+                maxWidth: 300,
+                className: styles.readjustWeight,
                 onRender: (item: IMagnetProduct) => {
-                    return <Slider min={1} max={3} step={0.1} value={item.weight} disabled={!item.location ? true : false} onChange={(number) => this.onWeightChange(number, item)} />
+                    return (
+                        <Slider min={1}
+                            max={3}
+                            step={0.1}
+                            value={item.weight}
+                            disabled={!item.location ? true : false}
+                            onChange={(number) => this.onWeightChange(number, item)} />
+                    );
                 }
             }
         ]

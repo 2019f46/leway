@@ -15,7 +15,7 @@ const SettingsPage = () => {
     case "loc":
       break;
     case "mag":
-      selectedView = <MagnetProductSettings />;
+      selectedView = <MagnetProductSettings/>;
       break;
     default:
   }
