@@ -1,18 +1,18 @@
-import Axios from "axios";
 import { Checkbox, DetailsList, IColumn, Image, Slider } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
+import SearchService, { ISearchService } from "../../services/SearchService";
 import styles from "./MagnetProductSettings.module.scss";
 
 /** Interface which defines the properties of MagnetProductSettings */
 export interface IMagnetProductSettingsProps {
-    /** List of all products */
-    products: IProduct[];
+    // /** List of all products */
+    // products: IProduct[];
 
-    /** List of all magnetized products */
-    magneticProducts: IMagnetProduct[];
+    // /** List of all magnetized products */
+    // magneticProducts: IMagnetProduct[];
 }
 
 /** Interface which defines the states of MagnetProductSettings */
@@ -32,15 +32,16 @@ export interface IMagnetProductSettingsState {
  * Product weights will also be adjustable. 
  */
 export default class MagnetProductSettings extends React.Component<IMagnetProductSettingsProps, IMagnetProductSettingsState> {
+    private searchService: ISearchService = new SearchService();
     private magnetService: IMagnetService = new MagnetService();
     private timeout: any;
-    private SLIDER_DELAY = 1000;
+    private SLIDER_DELAY = 200;
     constructor(props: IMagnetProductSettingsProps) {
         super(props);
         this.state = {
             columns: undefined,
-            allProducts: this.props.products,
-            magneticProducts: this.props.magneticProducts
+            allProducts: [],
+            magneticProducts: []
         };
     }
     public render() {
@@ -56,8 +57,12 @@ export default class MagnetProductSettings extends React.Component<IMagnetProduc
     /**
      * Life cycle method, triggered when the component is initially loaded into the dom.
      */
-    public componentDidMount() {
+    public componentDidMount = async () => {
         this.setListColumns();
+        this.setState({
+            allProducts: await this.searchService.getProduct("a"),
+            magneticProducts: await this.magnetService.getAllProducts(),
+        });
     }
 
     /**
@@ -68,9 +73,12 @@ export default class MagnetProductSettings extends React.Component<IMagnetProduc
      */
     private onMagnetizeClick = async (ev: React.FormEvent<HTMLElement> | undefined, checked: boolean | undefined, item: IProduct) => {
         if (ev && checked !== undefined) {
-            let selectedProduct = await this.magnetService.getProduct(item.id);
-            selectedProduct.isMagnetized = checked;
-            await Axios.put(`https://magnetizer20190429034033.azurewebsites.net/api/products/${selectedProduct.productId}`, selectedProduct)
+            let productToMagnetize = this.state.magneticProducts.find(p => p.guid === item.id);
+            if (productToMagnetize) {
+                productToMagnetize.isMagnetized = checked;
+                var result = await this.magnetService.updateProduct(productToMagnetize.productId as string, productToMagnetize);
+                console.log(result);
+            }
         }
     }
 

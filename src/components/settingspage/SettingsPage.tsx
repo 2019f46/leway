@@ -1,6 +1,7 @@
 import { Pivot, PivotItem } from "office-ui-fabric-react";
 import React, { useState } from "react";
-import MagnetizerLoader from "../magnetizerloader/MagnetizerLoader";
+import MagnetProductSettings from "../magnetizedproductsettings/MagnetProductSettings";
+// import MagnetizerLoader from "../magnetizerloader/MagnetizerLoader";
 import styles from "./SettingsPage.module.scss";
 
 /**
@@ -14,7 +15,7 @@ const SettingsPage = () => {
     case "loc":
       break;
     case "mag":
-      selectedView = <MagnetizerLoader />;
+      selectedView = <MagnetProductSettings />;
       break;
     default:
   }
