@@ -1,19 +1,10 @@
-import { Checkbox, DetailsList, IColumn, Image, Slider } from "office-ui-fabric-react";
+import { Checkbox, DetailsList, IColumn, Image, Slider, Spinner, SpinnerSize } from "office-ui-fabric-react";
 import React from "react";
 import { IMagnetProduct } from "../../models/IMagnetProduct";
 import { IProduct } from "../../models/IProduct";
 import MagnetService, { IMagnetService } from "../../services/MagnetService";
 import SearchService, { ISearchService } from "../../services/SearchService";
 import styles from "./MagnetProductSettings.module.scss";
-
-/** Interface which defines the properties of MagnetProductSettings */
-export interface IMagnetProductSettingsProps {
-    // /** List of all products */
-    // products: IProduct[];
-
-    // /** List of all magnetized products */
-    // magneticProducts: IMagnetProduct[];
-}
 
 /** Interface which defines the states of MagnetProductSettings */
 export interface IMagnetProductSettingsState {
@@ -25,33 +16,35 @@ export interface IMagnetProductSettingsState {
 
     /** All magnetic products */
     magneticProducts: IMagnetProduct[];
+
+    spinner: boolean;
 }
 
 /**
  * This component will render a list of all products. Products in this list will be able to be magnetized / demagnetized.
  * Product weights will also be adjustable. 
  */
-export default class MagnetProductSettings extends React.Component<IMagnetProductSettingsProps, IMagnetProductSettingsState> {
+export default class MagnetProductSettings extends React.Component<{}, IMagnetProductSettingsState> {
     private searchService: ISearchService = new SearchService();
     private magnetService: IMagnetService = new MagnetService();
     private timeout: any;
     private SLIDER_DELAY = 200;
-    constructor(props: IMagnetProductSettingsProps) {
+    constructor(props: any) {
         super(props);
         this.state = {
             columns: undefined,
             allProducts: [],
-            magneticProducts: []
+            magneticProducts: [],
+            spinner: true
         };
     }
     public render() {
-        return (
-            <DetailsList
-                className={styles.magnetizedProductsContainer}
-                columns={this.state.columns}
-                items={this.state.allProducts}
-            />
-        );
+        let view = this.state.spinner ? <Spinner style={{paddingTop: "25px"}} size={SpinnerSize.large}/> : <DetailsList
+            className={styles.magnetizedProductsContainer}
+            columns={this.state.columns}
+            items={this.state.allProducts}
+        />;
+        return (view);
     }
 
     /**
@@ -62,6 +55,7 @@ export default class MagnetProductSettings extends React.Component<IMagnetProduc
         this.setState({
             allProducts: await this.searchService.getProduct("a"),
             magneticProducts: await this.magnetService.getAllProducts(),
+            spinner: false
         });
     }
 
