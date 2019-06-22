@@ -76,8 +76,7 @@ export default class MagnetProductSettings extends React.Component<IMagnetProduc
             let productToMagnetize = this.state.magneticProducts.find(p => p.guid === item.id);
             if (productToMagnetize) {
                 productToMagnetize.isMagnetized = checked;
-                var result = await this.magnetService.updateProduct(productToMagnetize.productId as string, productToMagnetize);
-                console.log(result);
+                await this.magnetService.updateProduct(productToMagnetize.productId as string, productToMagnetize);
             }
         }
     }
