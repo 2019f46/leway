@@ -12,10 +12,9 @@ export interface IMagnetProductSettingsState {
     columns: IColumn[] | undefined;
 
     /** All products */
-    allProducts: IProduct[];
+    allProducts: IMagnetProduct[];
 
-    /** All magnetic products */
-    magneticProducts: IMagnetProduct[];
+    standardProducts: IProduct[];
 
     spinner: boolean;
 }
@@ -29,22 +28,24 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
     private magnetService: IMagnetService = new MagnetService();
     private timeout: any;
     private SLIDER_DELAY = 200;
+    private UPDATE_URL = "https://lewayfindersync.azurewebsites.net/api/SyncLeWay?code=B1GKF3GaYK5Uwc7aUGQX0XrEvb5ahJgDFfJJjWj2czaxcdd1toZPqQ==";
     constructor(props: any) {
         super(props);
         this.state = {
             columns: undefined,
             allProducts: [],
-            magneticProducts: [],
-            spinner: true
+            spinner: true,
+            standardProducts: []
         };
     }
     public render() {
-        let view = this.state.spinner ? <Spinner style={{paddingTop: "25px"}} size={SpinnerSize.large}/> : <DetailsList
+        let view = this.state.spinner ? <Spinner style={{ paddingTop: "25px" }} size={SpinnerSize.large} /> : <DetailsList
             className={styles.magnetizedProductsContainer}
             columns={this.state.columns}
             items={this.state.allProducts}
         />;
         return (view);
+
     }
 
     /**
@@ -53,8 +54,8 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
     public componentDidMount = async () => {
         this.setListColumns();
         this.setState({
-            allProducts: await this.searchService.getProduct("a"),
-            magneticProducts: await this.magnetService.getAllProducts(),
+            standardProducts: await this.searchService.getProduct("a"),
+            allProducts: await this.magnetService.getAllProducts(),
             spinner: false
         });
     }
@@ -65,13 +66,10 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
      * @param checked Value of the checkbox (checked/unchecked)
      * @param item Product clicked
      */
-    private onMagnetizeClick = async (ev: React.FormEvent<HTMLElement> | undefined, checked: boolean | undefined, item: IProduct) => {
+    private onMagnetizeClick = async (ev: React.FormEvent<HTMLElement> | undefined, checked: boolean | undefined, item: IMagnetProduct) => {
         if (ev && checked !== undefined) {
-            let productToMagnetize = this.state.magneticProducts.find(p => p.guid === item.id);
-            if (productToMagnetize) {
-                productToMagnetize.isMagnetized = checked;
-                await this.magnetService.updateProduct(productToMagnetize.productId as string, productToMagnetize);
-            }
+            item.isMagnetized = checked;
+            await this.magnetService.updateProduct(item.productId as string, item);
         }
     }
 
@@ -91,13 +89,10 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 fieldName: 'magnetized',
                 minWidth: 30,
                 maxWidth: 120,
-                onRender: (item: IProduct) => {
-                    let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
-                    let status = product ? product.isMagnetized : false;
-
+                onRender: (item: IMagnetProduct) => {
                     return <Checkbox
-                        defaultChecked={status}
-                        disabled={!product ? true : false}
+                        defaultChecked={item.isMagnetized}
+                        disabled={!item.location ? true : false}
                         style={{ paddingTop: "5px" }}
                         onChange={(ev, checked) => this.onMagnetizeClick(ev, checked, item)} />;
                 }
@@ -108,8 +103,9 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 fieldName: 'image',
                 minWidth: 30,
                 maxWidth: 100,
-                onRender: (item: IProduct) => {
-                    return <Image src={item.image} height={50} width={50} />;
+                onRender: (item: IMagnetProduct) => {
+                    let imgProd = this.state.standardProducts.find(p => p.id === item.guid);
+                    return <Image src={imgProd ? imgProd.image : undefined} height={50} width={50} />;
                 }
             },
             {
@@ -139,10 +135,8 @@ export default class MagnetProductSettings extends React.Component<{}, IMagnetPr
                 fieldName: "id",
                 minWidth: 50,
                 maxWidth: 100,
-                onRender: (item: IProduct) => {
-                    let product = this.state.magneticProducts.find(prod => prod.guid === item.id);
-                    let value = product ? product.weight : 0;
-                    return <Slider min={1} max={3} step={0.1} value={value} disabled={value === 0 ? true : false} onChange={(number) => this.onWeightChange(number, product)} />
+                onRender: (item: IMagnetProduct) => {
+                    return <Slider min={1} max={3} step={0.1} value={item.weight} disabled={!item.location ? true : false} onChange={(number) => this.onWeightChange(number, item)} />
                 }
             }
         ]
