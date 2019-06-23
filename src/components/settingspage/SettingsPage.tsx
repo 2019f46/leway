@@ -1,8 +1,12 @@
 import { Pivot, PivotItem } from "office-ui-fabric-react";
 import React, { useState } from "react";
-import MagnetizerLoader from "../magnetizerloader/MagnetizerLoader";
+import MagnetProductSettings from "../magnetizedproductsettings/MagnetProductSettings";
+// import MagnetizerLoader from "../magnetizerloader/MagnetizerLoader";
 import styles from "./SettingsPage.module.scss";
 
+/**
+ * Component generated using react 16.8 new feature: hooks
+ */
 const SettingsPage = () => {
   const [selectedTab, setSelectedTab] = useState<string | undefined>("mag");
 
@@ -11,11 +15,15 @@ const SettingsPage = () => {
     case "loc":
       break;
     case "mag":
-      selectedView = <MagnetizerLoader />;
+      selectedView = <MagnetProductSettings/>;
       break;
     default:
   }
 
+  /**
+   * This is a method which is triggered when a tab is clicked. 
+   * @param clickedTab The tab which is clicked
+   */
   function handleTabClick(clickedTab: PivotItem | undefined) {
     if (clickedTab) {
       if (clickedTab.props.itemKey === "Home") {

@@ -1,0 +1,36 @@
+.magnetizedProductsContainer {
+
+    :global div[class*="ms-DetailsHeader-cellIsCheck"] {
+        display: none;
+    }
+
+    :global div[class*="ms-DetailsRow-check"] {
+        display: none;
+    }
+}
+
+:global div[class*="ms-DetailsRow-fields"] {
+    align-items: center;
+}
+
+@media only screen and (max-width: 639px) {
+    .hideOnMobile {
+        display: none;
+    }
+
+    :global span[id*="-location"] {
+        display: none;
+    }
+
+    :global span[id*="-quantity"] {
+        display: none;
+    }
+
+    :global div[class*="ms-DetailsRow-fields"] {
+        width: 100%;
+    }
+
+    .readjustWeight {
+        width: 55% !important;
+    }
+}

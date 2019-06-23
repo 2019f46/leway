@@ -3,23 +3,23 @@ import * as React from "react";
 import { IProduct } from "../../models/IProduct";
 import styles from "./Product.module.scss";
 
-/**
- * Properties recived by the Product Component.
- * @param product Required prop, Is the product object to be rendered.
- * @param onProductClick Optional prop, callback to parent component, telling the parent which product was selected.
- */
+/** Interface which defines props used by Product component */
 export interface IProductProps {
+    /** Required prop, Is the product object to be rendered. */
     product: IProduct;
+
+    /** Optional prop, callback to parent component, telling the parent which product was selected */
     onProductClick?: (prod: IProduct) => void;
+
     /** If this product has been chosen in the list */
     chosen?: boolean;
 }
 
 /**
  * States managed by Product
- * @param currentProduct The product which is currently being handled.
- */
+*/
 export interface IProductState {
+    /** The product which is currently being handled */
     currentProduct: IProduct;
 }
 
@@ -37,12 +37,10 @@ export default class Product extends React.Component<IProductProps, IProductStat
      * Standard function in all react components. This function activates the react render engine and renders the desired content.
      */
     public render(): JSX.Element {
-
-        let searchResults: JSX.Element = (
-            <div 
-                className={this.props.chosen ? styles.resultContainer : styles.resultsEllipsis} 
-                onClick={() => this.props.onProductClick ? this.props.onProductClick(this.props.product) : undefined}
-            >
+        return (
+            <div
+                className={this.props.chosen ? styles.resultContainer : styles.resultsEllipsis}
+                onClick={() => this.props.onProductClick ? this.props.onProductClick(this.props.product) : undefined}>
                 <div className={styles.left}>
                     <h3>{this.state.currentProduct.name}</h3>
                     <span>{this.props.product.description}</span>
@@ -53,6 +51,5 @@ export default class Product extends React.Component<IProductProps, IProductStat
                 </div>
             </div>
         );
-        return (searchResults);
     }
 }

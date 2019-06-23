@@ -1,9 +1,8 @@
+import Hammer from "hammerjs";
 import * as React from "react";
 import styles from "./GestureWrap.module.scss";
-import Hammer from "hammerjs";
 
-export interface IGestureWrapProps {}
-
+/** Interface which defines the states of GestureWrap */
 export interface IGestureWrapState {
   /** Scale of the map, used for transforming the wrapper */
   mapScale: { x: number; y: number };
@@ -13,14 +12,17 @@ export interface IGestureWrapState {
   zoomOffset: {x: number; y: number };
 }
 
-export default class GestureWrap extends React.Component<IGestureWrapProps, IGestureWrapState> {
+/**
+ * Contents wrapped inside this component will contain gestures.
+ */
+export default class GestureWrap extends React.Component<{}, IGestureWrapState> {
   /** Coordinates for where the pan was started */
   private panStartCoords = { x: 0, y: 0 };
   /** Scale for when the pinch was started */
   private pinchStart = { x: 0.9, y: 0.9 };
   private translation = {x: 0, y: 0};
 
-  constructor(props: IGestureWrapProps) {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -48,7 +50,7 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   }
 
   /**
-   * Lifecycle react method. This method is triggered when the react component is correctly loaded into the dom.
+   * Lifecycle react method. This method is triggered when the react component is initially loaded into the dom.
    * This is where all the eventhandlers are connected.
    */
   public componentDidMount() {
@@ -58,18 +60,14 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
     var mc = new Hammer.Manager(container);
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith(mc.get("pan"));
-    mc.add(new Hammer.Tap({ event:'doubletap', taps: 2}));
+    mc.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
     mc.on("panstart panmove", this.throttled(this.onPan, delay));
     mc.on("pinchstart pinchmove pinchend pinchcancel", this.throttled(this.onPinch, delay));
     mc.on("doubletap", this.throttled(this.onDoubleTap, delay));
-    
+
     // OTHER EVENT LISTENERS
     window.addEventListener("wheel", this.throttled(this.onScroll, delay));
   }
-
-  /**
-   * Touch gestures
-   */
 
   /**
    * Eventhandler for panning
@@ -107,10 +105,6 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   };
 
   /**
-   * OTHER HANDLERS
-   */
-
-  /**
    * Evenhandler for scroll zoom
    * @param e Event that triggered the handler
    */
@@ -129,10 +123,6 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   private onDoubleTap = (e: HammerInput) => {
     this.zoomRelative(1.2, this.state.mapScale.x, e.center);
   }
-
-  /** 
-   * HELPERS
-   */
 
   /**
    * Will perform a zoom relative to the pointer.
@@ -206,11 +196,11 @@ export default class GestureWrap extends React.Component<IGestureWrapProps, IGes
   private throttled(fn: Function, delay: number) {
     let canCall = true;
 
-    return function(...args: any) {
+    return function (...args: any) {
       if (canCall) {
         canCall = false;
         fn(...args);
-        setTimeout(function() {
+        setTimeout(function () {
           canCall = true;
         }, delay);
       }

@@ -1,6 +1,8 @@
 import { IBooth } from "../models/IBooth";
-import { Guid } from "guid-typescript";
 
+/** This service describes the methods implemented by the BoothService
+ * Due to time restrictions booth customization was not implemented.
+ */
 export interface IBoothService {
     saveBooth: () => void;
     getBooth: () => IBooth | undefined;
